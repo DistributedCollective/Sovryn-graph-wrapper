@@ -1,6 +1,6 @@
 import moment from 'moment'
 
-const getTimestamp = () => {
+const getTimestamp = (): string => {
   const currentTime = moment().toISOString()
   return currentTime
 }

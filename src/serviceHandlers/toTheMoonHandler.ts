@@ -1,6 +1,6 @@
 import getTimestamp from '../utils/getTimeStamp'
 
-export const toTheMoonHandler = async (req: object) => {
+export const toTheMoonHandler = async (req: object): Promise<object> => {
   const response = {
     reqStatus: 'SUCCESS',
     data: {

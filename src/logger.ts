@@ -5,8 +5,11 @@ import config from './config/config'
 
 const { appName, logLevel, env } = config
 
+let isAppName = false
+if (appName !== '') isAppName = true
+
 export const logger = pino({
-  name: appName || 'sov-boilerplate-service',
+  name: isAppName ? appName : 'sov-boilerplate-service',
   level: logLevel,
   prettyPrint: env !== 'production' ? { colorize: true } : false
 })
