@@ -1,6 +1,8 @@
+import { logger } from '../logger'
 import getTimestamp from '../utils/getTimeStamp'
 
 export const helloSovrynHandler = async (req: object) => {
+  logger.info(req, 'helloSovrynHandler')
   const response = {
     reqStatus: 'SUCCESS',
     data: {

@@ -1,5 +1,5 @@
-import { getUsers, getUser as getUserById } from "../models/user.model";
-import { User } from "../entity";
+import { getUsers, getUser as getUserById, createUser as create, IUserPayload } from '../models/user.model'
+import { User } from '../entity'
 
 export const getAll = async (): Promise<User[]> => {
   const users = await getUsers()
@@ -12,4 +12,11 @@ export const getUser = async (id: string): Promise<User | null> => {
   // finish validation
   const user = await getUserById(Number(id))
   return user
+}
+
+export const createUser = async (body: IUserPayload): Promise<User> => {
+  // validate input
+
+  // finish validation
+  return await create(body)
 }

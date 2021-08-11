@@ -16,7 +16,7 @@ const config = convict({
   appName: {
     doc: 'application name',
     format: String,
-    default: 'sov-treasury-dashboard-db-read',
+    default: 'sov-boilerplate-service',
     env: 'APP_NAME'
   },
   logLevel: {
@@ -53,9 +53,9 @@ const config = convict({
   postgresDatabase: {
     doc: 'postgres database',
     format: String,
-    default: 'sov-treasury-dashboard-main',
+    default: 'sov-boilerplate-main',
     env: 'POSTGRES_DB'
-  },
+  }
 })
 
 config.validate({ allowed: 'strict' })

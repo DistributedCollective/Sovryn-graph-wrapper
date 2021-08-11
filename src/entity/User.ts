@@ -3,26 +3,32 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  UpdateDateColumn,
-} from "typeorm"
+  UpdateDateColumn
+} from 'typeorm'
+
+import { IsInt, Length, IsEmail } from 'class-validator'
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
+  @IsInt()
   id!: number
 
-  @Column({ readonly: true })
+  @Column()
+  @Length(2, 10)
   firstName!: string
 
-  @Column({ readonly: true })
+  @Column()
+  @Length(2, 10)
   lastName!: string
 
-  @Column({ readonly: true })
+  @Column()
+  @IsEmail()
   email!: string
 
-  @CreateDateColumn({ readonly: true })
+  @CreateDateColumn()
   createdAt!: Date
 
-  @UpdateDateColumn({ readonly: true })
+  @UpdateDateColumn()
   updatedAt!: Date
 }

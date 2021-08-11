@@ -1,4 +1,4 @@
-import express from "express"
+import express from 'express'
 
 const asyncMiddleware = (fn: any) =>
   (req: express.Request, res: express.Response, next: express.NextFunction) => {

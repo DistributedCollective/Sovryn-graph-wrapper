@@ -1,5 +1,6 @@
-import { getRepository } from "typeorm"
-import { User } from "../entity"
+import { getRepository } from 'typeorm'
+import { validate } from 'class-validator'
+import { User } from '../entity'
 
 export interface IUserPayload {
   firstName: string
@@ -7,14 +8,32 @@ export interface IUserPayload {
   email: string
 }
 
-export const getUsers = async (): Promise<Array<User>> => {
+export const getUsers = async (): Promise<User[]> => {
   const userRepository = getRepository(User)
-  return userRepository.find()
+  return await userRepository.find()
 }
 
 export const getUser = async (id: number): Promise<User | null> => {
   const userRepository = getRepository(User)
   const user = await userRepository.findOne({ id: id })
-  if (!user) return null
+  if (user == null) return null
   return user
+}
+
+export const createUser = async (payload: IUserPayload): Promise<User> => {
+  const userRepository = getRepository(User)
+  const user = new User()
+  user.firstName = payload.firstName
+  user.lastName = payload.lastName
+  user.email = payload.email
+
+  const errors = await validate(user)
+  if (errors.length > 0) {
+    throw new Error('Validation failed!')
+  } else {
+    return await userRepository.save({
+      ...user,
+      ...payload
+    })
+  }
 }
