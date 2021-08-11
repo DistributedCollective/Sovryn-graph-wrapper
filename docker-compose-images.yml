@@ -1,97 +1,30 @@
 version: '3.4'
 
 services:
-  redis-server:
-    image: redis
+  sov-postgres:
+    image: postgres:10.5-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=sov-boilerplate-main
+    expose:
+      - 5432
     networks:
       - sovryn
 
-  sov-treasury-dashboard-service-public-api:
-    image: sovryn-treasury-dashboard-service-public-api
+  sov-boilerplate-service:
+    image: sov-boilerplate-service
     environment:
       - PORT=3000
+      - URL_REDIS_SERVICE=http://sov-boilerplate-redis-service
     ports:
-      - "3000:3000"  
+      - "3000:3000"
     expose:
       - "3000"
     depends_on:
-      - sov-treasury-dashboard--service-redis-service
-      - sov-treasury-dashboard-service-scheduler
-      - sov-treasury-dashboard-service
+      - sov-boilerplate-service-redis-service
     networks:
       - sovryn
-
-  sov-treasury-dashboard-service-redis-service:
-    image: sov-treasury-dashboard-service-redis-service
-    environment:
-      - PORT=3001
-      - REDISHOST=redis-server
-      - REDISPORT=6379
-    ports:
-      - "3001:3001"
-    expose:
-      - "3001"
-    depends_on:
-      - redis-server
-    networks:
-      - sovryn
-
-  sov-treasury-dashboard-service-scheduler:
-    image: sov-treasury-dashboard-service-scheduler
-    environment:
-      - PORT=3002
-      - REDISHOST=redis-server
-      - REDISPORT=6379
-    ports:
-      - "3002:3002"
-    expose:
-      - "3002"
-    depends_on:
-      - redis-server
-    networks:
-      - sovryn
-  
-  sov-treasury-dashboard-service:
-    image: sov-treasury-dashboard-service
-    environment:
-      - PORT=3003
-      - URL_REDIS_SERVICE=http://sov-treasury-dashboard-redis-service
-    ports:
-      - "3003:3003"
-    expose:
-      - "3003"
-    depends_on:
-      - sov-treasury-dashboard-service-redis-service
-    networks:
-      - sovryn
-  
-  sov-treasury-dashboard-service-db-read:
-    image: sov-treasury-dashboard-service-db-read
-    environment:
-      - PORT=3006
-      - URL_REDIS_SERVICE=http://sov-treasury-dashboard-redis-service
-    ports:
-      - "3006:3006"
-    expose:
-      - "3006"
-    depends_on:
-      - sov-treasury-dashboard-service-redis-service
-    networks:
-      - sovryn
-  
-  sov-treasury-dashboard-service-db-write:
-      image: sov-treasury-dashboard-service-db-write
-      environment:
-        - PORT=3007
-        - URL_REDIS_SERVICE=http://sov-treasury-dashboard-service-redis-service
-      ports:
-        - "3007:3007"
-      expose:
-        - "3007"
-      depends_on:
-        - sov-treasury-dashboard-service-redis-service
-      networks:
-        - sovryn 
 
 networks:
   sovryn:

@@ -1,164 +1,41 @@
 version: '3.4'
 
 services:
-  redis-server:
-    image: redis
-    networks:
-      - sovryn
   sov-postgres:
     image: postgres:10.5-alpine
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=sov-treasury-dashboard-main
+      - POSTGRES_DB=sov-boilerplate-main
     expose:
       - 5432
     networks:
       - sovryn
 
-  sov-treasury-dashboard-service-public-api:
+  sov-boilerplate-service:
     build: 
-      context: ./sov-treasury-dashboard-service-public-api/
+      context: ./
       dockerfile: Dockerfile-dev
     volumes:
-        - ./sov-treasury-dashboard-service-public-api/:/app
+        - ./:/app
     working_dir: /app
     environment:
+      - APP_NAME=
+      - LOG_LEVEL=debug
       - PORT=3000
-      - APP_NAME=
-      - LOG_LEVEL=debug
-      # - URL_SOV_NOTIFICATION_SERVICE_PROFILE_SERVICE=http://sov-notification-service-profile-service
-      # - URL_SOV_NOTIFICATION_REDIS_SERVICE=http://sov-pancakeswap-watcher-service
-      # - URL_SOV_NOTIFICATION_SCHEDULER_SERVICE=http://sov-uniswap-watcher-service
-      # - URL_SOV_NOTIFICATION_SOVRYN_SERVICE=http://sov-pancakeswap-watcher-service
-      # - URL_SOV_NOTIFICATION_SCHEDULER=http://sov-watcher-scheduler
-    ports:
-      - "3000:3000"  
-    expose:
-      - "3000"
-    depends_on:
-      - sov-treasury-dashboard-service-redis-service
-      - sov-treasury-dashboard-service-scheduler
-      - sov-treasury-dashboard-service
-    networks:
-      - sovryn
-
-  sov-treasury-dashboard-service-redis-service:
-    build: 
-      context: ./sov-treasury-dashboard-service-redis-service/
-      dockerfile: Dockerfile-dev
-    volumes:
-        - ./sov-treasury-dashboard-service-redis-service/:/app
-    working_dir: /app
-    environment:
-      - APP_NAME=
-      - LOG_LEVEL=debug
-      - PORT=3001
-      - REDIS_HOST=redis-server
-      - REDIS_PORT=6379
-    ports:
-      - "3001:3001"
-    expose:
-      - "3001"
-    depends_on:
-      - redis-server
-    networks:
-      - sovryn
-
-  sov-treasury-dashboard-service-scheduler:
-    build: 
-      context: ./sov-treasury-dashboard-service-scheduler/
-      dockerfile: Dockerfile-dev
-    volumes:
-        - ./sov-treasury-dashboard-service-scheduler/:/app
-    working_dir: /app
-    environment:
-      - APP_NAME=
-      - LOG_LEVEL=debug
-      - PORT=3002
-      - REDIS_HOST=redis-server
-      - REDIS_PORT=6379
-    ports:
-      - "3002:3002"
-    expose:
-      - "3002"
-    depends_on:
-      - redis-server
-    networks:
-      - sovryn
-
-  sov-treasury-dashboard-service:
-    build: 
-      context: ./sov-treasury-dashboard-service/
-      dockerfile: Dockerfile-dev
-    volumes:
-        - ./sov-treasury-dashboard-service/:/app
-    working_dir: /app
-    environment:
-      - APP_NAME=
-      - LOG_LEVEL=debug
-      - PORT=3003
-      - URL_REDIS_SERVICE=http://sov-treasury-dashboard-redis-service
-    ports:
-      - "3003:3003"
-    expose:
-      - "3003"
-    depends_on:
-      - sov-treasury-dashboard-service-redis-service
-    networks:
-      - sovryn
-
-  sov-treasury-dashboard-service-db-read:
-    build: 
-      context: ./sov-treasury-dashboard-service-db-read/
-      dockerfile: Dockerfile-dev
-    volumes:
-        - ./sov-treasury-dashboard-service-db-read/:/app
-    working_dir: /app
-    environment:
-      - APP_NAME=
-      - LOG_LEVEL=debug
-      - PORT=3006
-      - URL_REDIS_SERVICE=http://sov-treasury-dashboard-service-redis-service
       - POSTGRES_HOST=sov-postgres
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=sov-treasury-dashboard-main
+      - POSTGRES_DB=sov-boilerplate-main
     ports:
-      - "3006:3006"
+      - "3000:3000"
     expose:
-      - "3006"
+      - "3000"
     depends_on:
-      - sov-treasury-dashboard-service-redis-service
       - sov-postgres
     networks:
       - sovryn
-         
-  sov-treasury-dashboard-service-db-write:
-    build: 
-      context: ./sov-treasury-dashboard-service-db-write/
-      dockerfile: Dockerfile-dev
-    volumes:
-      - ./sov-treasury-dashboard-service-db-write/:/app
-    working_dir: /app
-    environment:
-      - APP_NAME=
-      - LOG_LEVEL=debug
-      - PORT=3007
-      - URL_REDIS_SERVICE=http://sov-treasury-dashboard-service-redis-service
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=sov-treasury-dashboard-main
-    ports:
-      - "3007:3007"
-    expose:
-      - "3007"
-    depends_on:
-      - sov-treasury-dashboard-service-redis-service
-    networks:
-      - sovryn
-
 networks:
   sovryn:
     driver: bridge
