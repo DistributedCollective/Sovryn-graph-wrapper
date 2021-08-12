@@ -6,12 +6,11 @@ import {
   UpdateDateColumn
 } from 'typeorm'
 
-import { IsInt, Length, IsEmail } from 'class-validator'
+import { Length, IsEmail } from 'class-validator'
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
-  @IsInt()
   id!: number
 
   @Column()

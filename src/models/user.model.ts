@@ -1,6 +1,7 @@
 import { getRepository } from 'typeorm'
 import { validate } from 'class-validator'
 import { User } from '../entity'
+import { ValidateError } from '../errorHandlers/baseError'
 
 export interface IUserPayload {
   firstName: string
@@ -29,7 +30,7 @@ export const createUser = async (payload: IUserPayload): Promise<User> => {
 
   const errors = await validate(user)
   if (errors.length > 0) {
-    throw new Error('Validation failed!')
+    throw new ValidateError(errors)
   } else {
     return await userRepository.save({
       ...user,

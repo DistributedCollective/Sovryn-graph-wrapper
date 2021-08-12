@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 import cors from 'cors'
-import express, { Request, Response } from 'express'
+import express, { NextFunction, Request, Response } from 'express'
 import helmet from 'helmet'
 import expressRequestId from 'express-request-id'
 import log from './logger'
@@ -9,6 +9,7 @@ import { toTheMoonHandler } from './serviceHandlers/toTheMoonHandler'
 import { getAll, getUser, createUser } from './serviceHandlers/userHandler'
 import asyncMiddleware from './utils/asyncMiddleware'
 import responseTime from 'response-time'
+import errorHandler from './errorHandlers/errorHandler'
 
 const app = express()
 app.use(helmet())
@@ -58,5 +59,11 @@ app.post('/user', asyncMiddleware(async (req: Request, res: Response) => {
   const response = await createUser(req.body)
   res.send(response)
 }))
+
+app.use(function (_req: Request, res: Response, _next: NextFunction) {
+  res.status(404).send("Sorry can't find that!")
+})
+
+app.use(errorHandler.handleError)
 
 export default app
