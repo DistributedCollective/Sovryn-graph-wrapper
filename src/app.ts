@@ -21,8 +21,8 @@ app.use(expressRequestId())
 app.use(log)
 
 app.get('/', (req, res) => {
-  req.log.info(req, 'Sovryn treasury-dashboard Service DB Read Service Running. Stay Sovryn.')
-  res.send('Sovryn treasury-dashboard Service DB Read Service Running. Stay Sovryn.')
+  req.log.info(req, 'Sovryn boilerplate Service DB Read Service Running. Stay Sovryn.')
+  res.send('Sovryn boilerplate Service DB Read Service Running. Stay Sovryn.')
 })
 
 app.get('/test', (req, res) => {
