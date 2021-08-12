@@ -5,8 +5,8 @@ metadata:
     deployment.kubernetes.io/revision: "1"
   generation: 1
   labels:
-    app: sov-treasury-dashboard-service
-  name: sov-treasury-dashboard-service
+    app: sov-boilerplate-service
+  name: sov-boilerplate-service
   namespace: default
 spec:
   progressDeadlineSeconds: 600
@@ -14,79 +14,23 @@ spec:
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      app: sov-treasury-dashboard-service
+      app: sov-boilerplate-service
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: sov-treasury-dashboard-service
+        app: sov-boilerplate-service
     spec:
       containers:
-      - image: gcr.io/sovryn-dev/sov-treasury-dashboard-service-public-api:latest
-        name: sov-treasury-dashboard-service-public-api
-        resources: {}
-        terminationMessagePath: /dev/termination-log
-        terminationMessagePolicy: File
-        env:
-        - name: PORT
-          value: "3000"
-        - name: URL_SOV_TREASURY_DASHBOARD_SERVICE
-          value: http://localhost
-        - name: URL_SOV_TREASURY_DASHBOARD_SERVICE_SCHEDULER
-          value: http://localhost
-      - image: gcr.io/sovryn-dev/sov-treasury-dashboard-service-redis-service:latest
-        name: sov-treasury-dashboard-service-redis-service
-        resources: {}
-        terminationMessagePath: /dev/termination-log
-        terminationMessagePolicy: File
-        env:
-        - name: PORT
-          value: "3001"
-        - name: REDISHOST
-          value: sov-redis-cache-master.default.svc.cluster.local
-        - name: REDISPORT
-          value: "6379"
-      - image: gcr.io/sovryn-dev/sov-treasury-dashboard-service-scheduler:latest
-        name: sov-treasury-dashboard-service-scheduler
-        resources: {}
-        terminationMessagePath: /dev/termination-log
-        terminationMessagePolicy: File
-        env:
-        - name: PORT
-          value: "3002" 
-        - name: REDISHOST
-          value: sov-redis-cache-master.default.svc.cluster.local
-        - name: REDISPORT
-          value: "6379"
-      - image: gcr.io/sovryn-dev/sov-treasury-dashboard-service:latest
-        name: sov-treasury-dashboard-service
+      - image: gcr.io/sovryn-dev/sov-boilerplate-service:latest
+        name: sov-boilerplate-service
         resources: {}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
         env:
         - name: PORT
           value: "3003"
-        - name: URL_REDIS_SERVICE
-          value: http://localhost
-      - image: gcr.io/sovryn-dev/sov-treasury-dashboard-service-db-read:latest
-        name: sov-treasury-dashboard-service-db-read
-        resources: {}
-        terminationMessagePath: /dev/termination-log
-        terminationMessagePolicy: File
-        env:
-        - name: PORT
-          value: "3006"
-        - name: URL_REDIS_SERVICE
-          value: http://localhost
-      - image: gcr.io/sovryn-dev/sov-treasury-dashboard-service-db-write:latest
-        name: sov-treasury-dashboard-service-db-write
-        resources: {}
-        terminationMessagePath: /dev/termination-log
-        terminationMessagePolicy: File
-        env:
-        - name: PORT
-          value: "3007"
         - name: URL_REDIS_SERVICE
           value: http://localhost
       dnsPolicy: ClusterFirst
