@@ -12,7 +12,8 @@
       "test": "jest",
       "test:watch": "jest --watchAll",
       "lint": "ts-standard",
-      "lint:fix": "ts-standard --fix"
+      "lint:fix": "ts-standard --fix",
+      "prepare": "husky install"
    },
    "keywords": [
       "Sovryn"
@@ -54,6 +55,7 @@
       "@types/pino-http": "^5.4.2",
       "@types/response-time": "^2.3.5",
       "@types/supertest": "^2.0.11",
+      "husky": "^7.0.2",
       "jest": "^27.0.6",
       "nodemon": "^2.0.12",
       "pino-pretty": "^5.1.3",
