@@ -1,4 +1,3 @@
-// import { createLogger, LogLevel } from 'bunyan'
 import pino from 'pino'
 import pinoHttp from 'pino-http'
 import config from './config/config'

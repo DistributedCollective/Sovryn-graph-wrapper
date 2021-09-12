@@ -10,6 +10,7 @@ import { getAll, getUser, createUser } from './serviceHandlers/userHandler'
 import asyncMiddleware from './utils/asyncMiddleware'
 import responseTime from 'response-time'
 import errorHandler from './errorHandlers/errorHandler'
+import { HTTP404Error } from './errorHandlers/baseError'
 
 const app = express()
 app.use(helmet())
@@ -62,6 +63,10 @@ app.post('/user', asyncMiddleware(async (req: Request, res: Response) => {
 
 app.use(function (_req: Request, res: Response, _next: NextFunction) {
   res.status(404).send("Sorry can't find that!")
+})
+
+app.use(function (_req: Request, _res: Response, _next: NextFunction) {
+  throw new HTTP404Error()
 })
 
 app.use(errorHandler.handleError)
