@@ -1,18 +1,14 @@
 import {
   Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn
+  Column
 } from 'typeorm'
 
 import { Length, IsEmail } from 'class-validator'
 
-@Entity()
-export class User {
-  @PrimaryGeneratedColumn()
-  id!: number
+import { AbstractBaseEntity } from './AbstractBase.entity'
 
+@Entity()
+export class User extends AbstractBaseEntity {
   @Column()
   @Length(2, 10)
   firstName!: string
@@ -24,10 +20,4 @@ export class User {
   @Column()
   @IsEmail()
   email!: string
-
-  @CreateDateColumn()
-  createdAt!: Date
-
-  @UpdateDateColumn()
-  updatedAt!: Date
 }
