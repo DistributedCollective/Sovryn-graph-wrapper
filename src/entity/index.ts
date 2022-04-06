@@ -1,3 +1,3 @@
-import { Summary } from './Summary'
+import { SummaryPairData } from './Summary'
 import { User } from './User'
-export { Summary, User }
+export { SummaryPairData, User }

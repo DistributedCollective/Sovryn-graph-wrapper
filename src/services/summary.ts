@@ -4,9 +4,12 @@
  */
 
 import { priceAndVolumeQuery } from '../queries/priceAndVolume'
+import { candlestickQuery } from '../queries/candlesticks'
+import { blockNumber } from '../queries/block'
 import { getQuery } from '../utils/apolloClient'
 import { isNil } from 'lodash'
 import { bignumber } from 'mathjs'
+import { createMultipleSummaryPairData } from '../models/summary.model'
 
 interface ConnectorToken {
   token: {
@@ -29,7 +32,7 @@ interface LiquidityPool {
   token1: Token
 }
 
-interface ITradingPairData {
+export interface ITradingPairData {
   tradingPair: string
   baseSymbol: string
   baseId: string
@@ -43,20 +46,28 @@ interface ITradingPairData {
   priceChangePercentWeek: number
   priceChangePercent24hUsd: number
   priceChangePercentWeekUsd: number
+  highUsd: number
+  lowUsd: number
+  highBtc: number
+  lowBtc: number
 }
 
 export async function main (): Promise<void> {
   console.log('Running main...')
   const data = await getQuery(priceAndVolumeQuery())
-  const currentBlock = data._meta.block.number
   const currentData: LiquidityPool[] = data.liquidityPools
   /** We assume 30 second block time */
-  const yesterdayBlock = currentBlock - 2880
-  const lastWeekBlock = currentBlock - 2880 * 7
+  const yesterdayBlock = await getQuery(
+    blockNumber(Math.floor((new Date().getTime() - 24 * 60 * 60 * 1000) / 1000))
+  ).then((res) => parseInt(res.transactions[0].blockNumber))
+  const lastWeekBlock = await getQuery(
+    blockNumber(
+      Math.floor((new Date().getTime() - 24 * 60 * 60 * 7 * 1000) / 1000)
+    )
+  ).then((res) => parseInt(res.transactions[0].blockNumber))
   const dayData: { liquidityPools: LiquidityPool[] } = await getQuery(
     priceAndVolumeQuery(yesterdayBlock)
   )
-  console.log(dayData)
   const weekData: { liquidityPools: LiquidityPool[] } = await getQuery(
     priceAndVolumeQuery(lastWeekBlock)
   )
@@ -75,7 +86,7 @@ export async function main (): Promise<void> {
     }
   })
 
-  const parsedData: ITradingPairData[] = sortedByPairs.map((item) => {
+  const parsedData = sortedByPairs.map((item) => {
     const currentData = item.currentData
     const dayData = item.dayData
     const weekData = item.weekData
@@ -138,7 +149,16 @@ export async function main (): Promise<void> {
     }
   })
 
-  console.log(parsedData)
+  const output: ITradingPairData[] = []
+  for (const i of parsedData) {
+    const highLowPrices = await getHighAndLowPrices(i.baseId)
+    const item = {
+      ...i,
+      ...highLowPrices
+    }
+    output.push(item)
+  }
+  await createMultipleSummaryPairData(output)
 }
 
 function calculatePriceChange (currentPrice: string, prevPrice: string): number {
@@ -147,4 +167,48 @@ function calculatePriceChange (currentPrice: string, prevPrice: string): number 
   return parseFloat(percentChange.toFixed(8))
 }
 
-// main()
+async function getHighAndLowPrices (baseToken: string): Promise<{
+  highUsd: number
+  lowUsd: number
+  highBtc: number
+  lowBtc: number
+}> {
+  const yesterdayTimestamp = Math.floor(
+    (new Date().getTime() - 24 * 60 * 60 * 1000) / 1000
+  )
+  const query = candlestickQuery(baseToken, 'HourInterval', yesterdayTimestamp)
+  const candlestickResult = await getQuery(query)
+  const candlesticks = candlestickResult.candleSticks
+  let highUsd: number = 0
+  let lowUsd: number = 0
+  let highBtc: number = 0
+  let lowBtc: number = 0
+  for (const i of candlesticks) {
+    if (i.quoteToken.symbol === 'XUSD') {
+      if (lowUsd === 0) lowUsd = parseFloat(i.low)
+      if (parseFloat(i.high) > highUsd) {
+        highUsd = parseFloat(i.high)
+      }
+      if (parseFloat(i.low) < lowUsd) {
+        lowUsd = parseFloat(i.low)
+      }
+    } else if (i.quoteToken.symbol === 'WRBTC') {
+      if (lowBtc === 0) lowBtc = parseFloat(i.low)
+      if (parseFloat(i.high) > highBtc) {
+        highBtc = parseFloat(i.high)
+      }
+      if (parseFloat(i.low) < lowBtc) {
+        lowBtc = parseFloat(i.low)
+      }
+    }
+  }
+  return {
+    highUsd: highUsd,
+    lowUsd: lowUsd,
+    highBtc: highBtc,
+    lowBtc: lowBtc
+  }
+}
+
+// getHighAndLowPrices("0xefc78fc7d48b64958315949279ba181c2114abbd");
+// main();

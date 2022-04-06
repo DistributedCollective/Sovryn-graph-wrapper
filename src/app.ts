@@ -6,7 +6,6 @@ import expressRequestId from 'express-request-id'
 import log from './logger'
 import { helloSovrynHandler } from './services/helloSovrynHandler'
 import { toTheMoonHandler } from './services/toTheMoonHandler'
-import { getAll, getUser, createUser } from './services/userHandler'
 import asyncMiddleware from './utils/asyncMiddleware'
 import responseTime from 'response-time'
 import errorHandler from './errorHandlers/errorHandler'
@@ -48,33 +47,6 @@ app.post(
   asyncMiddleware(async (req: Request, res: Response) => {
     const response = await toTheMoonHandler(req.body)
     req.log.info(response, 'service returned for To The Moon')
-    res.send(response)
-  })
-)
-
-app.get(
-  '/user/',
-  asyncMiddleware(async (req: Request, res: Response) => {
-    req.log.info('handling user request')
-    const response = await getAll()
-    res.send(response)
-  })
-)
-
-app.get(
-  '/user/:id',
-  asyncMiddleware(async (req: Request, res: Response) => {
-    req.log.info(req.body, 'handling user request')
-    const response = await getUser(req.params.id)
-    res.send(response)
-  })
-)
-
-app.post(
-  '/user',
-  asyncMiddleware(async (req: Request, res: Response) => {
-    req.log.info(req.body, 'handling user request')
-    const response = await createUser(req.body)
     res.send(response)
   })
 )

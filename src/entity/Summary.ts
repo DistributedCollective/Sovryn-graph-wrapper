@@ -1,4 +1,4 @@
-import { Entity, Column, Unique } from 'typeorm'
+import { Entity, Column, Unique, PrimaryColumn } from 'typeorm'
 
 import { Length, IsEthereumAddress, IsNumber } from 'class-validator'
 
@@ -6,8 +6,8 @@ import { AbstractBaseEntity } from './AbstractBase.entity'
 
 @Entity()
 @Unique('pair', ['tradingPair'])
-export class Summary extends AbstractBaseEntity {
-  @Column()
+export class SummaryPairData extends AbstractBaseEntity {
+  @PrimaryColumn()
   @Length(83)
   tradingPair!: string
 
@@ -43,9 +43,37 @@ export class Summary extends AbstractBaseEntity {
 
   @Column()
   @IsNumber()
-  dayPrice!: number
+  lastPriceUsd!: number
 
   @Column()
   @IsNumber()
-  weekPrice!: number
+  priceChangePercent24h!: number
+
+  @Column()
+  @IsNumber()
+  priceChangePercentWeek!: number
+
+  @Column()
+  @IsNumber()
+  priceChangePercent24hUsd!: number
+
+  @Column()
+  @IsNumber()
+  priceChangePercentWeekUsd!: number
+
+  @Column()
+  @IsNumber()
+  highUsd!: number
+
+  @Column()
+  @IsNumber()
+  lowUsd!: number
+
+  @Column()
+  @IsNumber()
+  highBtc!: number
+
+  @Column()
+  @IsNumber()
+  lowBtc!: number
 }
