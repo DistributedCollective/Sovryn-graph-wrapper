@@ -1,2 +1,3 @@
 import { Summary } from './Summary'
-export { Summary }
+import { User } from './User'
+export { Summary, User }
