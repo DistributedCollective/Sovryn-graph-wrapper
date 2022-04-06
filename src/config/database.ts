@@ -1,8 +1,14 @@
 import { ConnectionOptions } from 'typeorm'
-import { User } from '../entity'
+import { Summary } from '../entity'
 
 import config from './config'
-const { postgresHost, postgresPort, postgresUser, postgresPassword, postgresDatabase } = config
+const {
+  postgresHost,
+  postgresPort,
+  postgresUser,
+  postgresPassword,
+  postgresDatabase
+} = config
 
 const dbConfig: ConnectionOptions = {
   type: 'postgres',
@@ -11,7 +17,7 @@ const dbConfig: ConnectionOptions = {
   username: postgresUser,
   password: postgresPassword,
   database: postgresDatabase,
-  entities: [User],
+  entities: [Summary],
   synchronize: true
 }
 

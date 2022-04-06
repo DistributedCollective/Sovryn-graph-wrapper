@@ -1,2 +1,2 @@
-import { User } from './User'
-export { User }
+import { Summary } from './Summary'
+export { Summary }

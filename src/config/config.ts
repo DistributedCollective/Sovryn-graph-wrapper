@@ -16,7 +16,7 @@ const config = convict({
   appName: {
     doc: 'application name',
     format: String,
-    default: 'sov-boilerplate-service',
+    default: 'sov-graph-wrapper-service',
     env: 'APP_NAME'
   },
   logLevel: {
@@ -55,6 +55,13 @@ const config = convict({
     format: String,
     default: 'sov-boilerplate-main',
     env: 'POSTGRES_DB'
+  },
+  subgraphUrl: {
+    doc: 'postgres database',
+    format: 'url',
+    default:
+      'https://graphql-sov-v0-0-6-main-818628407.us-east-2.elb.amazonaws.com/subgraphs/name/DistributedCollective/sovryn-subgraph',
+    env: 'SUBGRAPH_URL'
   }
 })
 
