@@ -1,0 +1,41 @@
+import { bignumber } from "mathjs";
+import { getAllSummaryPairData } from "../models/summary.model";
+
+export const getSummaryData = async () => {
+  const data = await getAllSummaryPairData();
+  let pairs: { [key: string]: any } = {};
+  let btcPrice = 0;
+  let totalVolumeBtc = 0;
+  data.forEach((item) => {
+    if (item.baseSymbol === "XUSD") {
+      btcPrice = Number(bignumber(1).div(item.lastPrice).toFixed(2));
+    }
+    totalVolumeBtc += Number(item.quoteVolume24h);
+    pairs[item.tradingPair] = {
+      trading_pairs: `${item.baseSymbol}_${item.quoteSymbol}`,
+      base_symbol: item.baseSymbol,
+      base_id: item.baseId,
+      quote_symbol: item.quoteSymbol,
+      quote_id: item.quoteId,
+      base_volume: Number(item.baseVolume24h),
+      quote_volume: Number(item.quoteVolume24h),
+      last_price: Number(item.lastPrice),
+      last_price_usd: Number(item.lastPriceUsd),
+      high_price_24h: Number(item.highBtc),
+      high_price_24h_usd: Number(item.highUsd),
+      lowest_price_24h: Number(item.lowBtc),
+      lowest_price_24h_usd: Number(item.lowUsd),
+      price_change_percent_24h: Number(item.priceChangePercent24h),
+      price_change_percent_24h_usd: Number(item.priceChangePercent24hUsd),
+      price_change_week: Number(item.priceChangePercentWeek),
+      price_change_week_usd: Number(item.priceChangePercentWeekUsd),
+    };
+  });
+
+  return {
+    pairs: pairs,
+    updated_at: data[0].updatedAt,
+    total_volume_btc: totalVolumeBtc,
+    total_volume_usd: totalVolumeBtc * btcPrice,
+  };
+};

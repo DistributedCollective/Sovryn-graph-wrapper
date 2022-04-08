@@ -2,67 +2,67 @@
 
 type Deposit @entity {
   id: ID!
-  to: Bytes! # address
-  amount: BigInt! # uint256
-  timestamp: BigInt!
-  emittedBy: Bytes! #address
+  to: String! # address
+  amount: String! # uint256
+  timestamp: String!
+  emittedBy: String! #address
   transaction: Transaction!
 }
 
 type MarginOrderCanceled @entity {
   id: ID!
-  hash: Bytes! # bytes32
-  trader: Bytes! # address
-  timestamp: BigInt!
-  emittedBy: Bytes! #address
+  hash: String! # String32
+  trader: String! # address
+  timestamp: String!
+  emittedBy: String! #address
   transaction: Transaction!
 }
 
 type MarginOrderFilled @entity {
   id: ID!
-  hash: Bytes! # bytes32
+  hash: String! # String32
   trader: User! # address
-  principal: BigInt! # uint256
-  collateral: BigInt! # uint256
-  leverageAmount: BigInt! # uint256
-  loanTokenAddress: Bytes! # address
-  loanTokenSent: BigInt! # uint256
-  collateralTokenSent: BigInt! # uint256
-  collateralTokenAddress: Bytes! # address
-  filledPrice: BigInt! # uint256
-  timestamp: BigInt!
-  emittedBy: Bytes! #address
+  principal: String! # uint256
+  collateral: String! # uint256
+  leverageAmount: String! # uint256
+  loanTokenAddress: String! # address
+  loanTokenSent: String! # uint256
+  collateralTokenSent: String! # uint256
+  collateralTokenAddress: String! # address
+  filledPrice: String! # uint256
+  timestamp: String!
+  emittedBy: String! #address
   transaction: Transaction!
 }
 
 type OrderCanceled @entity {
   id: ID!
-  hash: Bytes! # bytes32
-  maker: Bytes! # address
-  timestamp: BigInt!
-  emittedBy: Bytes! #address
+  hash: String! # String32
+  maker: String! # address
+  timestamp: String!
+  emittedBy: String! #address
   transaction: Transaction!
 }
 
 type OrderFilled @entity {
   id: ID!
-  hash: Bytes! # bytes32
+  hash: String! # String32
   maker: User! # address
-  amountIn: BigInt! # uint256
-  amountOut: BigInt! # uint256
+  amountIn: String! # uint256
+  amountOut: String! # uint256
   path: [String!]! # address[]
-  filledPrice: BigInt! # uint256
-  timestamp: BigInt!
-  emittedBy: Bytes! #address
+  filledPrice: String! # uint256
+  timestamp: String!
+  emittedBy: String! #address
   transaction: Transaction!
 }
 
 type Withdrawal @entity {
   id: ID!
-  receiver: Bytes! # address
-  amount: BigInt! # uint256
-  timestamp: BigInt!
-  emittedBy: Bytes! #address
+  receiver: String! # address
+  amount: String! # uint256
+  timestamp: String!
+  emittedBy: String! #address
   transaction: Transaction!
 }
 
@@ -83,14 +83,14 @@ type ConverterRegistry @entity {
   converters: [LiquidityPool!] @derivedFrom(field: "currentConverterRegistry")
   smartTokens: [SmartToken!] @derivedFrom(field: "currentConverterRegistry")
   connectorTokens: [Token!] @derivedFrom(field: "currentConverterRegistry")
-  owner: Bytes! # address
-  addedToContractRegistryAtBlockTimestamp: BigInt
+  owner: String! # address
+  addedToContractRegistryAtBlockTimestamp: String
   addedToContractRegistryAtTransactionHash: String
-  addedToContractRegistryAtBlockNumber: BigInt
-  lastUsedAtBlockTimestamp: BigInt
+  addedToContractRegistryAtBlockNumber: String
+  lastUsedAtBlockTimestamp: String
   lastUsedAtTransactionHash: String
-  lastUsedAtBlockNumber: BigInt
-  numConverters: BigInt!
+  lastUsedAtBlockNumber: String
+  numConverters: String!
 }
 
 """
@@ -119,11 +119,11 @@ type SmartToken @entity {
   connectorTokens are the entity that holds the many-to-many relationship between the underlying token asset and the smart token
   """
   connectorTokens: [TokenSmartToken!] @derivedFrom(field: "smartToken")
-  owner: Bytes!
+  owner: String!
   # tokenSwapTotals: [TokenSwapTotal!] @derivedFrom(field: "toToken")
   currentConverterRegistry: ConverterRegistry
-  addedToRegistryBlockNumber: BigInt
-  addedToRegistryTransactionHash: Bytes
+  addedToRegistryBlockNumber: String
+  addedToRegistryTransactionHash: String
 }
 
 """
@@ -172,12 +172,12 @@ type Swap @entity {
   numConversions: Int!
   fromToken: Token!
   toToken: Token!
-  fromAmount: BigDecimal!
-  toAmount: BigDecimal!
+  fromAmount: String!
+  toAmount: String!
   """
   Rate is calculated as toAmount / fromAmount
   """
-  rate: BigDecimal!
+  rate: String!
   """
   If this swap was initiated by a contract (for example as part of a Margin Trade), User will be null
   """
@@ -191,7 +191,7 @@ type Swap @entity {
   Was this swap a limit order?
   """
   isLimit: Boolean!
-  timestamp: BigInt!
+  timestamp: String!
   transaction: Transaction!
 }
 
@@ -202,13 +202,13 @@ type Conversion @entity {
   id: ID!
   _fromToken: Token! # address
   _toToken: Token! # address
-  _trader: Bytes! # address
-  _amount: BigInt! # uint256
-  _return: BigInt! # uint256
-  _conversionFee: BigInt! # int256
-  _protocolFee: BigInt! # int256
-  timestamp: BigInt!
-  emittedBy: Bytes! #address
+  _trader: String! # address
+  _amount: String! # uint256
+  _return: String! # uint256
+  _conversionFee: String! # int256
+  _protocolFee: String! # int256
+  timestamp: String!
+  emittedBy: String! #address
   transaction: Transaction!
   swapTransaction: Swap!
 }
@@ -235,21 +235,21 @@ type LiquidityPool @entity {
   connectorTokens: [LiquidityPoolToken!]! @derivedFrom(field: "liquidityPool")
   poolTokens: [TokenPoolToken!]! @derivedFrom(field: "liquidityPool")
   owner: String
-  conversionFee: BigInt
-  weight: BigInt
+  conversionFee: String
+  weight: String
   """
   Activated with be true when this pool is activated, and will change to false is the pool is deactivated
   """
   activated: Boolean
   # hasRBTCReserve: Boolean!
-  maxConversionFee: BigInt
+  maxConversionFee: String
   # reserveRatio: Int!
   # activated: Boolean!
-  # numSwaps: BigInt!
-  lastResetBlockNumber: BigInt
-  lastResetTimestamp: BigInt
-  createdAtTimestamp: BigInt
-  createdAtBlockNumber: BigInt
+  # numSwaps: String!
+  lastResetBlockNumber: String
+  lastResetTimestamp: String
+  createdAtTimestamp: String
+  createdAtBlockNumber: String
   createdAtTransaction: Transaction!
   currentConverterRegistry: ConverterRegistry
   # OTHER FIELDS TO ADD HERE
@@ -270,10 +270,10 @@ type LiquidityPoolToken @entity {
   The pool token that represents this token-liquidityPool relationship
   """
   poolToken: PoolToken!
-  # balance: BigInt! # Balance is hard to implement because pools were initially funded not through the LiquidityAdded event
-  volumeBought: BigDecimal!
-  volumeSold: BigDecimal!
-  totalVolume: BigDecimal!
+  # balance: String! # Balance is hard to implement because pools were initially funded not through the LiquidityAdded event
+  volumeBought: String!
+  volumeSold: String!
+  totalVolume: String!
 }
 
 """
@@ -294,9 +294,9 @@ type TokenPoolToken @entity {
 type NewConverter @entity {
   id: ID!
   _type: Int! # uint16
-  _converter: Bytes! # address
-  _owner: Bytes! # address
-  timestamp: BigInt!
+  _converter: String! # address
+  _owner: String! # address
+  timestamp: String!
   transaction: Transaction!
 }
 
@@ -305,9 +305,9 @@ Autogenerated for debugging - to be eventually deleted
 """
 type LiquidityPoolAdded @entity {
   id: ID!
-  _liquidityPool: Bytes! # address
-  timestamp: BigInt!
-  emittedBy: Bytes! #address
+  _liquidityPool: String! # address
+  timestamp: String!
+  emittedBy: String! #address
   transaction: Transaction!
 }
 
@@ -316,9 +316,9 @@ Autogenerated for debugging - to be eventually deleted
 """
 type LiquidityPoolRemoved @entity {
   id: ID!
-  _liquidityPool: Bytes! # address
-  timestamp: BigInt!
-  emittedBy: Bytes! #address
+  _liquidityPool: String! # address
+  timestamp: String!
+  emittedBy: String! #address
   transaction: Transaction!
 }
 
@@ -327,9 +327,9 @@ Autogenerated for debugging - to be eventually deleted
 """
 type SmartTokenAdded @entity {
   id: ID!
-  _smartToken: Bytes! # address
-  timestamp: BigInt!
-  emittedBy: Bytes! #address
+  _smartToken: String! # address
+  timestamp: String!
+  emittedBy: String! #address
   transaction: Transaction!
 }
 
@@ -338,9 +338,9 @@ Autogenerated for debugging - to be eventually deleted
 """
 type SmartTokenRemoved @entity {
   id: ID!
-  _smartToken: Bytes! # address
-  timestamp: BigInt!
-  emittedBy: Bytes! #address
+  _smartToken: String! # address
+  timestamp: String!
+  emittedBy: String! #address
   transaction: Transaction!
 }
 
@@ -352,12 +352,12 @@ type CandleStick @entity {
   baseToken: Token
   quoteToken: Token
   interval: CandleSticksInterval
-  open: BigDecimal # opening price
-  high: BigDecimal! # high price
-  low: BigDecimal! # low price
-  close: BigDecimal! # close price
+  open: String # opening price
+  high: String! # high price
+  low: String! # low price
+  close: String! # close price
   txCount: Int! # number of transactions during period
-  totalVolume: BigDecimal! # total volume in quote currency
+  totalVolume: String! # total volume in quote currency
   periodStartUnix: Int! # unix timestamp for start of candle
 }
 
@@ -377,32 +377,32 @@ type Proposal @entity {
   canceled: Transaction
   executed: Transaction
   queued: Transaction
-  votesFor: BigInt!
-  votesAgainst: BigInt!
-  countVotersFor: BigInt!
-  countVotersAgainst: BigInt!
+  votesFor: String!
+  votesAgainst: String!
+  countVotersFor: String!
+  countVotersAgainst: String!
   votes: [VoteCast!] @derivedFrom(field: "proposal")
-  proposalId: BigInt!
-  proposer: Bytes! # address
+  proposalId: String!
+  proposer: String! # address
   targets: [String!]! # address[]
-  values: [BigInt!]! # uint256[]
+  values: [String!]! # uint256[]
   signatures: [String!]! # string[]
-  startBlock: BigInt! # uint256
-  endBlock: BigInt! # uint256
+  startBlock: String! # uint256
+  endBlock: String! # uint256
   description: String! # string
-  timestamp: BigInt!
-  emittedBy: Bytes! #address
+  timestamp: String!
+  emittedBy: String! #address
 }
 
 type VoteCast @entity {
   id: ID!
   voter: User! # address
-  proposalId: BigInt! # uint256
+  proposalId: String! # uint256
   proposal: Proposal!
   support: Boolean! # bool
-  votes: BigInt! # uint256
-  timestamp: BigInt!
-  emittedBy: Bytes! #address
+  votes: String! # uint256
+  timestamp: String!
+  emittedBy: String! #address
   transaction: Transaction!
 }
 
@@ -419,12 +419,12 @@ type LendingPool @entity {
   The actual asset being lent and borrowed in this pool
   """
   underlyingAsset: Token!
-  poolTokenBalance: BigInt!
-  assetBalance: BigInt!
+  poolTokenBalance: String!
+  assetBalance: String!
   """
   Total asset volume lent over all time
   """
-  totalAssetLent: BigInt!
+  totalAssetLent: String!
 }
 
 """
@@ -444,11 +444,11 @@ type UserLendingHistory @entity {
   """
   Total volume this User has lent to this pool over all time (in the underlying asset currency, ie rBTC for the rBTC lending pool)
   """
-  totalLendVolume: BigInt!
+  totalLendVolume: String!
   """
   Total volume this User has withdrawn from this pool over all time
   """
-  totalUnlendVolume: BigInt!
+  totalUnlendVolume: String!
 }
 
 enum LendingHistoryType {
@@ -465,8 +465,8 @@ type LendingHistoryItem @entity {
   The underlying asset for this pool (eg USDT for the iUSDT pool)
   """
   asset: Token 
-  amount: BigInt! #TODO: Change to BigDecimal
-  loanTokenAmount: BigInt!
+  amount: String! #TODO: Change to String
+  loanTokenAmount: String!
   transaction: Transaction!
   emittedBy: String!
   userLendingHistory: UserLendingHistory!
@@ -479,10 +479,10 @@ type UserLiquidityHistory @entity {
   id: ID! # user + '-' + smartToken
   user: User!
   poolToken: PoolToken!
-  totalAsset0LiquidityAdded: BigInt!
-  totalAsset0LiquidityRemoved: BigInt!
-  totalAsset1LiquidityAdded: BigInt!
-  totalAsset1LiquidityRemoved: BigInt!
+  totalAsset0LiquidityAdded: String!
+  totalAsset0LiquidityRemoved: String!
+  totalAsset1LiquidityAdded: String!
+  totalAsset1LiquidityRemoved: String!
   liquidityHistory: [LiquidityHistoryItem!] @derivedFrom(field: "userLiquidityHistory")
 }
 
@@ -501,10 +501,10 @@ type LiquidityHistoryItem @entity {
   type: LiquidityHistoryType! # Added or removed
   provider: String! # address
   reserveToken: Token! # address
-  amount: BigInt! # uint256
-  newBalance: BigInt! # uint256
-  newSupply: BigInt! # uint256
-  timestamp: BigInt!
+  amount: String! # uint256
+  newBalance: String! # uint256
+  newSupply: String! # uint256
+  timestamp: String!
   liquidityPool: LiquidityPool!
   emittedBy: String! #address
   transaction: Transaction!
@@ -527,31 +527,31 @@ type Loan @entity {
   LoanType is either Trade (for Margin Trades) or Borrow (for Borrows)
   """
   type: LoanType!
-  startTimestamp: BigInt!
-  endTimestamp: BigInt
+  startTimestamp: String!
+  endTimestamp: String
   """
   The amount borrowed in loan tokens
   """
-  borrowedAmount: BigDecimal!
-  startBorrowedAmount: BigDecimal!
-  maxBorrowedAmount: BigDecimal!
+  borrowedAmount: String!
+  startBorrowedAmount: String!
+  maxBorrowedAmount: String!
 
   """
   Total of collateral (user collateral in a Borrow, and user collateral + borrowed amount in a Trade) in collateral tokens
   """
-  positionSize: BigDecimal!
+  positionSize: String!
   """
   Initial size of the position
   """
-  startPositionSize: BigDecimal!
+  startPositionSize: String!
   """
   The maximum this position size was - mainly for debugging purposes
   """
-  maximumPositionSize: BigDecimal!
+  maximumPositionSize: String!
   """
   The start rate of the loan in loan tokens (eg if it is a long USD/BTC margin trade, this is the BTC price in USD)
   """
-  startRate: BigDecimal!
+  startRate: String!
   """
   If a Liquidate, CloseWithSwap or CloseWithDeposit event occurs with 0 margin or 0 leverage, this property changes to false
   """
@@ -566,24 +566,24 @@ type Loan @entity {
   """
   Sum of position volume from Trade, Borrow and DepositCollateral events in this loan, in collateral token
   """
-  totalBought: BigDecimal!
+  totalBought: String!
   """
   Sum of position change volume from CloseWithSwap, CloseWithDeposit and Liquidate events in this loan, in collateral token
   """
-  totalSold: BigDecimal!
+  totalSold: String!
   """
   Average price per token from all loan open events
   """
-  averageBuyPrice: BigDecimal!
+  averageBuyPrice: String!
   """
   Average price per token from all loan close events
   """
-  averageSellPrice: BigDecimal!
+  averageSellPrice: String!
   """
   The realized PnL is quoted in the collateral currency
   """
-  realizedPnL: BigDecimal!
-  realizedPnLPercent: BigDecimal!
+  realizedPnL: String!
+  realizedPnLPercent: String!
 }
 
 """
@@ -592,18 +592,18 @@ Granular event data for the Loan entity. Emitted when a user Borrows (takes out 
 type Borrow @entity {
   id: ID!
   user: User! # address
-  lender: Bytes! # address
-  loanId: Loan! # bytes32
-  loanToken: Bytes! # address
-  collateralToken: Bytes! # address
-  newPrincipal: BigInt! # uint256
-  newCollateral: BigInt! # uint256
-  interestRate: BigInt! # uint256
-  interestDuration: BigInt! # uint256
-  collateralToLoanRate: BigInt! # uint256
-  currentMargin: BigInt! # uint256
-  timestamp: BigInt!
-  emittedBy: Bytes! #address
+  lender: String! # address
+  loanId: Loan! # String32
+  loanToken: String! # address
+  collateralToken: String! # address
+  newPrincipal: String! # uint256
+  newCollateral: String! # uint256
+  interestRate: String! # uint256
+  interestDuration: String! # uint256
+  collateralToLoanRate: String! # uint256
+  currentMargin: String! # uint256
+  timestamp: String!
+  emittedBy: String! #address
   transaction: Transaction!
 }
 
@@ -612,18 +612,18 @@ Granular event data for the Loan entity. Emitted when a user closes a loan initi
 """
 type CloseWithDeposit @entity {
   id: ID!
-  user: Bytes! # address
-  lender: Bytes! # address
-  loanId: Loan! # bytes32
-  closer: Bytes! # address
-  loanToken: Bytes! # address
-  collateralToken: Bytes! # address
-  repayAmount: BigInt! # uint256
-  collateralWithdrawAmount: BigInt! # uint256
-  collateralToLoanRate: BigInt! # uint256
-  currentMargin: BigInt! # uint256
-  timestamp: BigInt!
-  emittedBy: Bytes! #address
+  user: String! # address
+  lender: String! # address
+  loanId: Loan! # String32
+  closer: String! # address
+  loanToken: String! # address
+  collateralToken: String! # address
+  repayAmount: String! # uint256
+  collateralWithdrawAmount: String! # uint256
+  collateralToLoanRate: String! # uint256
+  currentMargin: String! # uint256
+  timestamp: String!
+  emittedBy: String! #address
   transaction: Transaction!
 }
 
@@ -632,18 +632,18 @@ Granular event data for the Loan entity. Emitted when a user closes a loan initi
 """
 type CloseWithSwap @entity {
   id: ID!
-  user: Bytes! # address
-  lender: Bytes! # address
-  loanId: Loan! # bytes32
-  collateralToken: Bytes! # address
-  loanToken: Bytes! # address
-  closer: Bytes! # address
-  positionCloseSize: BigInt! # uint256
-  loanCloseAmount: BigInt! # uint256
-  exitPrice: BigInt! # uint256
-  currentLeverage: BigInt! # uint256
-  timestamp: BigInt!
-  emittedBy: Bytes! #address
+  user: String! # address
+  lender: String! # address
+  loanId: Loan! # String32
+  collateralToken: String! # address
+  loanToken: String! # address
+  closer: String! # address
+  positionCloseSize: String! # uint256
+  loanCloseAmount: String! # uint256
+  exitPrice: String! # uint256
+  currentLeverage: String! # uint256
+  timestamp: String!
+  emittedBy: String! #address
   transaction: Transaction!
 }
 
@@ -652,11 +652,11 @@ Granular event data for the Loan entity. Emitted when a user closes adds collate
 """
 type DepositCollateral @entity {
   id: ID!
-  loanId: Loan! # bytes32
-  depositAmount: BigInt! # uint256
-  rate: BigInt # uint256
-  timestamp: BigInt!
-  emittedBy: Bytes! #address
+  loanId: Loan! # String32
+  depositAmount: String! # uint256
+  rate: String # uint256
+  timestamp: String!
+  emittedBy: String! #address
   transaction: Transaction!
 }
 
@@ -666,17 +666,17 @@ Granular event data for the Loan entity. Emitted when a loan is fully or partial
 type Liquidate @entity {
   id: ID!
   user: User! # address
-  liquidator: Bytes! # address
-  loanId: Loan! # bytes32
-  lender: Bytes! # address
-  loanToken: Bytes! # address
-  collateralToken: Bytes! # address
-  repayAmount: BigInt! # uint256
-  collateralWithdrawAmount: BigInt! # uint256
-  collateralToLoanRate: BigInt! # uint256
-  currentMargin: BigInt! # uint256
-  timestamp: BigInt!
-  emittedBy: Bytes! #address
+  liquidator: String! # address
+  loanId: Loan! # String32
+  lender: String! # address
+  loanToken: String! # address
+  collateralToken: String! # address
+  repayAmount: String! # uint256
+  collateralWithdrawAmount: String! # uint256
+  collateralToLoanRate: String! # uint256
+  currentMargin: String! # uint256
+  timestamp: String!
+  emittedBy: String! #address
   transaction: Transaction!
 }
 
@@ -685,12 +685,12 @@ Granular event data for the Loan entity. Emitted when a user Borrows and when a 
 """
 type PayBorrowingFee @entity {
   id: ID!
-  payer: Bytes! # address
-  token: Bytes! # address
-  loanId: Loan! # bytes32
-  amount: BigInt! # uint256
-  timestamp: BigInt!
-  emittedBy: Bytes! #address
+  payer: String! # address
+  token: String! # address
+  loanId: Loan! # String32
+  amount: String! # uint256
+  timestamp: String!
+  emittedBy: String! #address
   transaction: Transaction!
 }
 
@@ -699,11 +699,11 @@ Granular event data for the Loan entity. Emitted when a user Lends or Unlends an
 """
 type PayLendingFee @entity {
   id: ID!
-  payer: Bytes! # address
-  token: Bytes! # address
-  amount: BigInt! # uint256
-  timestamp: BigInt!
-  emittedBy: Bytes! #address
+  payer: String! # address
+  token: String! # address
+  amount: String! # uint256
+  timestamp: String!
+  emittedBy: String! #address
   transaction: Transaction!
 }
 
@@ -712,12 +712,12 @@ Granular event data for the Loan entity. Emitted when a user Margin Trades and w
 """
 type PayTradingFee @entity {
   id: ID!
-  payer: Bytes! # address
-  token: Bytes! # address
-  loanId: Loan! # bytes32
-  amount: BigInt! # uint256
-  timestamp: BigInt!
-  emittedBy: Bytes! #address
+  payer: String! # address
+  token: String! # address
+  loanId: Loan! # String32
+  amount: String! # uint256
+  timestamp: String!
+  emittedBy: String! #address
   transaction: Transaction!
 }
 
@@ -725,19 +725,19 @@ type PayTradingFee @entity {
 type Trade @entity {
   id: ID!
   user: User! 
-  lender: Bytes! 
+  lender: String! 
   loanId: Loan! 
   collateralToken: Token! 
   loanToken: Token! 
-  positionSize: BigInt! 
-  borrowedAmount: BigInt! 
-  interestRate: BigInt! 
-  settlementDate: BigInt! 
-  entryPrice: BigInt! 
-  entryLeverage: BigInt! 
-  currentLeverage: BigInt! 
-  timestamp: BigInt!
-  emittedBy: Bytes!
+  positionSize: String! 
+  borrowedAmount: String! 
+  interestRate: String! 
+  settlementDate: String! 
+  entryPrice: String! 
+  entryLeverage: String! 
+  currentLeverage: String! 
+  timestamp: String!
+  emittedBy: String!
   transaction: Transaction!
 }
 
@@ -757,80 +757,80 @@ type ProtocolStats @entity {
   """
   tokens: [Token!]!
   usdStablecoin: Token!
-  btcUsdPrice: BigDecimal!
+  btcUsdPrice: String!
   """
   Total number of users of the protocol. This number is incremented each time a user initiates a transaction with the Protocol.
   Currently this is incremented by specific user actions, but could be incremented on a per Transaction basis.
   """
-  totalUsers: BigInt!
+  totalUsers: String!
   """
   Total of positionSize property in Trade event (in usd). This includes user collateral and borrowed amount
   """
-  totalMarginTradeVolumeUsd: BigDecimal!
+  totalMarginTradeVolumeUsd: String!
   """
   Total position volume closed for Margin Trades (in usd)
   """
-  totalCloseWithSwapVolumeUsd: BigDecimal!
+  totalCloseWithSwapVolumeUsd: String!
   """
   Total additional collateral deposited for Margin Trades and Borrows (in usd)
   """
-  totalDepositCollateralVolumeUsd: BigDecimal!
+  totalDepositCollateralVolumeUsd: String!
   """
   Total Margin Trade and Borrow position size that has been liquidated (in usd)
   """
-  totalLiquidateVolumeUsd: BigDecimal!
+  totalLiquidateVolumeUsd: String!
   """
   Total volume that has passed through every AMM pool of the Sovryn protocol (in usd)
   """
-  totalAmmVolumeUsd: BigDecimal!
+  totalAmmVolumeUsd: String!
   """
   Total volume of fees earned by liquidity providers to AMM pools (in usd)
   """
-  totalAmmLpFeesUsd: BigDecimal!
+  totalAmmLpFeesUsd: String!
   """
   Total volume of fees earned by SOV stakers from AMM conversion events (in usd). These fees began after the fee-sharing SIP was executed.
   """
-  totalAmmStakerFeesUsd: BigDecimal!
+  totalAmmStakerFeesUsd: String!
   """
   Total fees from Margin Trading earned by SOV stakers (in usd)
   """
-  totalTradingFeesUsd: BigDecimal!
+  totalTradingFeesUsd: String!
   """
   Total fees from Lending and Unlending earned by SOV stakers (in usd)
   """
-  totalLendingFeesUsd: BigDecimal!
+  totalLendingFeesUsd: String!
   """
   Total fees from Borrowing earned by SOV stakers (in usd)
   """
-  totalBorrowingFeesUsd: BigDecimal!
+  totalBorrowingFeesUsd: String!
   """
   Total volume supplied to Lending Pools over all time (in usd)
   """
-  totalLendVolumeUsd: BigDecimal!
+  totalLendVolumeUsd: String!
   """
   Total volume withdrawn from Lending Pool over all time (in usd)
   """
-  totalUnlendVolumeUsd: BigDecimal!
+  totalUnlendVolumeUsd: String!
   """
   Total of collateral property in Trade event (in usd). This may be changed to borrowed amount volume, but collateral keeps it consistent with margin trading
   """
-  totalBorrowVolumeUsd: BigDecimal!
+  totalBorrowVolumeUsd: String!
   """
   Total volume of Borrows closed (in usd)
   """
-  totalCloseWithDepositVolumeUsd: BigDecimal!
+  totalCloseWithDepositVolumeUsd: String!
   """
   This is SOV staked by users (not vesting contracts). It is incremented when users stake tokens, and decremented when users withdraw tokens from the staking contract
   """
-  totalVoluntarilyStakedSov: BigInt!
+  totalVoluntarilyStakedSov: String!
   """
   This is SOV staked by vesting contracts. It in incremented when the contracts stake the tokens, and decremented when users claim their unlocked tokens
   """
-  totalStakedByVestingSov: BigInt!
+  totalStakedByVestingSov: String!
   """
   NOT YET IMPLEMENTED: This will be a total of volumes of all transaction types (AMM Swaps, Margin Trades, CloseWithSwap etc etc)
   """
-  totalTransactedVolumeUsd: BigInt! # TODO: Implement
+  totalTransactedVolumeUsd: String! # TODO: Implement
 }
 
 """
@@ -841,23 +841,23 @@ type Transaction @entity {
   ID is transaction hash
   """
   id: ID!
-  blockNumber: BigInt!
+  blockNumber: String!
   """
   The timestamp the transaction was confirmed
   """
-  timestamp: BigInt!
-  gasPrice: BigInt!
+  timestamp: String!
+  gasPrice: String!
   """
   The index of this transaction within the block
   """
-  index: BigInt!
+  index: String!
   """
   The account that initiated this transaction. This must be an Account and not a Contract.
   """
-  from: Bytes! # TODO: Change to User entity
-  to: Bytes
-  value: BigInt!
-  gasLimit: BigInt!
+  from: String! # TODO: Change to User entity
+  to: String
+  value: String!
+  gasLimit: String!
 }
 
 """
@@ -884,27 +884,27 @@ type Token @entity {
   """
   previous BTC price used for candleSticks
   """
-  prevPriceBtc: BigDecimal!
-  lastPriceBtc: BigDecimal!
+  prevPriceBtc: String!
+  lastPriceBtc: String!
   """
   previous BTC price used for candleSticks
   """
-  prevPriceUsd: BigDecimal!
-  lastPriceUsd: BigDecimal!
+  prevPriceUsd: String!
+  lastPriceUsd: String!
   """
   The total volume of this token that has been traded through the protocol quoted in BTC
   """
-  btcVolume: BigDecimal!
+  btcVolume: String!
   """
   The total volume of this token that has been traded through the protocol quoted in USD
   """
-  usdVolume: BigDecimal!
+  usdVolume: String!
   """
   The total volume of this token that has been traded through the protocol
   """
-  tokenVolume: BigDecimal!
-  # marketCap: BigInt!
-  # circulatingSupply: BigInt!
+  tokenVolume: String!
+  # marketCap: String!
+  # circulatingSupply: String!
   currentConverterRegistry: ConverterRegistry
   """
   Does this token have an AMM pool with rBTC as the other reserve asset?
@@ -927,15 +927,15 @@ type UserRewardsEarnedHistory @entity {
   """
   This is the total of all EarnReward and RewardClaimed events
   """
-  totalFeesAndRewardsEarned: BigInt!
+  totalFeesAndRewardsEarned: String!
   """
   This is incremented by EarnReward events, and set to 0 by TokensStaked events on the LockedSOV contract
   """
-  availableTradingRewards: BigInt!
+  availableTradingRewards: String!
   """
   This is incremented by EarnReward and RewardClaimed events, and set to 0 by RewardWithdrawn events
   """
-  availableRewardSov: BigInt!
+  availableRewardSov: String!
   rewardsEarnedHistory: [RewardsEarnedHistoryItem!] @derivedFrom(field: "user")
 }
 
@@ -951,8 +951,8 @@ type RewardsEarnedHistoryItem @entity {
   action: RewardsEarnedAction!
   user: UserRewardsEarnedHistory!
   token: Token
-  amount: BigInt!
-  timestamp: BigInt!
+  amount: String!
+  timestamp: String!
   transaction: Transaction!
 }
 
@@ -960,12 +960,12 @@ type RewardsEarnedHistoryItem @entity {
 type TokensStaked @entity {
   id: ID!
   user: User
-  staker: Bytes! # address
-  amount: BigInt! # uint256
-  lockedUntil: BigInt! # uint256
-  totalStaked: BigInt! # uint256
-  timestamp: BigInt!
-  emittedBy: Bytes! #address
+  staker: String! # address
+  amount: String! # uint256
+  lockedUntil: String! # uint256
+  totalStaked: String! # uint256
+  timestamp: String!
+  emittedBy: String! #address
   transaction: Transaction!
   isUserStaked: Boolean!
 }
@@ -976,9 +976,9 @@ type UserStakeHistory @entity {
   id: ID! # id is user
   user: User!
   stakeHistory: [StakeHistoryItem!] @derivedFrom(field: "user")
-  totalStaked: BigInt!
-  totalWithdrawn: BigInt!
-  totalRemaining: BigInt!
+  totalStaked: String!
+  totalWithdrawn: String!
+  totalRemaining: String!
 }
 
 enum StakeHistoryAction {
@@ -995,10 +995,10 @@ type StakeHistoryItem @entity {
   id: ID! # transaction hash
   user: UserStakeHistory!
   action: StakeHistoryAction!
-  timestamp: BigInt!
+  timestamp: String!
   transaction: Transaction!
-  amount: BigInt
-  lockedUntil: BigInt
+  amount: String
+  lockedUntil: String
 }
 
 # This event is emitted when tokens are transferred to the Protocol contract as fees
@@ -1006,9 +1006,9 @@ type StakeHistoryItem @entity {
 
 type FeeSharingTokensTransferred @entity {
   id: ID! # ID is tx hash - it can't be tx hash + log index because we need to load on tx hash
-  sender: Bytes!
-  token: Bytes!
-  amount: BigInt!
+  sender: String!
+  token: String!
+  amount: String!
 }
 
 
@@ -1080,21 +1080,21 @@ This is the total volumes of different actions for one user. See ProtocolStats e
 type UserTotal @entity {
   id: ID!
   user: User!
-  totalMarginTradeVolumeUsd: BigDecimal!
-  totalCloseWithSwapVolumeUsd: BigDecimal!
-  totalDepositCollateralVolumeUsd: BigDecimal!
-  totalLiquidateVolumeUsd: BigDecimal!
-  totalAmmVolumeUsd: BigDecimal!
-  totalAmmLpFeesUsd: BigDecimal!
-  totalAmmStakerFeesUsd: BigDecimal!
-  totalTradingFeesUsd: BigDecimal!
-  totalLendingFeesUsd: BigDecimal!
-  totalBorrowingFeesUsd: BigDecimal!
-  totalLendVolumeUsd: BigDecimal!
-  totalUnlendVolumeUsd: BigDecimal!
-  totalBorrowVolumeUsd: BigDecimal!
-  totalCloseWithDepositVolumeUsd: BigDecimal!
-  # totalTransactedVolumeUsd: BigInt! # TODO: Implement
+  totalMarginTradeVolumeUsd: String!
+  totalCloseWithSwapVolumeUsd: String!
+  totalDepositCollateralVolumeUsd: String!
+  totalLiquidateVolumeUsd: String!
+  totalAmmVolumeUsd: String!
+  totalAmmLpFeesUsd: String!
+  totalAmmStakerFeesUsd: String!
+  totalTradingFeesUsd: String!
+  totalLendingFeesUsd: String!
+  totalBorrowingFeesUsd: String!
+  totalLendVolumeUsd: String!
+  totalUnlendVolumeUsd: String!
+  totalBorrowVolumeUsd: String!
+  totalCloseWithDepositVolumeUsd: String!
+  # totalTransactedVolumeUsd: String! # TODO: Implement
 }
 
 # Vesting Resistry
@@ -1111,13 +1111,13 @@ enum VestingContractType {
 type VestingContract @entity {
   id: ID! # vesting contract id
   user: User!
-  createdAtTimestamp: BigInt!
-  cliff: BigInt # uint256
-  duration: BigInt # uint256
-  startingBalance: BigInt! # uint256
-  currentBalance: BigInt!
+  createdAtTimestamp: String!
+  cliff: String # uint256
+  duration: String # uint256
+  startingBalance: String! # uint256
+  currentBalance: String!
   type: VestingContractType!
-  emittedBy: Bytes!
+  emittedBy: String!
   createdAtTransaction: Transaction!
   stakeHistory: [VestingHistoryItem!] @derivedFrom(field: "staker")
 }
@@ -1132,10 +1132,10 @@ type VestingHistoryItem @entity {
   id: ID!
   action: VestingHistoryItemAction!
   staker: VestingContract!
-  amount: BigInt! # uint256
-  lockedUntil: BigInt! # uint256
-  totalStaked: BigInt! # uint256
-  timestamp: BigInt!
-  emittedBy: Bytes! #address
+  amount: String! # uint256
+  lockedUntil: String! # uint256
+  totalStaked: String! # uint256
+  timestamp: String!
+  emittedBy: String! #address
   transaction: Transaction!
 }

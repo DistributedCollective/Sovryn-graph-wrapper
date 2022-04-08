@@ -62,12 +62,26 @@ export const priceAndVolumeQuery = (block: number = 0): DocumentNode => {
   }
 };
 
-export const assetDataQuery: DocumentNode = gql`
+export const liquidityPoolsByAsset: DocumentNode = gql`
   {
     liquidityPools(where: { activated: true }) {
       id
       type
       token1 {
+        id
+        name
+        symbol
+        lastPriceBtc
+        lastPriceUsd
+      }
+    }
+  }
+`;
+
+export const assetDataQuery: DocumentNode = gql`
+  {
+    protocolStats(id: "0") {
+      tokens {
         id
         name
         symbol

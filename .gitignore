@@ -27,3 +27,5 @@ build/
 tmp/
 temp/
 dist/
+.env
+codegen.yml
