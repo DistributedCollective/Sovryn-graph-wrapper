@@ -6,23 +6,29 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=sov-boilerplate-main
+      - POSTGRES_DB=sov-contract-data-main
     expose:
       - 5432
     networks:
       - sovryn
 
-  sov-boilerplate-service:
-    image: sov-boilerplate-service
+  sov-graph-wrapper-service:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/app
+    working_dir: /app
     environment:
-      - PORT=3000
-      - URL_REDIS_SERVICE=http://sov-boilerplate-redis-service
-    ports:
-      - "3000:3000"
-    expose:
-      - "3000"
+      - APP_NAME='margin-call-service'
+      - LOG_LEVEL=debug
+      - POSTGRES_HOST=sov-postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=sov-contract-data-main
     depends_on:
-      - sov-boilerplate-service-redis-service
+      - sov-postgres
     networks:
       - sovryn
 
