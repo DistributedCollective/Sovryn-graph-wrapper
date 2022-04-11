@@ -58,5 +58,5 @@ export const fishReleaseSchedule: { [key: string]: number } = {
   May_2026: 417900000,
   Jun_2026: 418600000,
   Jul_2026: 419300000,
-  Aug_2026: 420000000,
-};
+  Aug_2026: 420000000
+}

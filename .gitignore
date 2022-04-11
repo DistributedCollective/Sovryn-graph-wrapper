@@ -29,3 +29,5 @@ temp/
 dist/
 .env
 codegen.yml
+graphql.schema.json
+

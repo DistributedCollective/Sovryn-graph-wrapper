@@ -66,7 +66,6 @@ type Withdrawal @entity {
   transaction: Transaction!
 }
 
-
 # AMM SCHEMA
 
 """
@@ -94,7 +93,7 @@ type ConverterRegistry @entity {
 }
 
 """
-The smart token represents a single reserve asset on a single pool. 
+The smart token represents a single reserve asset on a single pool.
 For V1 pools, there is 1 smart token representing both reserve assets. For V2 pools, there are 2 smart tokens, one for each reserve asset.
 """
 type SmartToken @entity {
@@ -283,7 +282,7 @@ type TokenPoolToken @entity {
   """
   ID is token address + poolToken address
   """
-  id: ID! 
+  id: ID!
   token: Token!
   poolToken: PoolToken!
   liquidityPool: LiquidityPool!
@@ -344,7 +343,6 @@ type SmartTokenRemoved @entity {
   transaction: Transaction!
 }
 
-
 # Candlesticks
 
 type CandleStick @entity {
@@ -368,7 +366,6 @@ enum CandleSticksInterval {
   FourHourInterval
   DayInterval
 }
-
 
 # Governor Contracts
 type Proposal @entity {
@@ -406,7 +403,6 @@ type VoteCast @entity {
   transaction: Transaction!
 }
 
-
 """
 A Lending Pool (iToken), where Users can lend assets to earn interest, and Users can borrow assets to Margin Trade or just as a regular loan.
 """
@@ -414,7 +410,7 @@ type LendingPool @entity {
   """
   ID is the contract address of the iToken
   """
-  id: ID! 
+  id: ID!
   """
   The actual asset being lent and borrowed in this pool
   """
@@ -440,7 +436,8 @@ type UserLendingHistory @entity {
   """
   Granular Lend/UnLend events. Derived from Mint/Burn events on the contracts
   """
-  lendingHistory: [LendingHistoryItem!] @derivedFrom(field: "userLendingHistory")
+  lendingHistory: [LendingHistoryItem!]
+    @derivedFrom(field: "userLendingHistory")
   """
   Total volume this User has lent to this pool over all time (in the underlying asset currency, ie rBTC for the rBTC lending pool)
   """
@@ -464,7 +461,7 @@ type LendingHistoryItem @entity {
   """
   The underlying asset for this pool (eg USDT for the iUSDT pool)
   """
-  asset: Token 
+  asset: Token
   amount: String! #TODO: Change to String
   loanTokenAmount: String!
   transaction: Transaction!
@@ -483,7 +480,8 @@ type UserLiquidityHistory @entity {
   totalAsset0LiquidityRemoved: String!
   totalAsset1LiquidityAdded: String!
   totalAsset1LiquidityRemoved: String!
-  liquidityHistory: [LiquidityHistoryItem!] @derivedFrom(field: "userLiquidityHistory")
+  liquidityHistory: [LiquidityHistoryItem!]
+    @derivedFrom(field: "userLiquidityHistory")
 }
 
 enum LiquidityHistoryType {
@@ -721,21 +719,20 @@ type PayTradingFee @entity {
   transaction: Transaction!
 }
 
-
 type Trade @entity {
   id: ID!
-  user: User! 
-  lender: String! 
-  loanId: Loan! 
-  collateralToken: Token! 
-  loanToken: Token! 
-  positionSize: String! 
-  borrowedAmount: String! 
-  interestRate: String! 
-  settlementDate: String! 
-  entryPrice: String! 
-  entryLeverage: String! 
-  currentLeverage: String! 
+  user: User!
+  lender: String!
+  loanId: Loan!
+  collateralToken: Token!
+  loanToken: Token!
+  positionSize: String!
+  borrowedAmount: String!
+  interestRate: String!
+  settlementDate: String!
+  entryPrice: String!
+  entryLeverage: String!
+  currentLeverage: String!
   timestamp: String!
   emittedBy: String!
   transaction: Transaction!
@@ -916,8 +913,6 @@ type Token @entity {
   hasStablecoinPool: Boolean
 }
 
-
-
 """
 This entity contains the history, fees and totals regarding one users' SOV rewards
 """
@@ -955,7 +950,6 @@ type RewardsEarnedHistoryItem @entity {
   timestamp: String!
   transaction: Transaction!
 }
-
 
 type TokensStaked @entity {
   id: ID!
@@ -1011,7 +1005,6 @@ type FeeSharingTokensTransferred @entity {
   amount: String!
 }
 
-
 # USER SCHEMA
 
 """
@@ -1063,7 +1056,7 @@ type User @entity {
   """
   Vesting contracts owned by User, labelled by type
   """
-  vestingContracts: [VestingContract!] @derivedFrom(field:"user")
+  vestingContracts: [VestingContract!] @derivedFrom(field: "user")
   """
   Voting history of User
   """
@@ -1123,8 +1116,8 @@ type VestingContract @entity {
 }
 
 enum VestingHistoryItemAction {
-  TokensStaked,
-  TeamTokensRevoked,
+  TokensStaked
+  TeamTokensRevoked
   TokensWithdrawn
 }
 
@@ -1138,4 +1131,11 @@ type VestingHistoryItem @entity {
   timestamp: String!
   emittedBy: String! #address
   transaction: Transaction!
+}
+
+type Query {
+  liquidityPools: [LiquidityPool]
+  liquidityPool: LiquidityPool
+  transactions: [Transaction]
+  transaction: Transaction
 }

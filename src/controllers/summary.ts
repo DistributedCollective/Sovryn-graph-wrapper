@@ -1,16 +1,17 @@
-import { bignumber } from "mathjs";
-import { getAllSummaryPairData } from "../models/summary.model";
+import { bignumber } from 'mathjs'
+import { getAllSummaryPairData } from '../models/summary.model'
+import { Summary } from '../utils/interfaces'
 
-export const getSummaryData = async () => {
-  const data = await getAllSummaryPairData();
-  let pairs: { [key: string]: any } = {};
-  let btcPrice = 0;
-  let totalVolumeBtc = 0;
+export const getSummaryData = async (): Promise<Summary> => {
+  const data = await getAllSummaryPairData()
+  const pairs: { [key: string]: any } = {}
+  let btcPrice = 0
+  let totalVolumeBtc = 0
   data.forEach((item) => {
-    if (item.baseSymbol === "XUSD") {
-      btcPrice = Number(bignumber(1).div(item.lastPrice).toFixed(2));
+    if (item.baseSymbol === 'XUSD') {
+      btcPrice = Number(bignumber(1).div(item.lastPrice).toFixed(2))
     }
-    totalVolumeBtc += Number(item.quoteVolume24h);
+    totalVolumeBtc += Number(item.quoteVolume24h)
     pairs[item.tradingPair] = {
       trading_pairs: `${item.baseSymbol}_${item.quoteSymbol}`,
       base_symbol: item.baseSymbol,
@@ -28,14 +29,14 @@ export const getSummaryData = async () => {
       price_change_percent_24h: Number(item.priceChangePercent24h),
       price_change_percent_24h_usd: Number(item.priceChangePercent24hUsd),
       price_change_week: Number(item.priceChangePercentWeek),
-      price_change_week_usd: Number(item.priceChangePercentWeekUsd),
-    };
-  });
+      price_change_week_usd: Number(item.priceChangePercentWeekUsd)
+    }
+  })
 
   return {
     pairs: pairs,
     updated_at: data[0].updatedAt,
     total_volume_btc: totalVolumeBtc,
-    total_volume_usd: totalVolumeBtc * btcPrice,
-  };
-};
+    total_volume_usd: totalVolumeBtc * btcPrice
+  }
+}

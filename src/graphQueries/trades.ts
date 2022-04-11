@@ -1,5 +1,5 @@
-import { DocumentNode } from "graphql";
-import gql from "graphql-tag";
+import { DocumentNode } from 'graphql'
+import gql from 'graphql-tag'
 // import { getQuery } from "../utils/apolloClient";
 
 export const tradesQuery = (
@@ -32,5 +32,5 @@ export const tradesQuery = (
         }
       }
     }
-  `;
-};
+  `
+}

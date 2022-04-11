@@ -1,5 +1,5 @@
-import { DocumentNode } from "graphql";
-import gql from "graphql-tag";
+import { DocumentNode } from 'graphql'
+import gql from 'graphql-tag'
 
 export const priceAndVolumeQuery = (block: number = 0): DocumentNode => {
   if (block > 0) {
@@ -27,7 +27,7 @@ export const priceAndVolumeQuery = (block: number = 0): DocumentNode => {
           }
         }
       }
-    `;
+    `
   } else {
     return gql`
       {
@@ -58,9 +58,9 @@ export const priceAndVolumeQuery = (block: number = 0): DocumentNode => {
           }
         }
       }
-    `;
+    `
   }
-};
+}
 
 export const liquidityPoolsByAsset: DocumentNode = gql`
   {
@@ -76,7 +76,7 @@ export const liquidityPoolsByAsset: DocumentNode = gql`
       }
     }
   }
-`;
+`
 
 export const assetDataQuery: DocumentNode = gql`
   {
@@ -90,4 +90,4 @@ export const assetDataQuery: DocumentNode = gql`
       }
     }
   }
-`;
+`

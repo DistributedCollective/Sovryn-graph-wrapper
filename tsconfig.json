@@ -24,5 +24,8 @@
     "esModuleInterop": true,
     "sourceMap": true,
     "allowJs": false
+  },
+  "linterOptions": {
+    "exclude": ["./src/generated/*"]
   }
 }

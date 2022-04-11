@@ -1,5 +1,5 @@
-import { DocumentNode } from "graphql";
-import gql from "graphql-tag";
+import { DocumentNode } from 'graphql'
+import gql from 'graphql-tag'
 // import { getQuery } from "../utils/apolloClient";
 
 export const candlestickQuery = (
@@ -25,8 +25,8 @@ export const candlestickQuery = (
         low
       }
     }
-  `;
-};
+  `
+}
 
 // getQuery(
 //   candlestickQuery(

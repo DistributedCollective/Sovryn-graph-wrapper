@@ -1,79 +1,79 @@
-import { Entity, Column, Unique, PrimaryColumn } from "typeorm";
+import { Entity, Column, Unique, PrimaryColumn } from 'typeorm'
 
-import { Length, IsEthereumAddress, IsNumber } from "class-validator";
+import { Length, IsEthereumAddress, IsNumber } from 'class-validator'
 
-import { AbstractBaseEntity } from "./AbstractBase.entity";
+import { AbstractBaseEntity } from './AbstractBase.entity'
 
 @Entity()
-@Unique("pair", ["tradingPair"])
+@Unique('pair', ['tradingPair'])
 export class SummaryPairData extends AbstractBaseEntity {
   @PrimaryColumn()
   @Length(83)
-  tradingPair!: string;
+  tradingPair!: string
 
   @Column()
   @Length(2, 10)
-  baseSymbol!: string;
+  baseSymbol!: string
 
   @Column()
   @Length(42)
   @IsEthereumAddress()
-  baseId!: string;
+  baseId!: string
 
   @Column()
   @Length(2, 10)
-  quoteSymbol!: string;
+  quoteSymbol!: string
 
   @Column()
   @Length(42)
   @IsEthereumAddress()
-  quoteId!: string;
+  quoteId!: string
 
-  @Column("decimal", { precision: 40, scale: 18 })
+  @Column('decimal', { precision: 40, scale: 18 })
   @IsNumber()
-  baseVolume24h!: number;
+  baseVolume24h!: number
 
-  @Column("decimal", { precision: 40, scale: 18 })
+  @Column('decimal', { precision: 40, scale: 18 })
   @IsNumber()
-  quoteVolume24h!: number;
+  quoteVolume24h!: number
 
-  @Column("decimal", { precision: 40, scale: 18 })
+  @Column('decimal', { precision: 40, scale: 18 })
   @IsNumber()
-  lastPrice!: number;
+  lastPrice!: number
 
-  @Column("decimal", { precision: 40, scale: 2 })
+  @Column('decimal', { precision: 40, scale: 2 })
   @IsNumber()
-  lastPriceUsd!: number;
+  lastPriceUsd!: number
 
-  @Column("decimal", { precision: 6, scale: 2 })
+  @Column('decimal', { precision: 6, scale: 2 })
   @IsNumber()
-  priceChangePercent24h!: number;
+  priceChangePercent24h!: number
 
-  @Column("decimal", { precision: 6, scale: 2 })
+  @Column('decimal', { precision: 6, scale: 2 })
   @IsNumber()
-  priceChangePercentWeek!: number;
+  priceChangePercentWeek!: number
 
-  @Column("decimal", { precision: 6, scale: 2 })
+  @Column('decimal', { precision: 6, scale: 2 })
   @IsNumber()
-  priceChangePercent24hUsd!: number;
+  priceChangePercent24hUsd!: number
 
-  @Column("decimal", { precision: 6, scale: 2 })
+  @Column('decimal', { precision: 6, scale: 2 })
   @IsNumber()
-  priceChangePercentWeekUsd!: number;
+  priceChangePercentWeekUsd!: number
 
-  @Column("decimal", { precision: 40, scale: 2 })
+  @Column('decimal', { precision: 40, scale: 2 })
   @IsNumber()
-  highUsd!: number;
+  highUsd!: number
 
-  @Column("decimal", { precision: 40, scale: 2 })
+  @Column('decimal', { precision: 40, scale: 2 })
   @IsNumber()
-  lowUsd!: number;
+  lowUsd!: number
 
-  @Column("decimal", { precision: 40, scale: 18 })
+  @Column('decimal', { precision: 40, scale: 18 })
   @IsNumber()
-  highBtc!: number;
+  highBtc!: number
 
-  @Column("decimal", { precision: 40, scale: 18 })
+  @Column('decimal', { precision: 40, scale: 18 })
   @IsNumber()
-  lowBtc!: number;
+  lowBtc!: number
 }
