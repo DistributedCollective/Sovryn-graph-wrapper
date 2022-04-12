@@ -8,7 +8,7 @@ import { router as cmcRouter } from './routes/cmc.route'
 import responseTime from 'response-time'
 import errorHandler from './errorHandlers/errorHandler'
 import { HTTP404Error } from './errorHandlers/baseError'
-import { summaryDataScheduledTask } from './services/summary'
+import { jobList } from './services/cronJobs'
 
 const app = express()
 app.use(helmet())
@@ -19,19 +19,12 @@ app.use(responseTime())
 app.use(expressRequestId())
 app.use(log)
 
-summaryDataScheduledTask.cronJob.start()
+/** Start cron jobs */
+jobList.forEach((job) => job.cronJob.start())
 
 app.get('/', (req, res) => {
-  req.log.info(
-    req,
-    'Sovryn boilerplate Service DB Read Service Running. Stay Sovryn.'
-  )
-  res.send('Sovryn boilerplate Service DB Read Service Running. Stay Sovryn.')
-})
-
-app.get('/test', (req, res) => {
-  req.log.info(req, 'test')
-  res.json({ message: 'Pass!' })
+  req.log.info(req, 'Sovryn Graph Wrapper Service Running. Stay Sovryn.')
+  res.send('Sovryn Graph Wrapper Service Running. Stay Sovryn.')
 })
 
 app.use('/cmc/', cmcRouter)

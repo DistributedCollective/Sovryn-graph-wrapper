@@ -3,11 +3,13 @@ import config from './config/config'
 import dbConfig from './config/database'
 import app from './app'
 
-const { appName, port } = config
+const { appName, port, env } = config
 createConnection(dbConfig)
   .then(() => {
     app.listen(port, () =>
-      console.log(`${appName} Server Now Listening on ${port}. Stay Sovryn.`)
+      console.log(
+        `${appName}: ${env} Server Now Listening on ${port}. Stay Sovryn.`
+      )
     )
   })
   .catch((err) => {

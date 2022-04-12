@@ -24,3 +24,17 @@ export interface Summary {
   total_volume_btc: number
   total_volume_usd: number
 }
+
+export interface AssetData {
+  symbol: string | undefined
+  name: string | undefined
+  id: string
+  trading_fee: number
+  unified_cryptoasset_id: number | null
+  circulating_supply: number
+  updated: Date
+}
+
+export interface Asset {
+  [key: string]: AssetData
+}

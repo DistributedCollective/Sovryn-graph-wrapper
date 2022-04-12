@@ -4,8 +4,14 @@ import { createHttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { DocumentNode } from 'graphql'
 import fetch from 'cross-fetch'
+import log from '../logger'
+import { isNil } from 'lodash'
 
-const { subgraphUrl } = config
+const logger = log.logger.child({ module: 'Apollo Client' })
+
+const { mainnetSubgraphUrl, testnetSubgraphUrl, env } = config
+const subgraphUrl =
+  env === 'production' ? mainnetSubgraphUrl : testnetSubgraphUrl
 
 const httpLink = createHttpLink({
   uri: subgraphUrl,
@@ -29,8 +35,16 @@ const client = new ApolloClient({
 export const getQuery = async (query: DocumentNode): Promise<any> => {
   try {
     const res = await client.query({ query })
-    return res.data
+    if (!isNil(res.data)) return res.data
+    else throw new Error('Subgraph query did not return data')
   } catch (e) {
-    console.error(e)
+    const error = e as Error
+    logger.error('Error running subgraph query, {}', [
+      {
+        query: query.loc?.source.body,
+        error: error
+      }
+    ])
+    logger.error(error)
   }
 }

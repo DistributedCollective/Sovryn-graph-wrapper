@@ -1,13 +1,14 @@
-import { Entity, Column, Unique, PrimaryColumn } from 'typeorm'
+import { Entity, Column, PrimaryColumn } from 'typeorm'
 
 import { Length, IsEthereumAddress, IsNumber } from 'class-validator'
 
 import { AbstractBaseEntity } from './AbstractBase.entity'
 
 @Entity()
-@Unique('pair', ['tradingPair'])
 export class SummaryPairData extends AbstractBaseEntity {
   @PrimaryColumn()
+  poolId!: string
+
   @Length(83)
   tradingPair!: string
 

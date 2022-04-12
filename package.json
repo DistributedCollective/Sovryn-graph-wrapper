@@ -14,7 +14,8 @@
       "lint": "ts-standard",
       "lint:fix": "ts-standard --fix",
       "prepare": "husky install",
-      "codegen": "graphql-codegen --config codegen.yml"
+      "codegen": "graphql-codegen --config codegen.yml",
+      "run-file": "NODE_TLS_REJECT_UNAUTHORIZED=0 NODE_ENV=production ts-node "
    },
    "keywords": [
       "Sovryn"

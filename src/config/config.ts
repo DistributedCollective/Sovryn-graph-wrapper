@@ -22,7 +22,7 @@ const config = convict({
   logLevel: {
     doc: 'application log level',
     format: String,
-    default: 'info',
+    default: 'debug',
     env: 'LOG_LEVEL'
   },
   postgresHost: {
@@ -56,11 +56,18 @@ const config = convict({
     default: 'sov-contract-data-main',
     env: 'POSTGRES_DB'
   },
-  subgraphUrl: {
-    doc: 'postgres database',
+  mainnetSubgraphUrl: {
+    doc: 'Mainnet Subgraph',
     format: 'url',
     default:
       'https://graphql-sov-v0-0-6-main-818628407.us-east-2.elb.amazonaws.com/subgraphs/name/DistributedCollective/sovryn-subgraph',
+    env: 'SUBGRAPH_URL'
+  },
+  testnetSubgraphUrl: {
+    doc: 'Testnet Subgraph',
+    format: 'url',
+    default:
+      'https://graphql-sov-v0-0-6-test-1570131985.us-east-2.elb.amazonaws.com/subgraphs/name/DistributedCollective/sovryn-subgraph',
     env: 'SUBGRAPH_URL'
   },
   RSKMainnet: {

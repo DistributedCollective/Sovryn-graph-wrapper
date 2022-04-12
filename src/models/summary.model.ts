@@ -12,6 +12,7 @@ export const createMultipleSummaryPairData = async (
     // console.debug(data);
     try {
       const newSummaryPairData: SummaryPairData = new SummaryPairData()
+      newSummaryPairData.poolId = data.poolId
       newSummaryPairData.tradingPair = data.tradingPair
       newSummaryPairData.baseSymbol = data.baseSymbol
       newSummaryPairData.baseId = data.baseId

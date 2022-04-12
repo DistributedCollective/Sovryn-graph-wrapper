@@ -31,11 +31,6 @@ export const priceAndVolumeQuery = (block: number = 0): DocumentNode => {
   } else {
     return gql`
       {
-        _meta {
-          block {
-            number
-          }
-        }
         liquidityPools(where: { activated: true }) {
           id
           token1 {
