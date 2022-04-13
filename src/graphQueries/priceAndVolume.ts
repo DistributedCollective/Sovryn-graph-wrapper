@@ -2,10 +2,11 @@ import { DocumentNode } from 'graphql'
 import gql from 'graphql-tag'
 
 export const priceAndVolumeQuery = (block: number = 0): DocumentNode => {
-  if (block > 0) {
-    return gql`
+  const timeTravelClause = block > 0 ? `, block: {number: ${block}}` : ''
+
+  return gql`
       {
-        liquidityPools(where: { activated: true }, block: {number: ${block}}) {
+        liquidityPools(where: { activated: true } ${timeTravelClause}) {
           id
           token1 {
             id
@@ -28,33 +29,6 @@ export const priceAndVolumeQuery = (block: number = 0): DocumentNode => {
         }
       }
     `
-  } else {
-    return gql`
-      {
-        liquidityPools(where: { activated: true }) {
-          id
-          token1 {
-            id
-            symbol
-            lastPriceBtc
-            lastPriceUsd
-          }
-          token0 {
-            id
-            symbol
-            lastPriceBtc
-            lastPriceUsd
-          }
-          connectorTokens {
-            token {
-              symbol
-            }
-            totalVolume
-          }
-        }
-      }
-    `
-  }
 }
 
 export const liquidityPoolsByAsset: DocumentNode = gql`

@@ -12,8 +12,9 @@ export const getSummaryData = async (): Promise<Summary> => {
       btcPrice = Number(bignumber(1).div(item.lastPrice).toFixed(2))
     }
     totalVolumeBtc += Number(item.quoteVolume24h)
-    pairs[item.tradingPair] = {
-      trading_pairs: `${item.baseSymbol}_${item.quoteSymbol}`,
+    const pair = `${item.baseId}_${item.quoteId}`
+    pairs[pair] = {
+      trading_pairs: pair,
       base_symbol: item.baseSymbol,
       base_id: item.baseId,
       quote_symbol: item.quoteSymbol,

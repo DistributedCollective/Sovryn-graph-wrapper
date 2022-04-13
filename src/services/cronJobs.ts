@@ -9,6 +9,8 @@ class AbstractCronJob {
   cronFunction: () => Promise<void>
   cronJob: CronJob
   jobName: string
+  runFunction: Function
+  endFunction: Function
 
   constructor (
     cronFunction: () => Promise<void>,
@@ -17,39 +19,30 @@ class AbstractCronJob {
   ) {
     this.cronFunction = cronFunction
     this.jobName = jobName
+    this.runFunction = () => {
+      logger.info(
+        {
+          job: jobName
+        },
+        `Starting cron job: ${jobName}`
+      )
+      this.cronFunction().catch((e) => {
+        const error = e as Error
+        logger.error(error, `Error running cronjob: ${this.jobName}`)
+      })
+    }
+    this.endFunction = () => {
+      logger.info(
+        {
+          job: jobName
+        },
+        `Cron job completed: ${jobName}`
+      )
+    }
     this.cronJob = new CronJob(
       cronTime,
-      () => {
-        try {
-          logger.info(
-            {
-              job: jobName
-            },
-            `Starting cron job: ${jobName}`
-          )
-          this.cronFunction().catch((e) => {
-            const error = e as Error
-            logger.error(`Error running cronjob: ${this.jobName}`, {
-              error: error
-            })
-            logger.error(error)
-          })
-        } catch (e) {
-          const error = e as Error
-          logger.error(`Error running cronjob: ${this.jobName}`, {
-            error: error
-          })
-          logger.error(error)
-        }
-      },
-      () => {
-        logger.info(
-          {
-            job: jobName
-          },
-          `Cron job completed: ${jobName}`
-        )
-      },
+      this.runFunction(),
+      this.endFunction(),
       true
     )
   }

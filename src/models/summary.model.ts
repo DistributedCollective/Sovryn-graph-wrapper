@@ -8,49 +8,50 @@ export const createMultipleSummaryPairData = async (
   summaryPairData: ITradingPairData[]
 ): Promise<SummaryPairData[]> => {
   const repository = getRepository(SummaryPairData)
-  const promises = summaryPairData.map(async (data) => {
-    // console.debug(data);
-    try {
-      const newSummaryPairData: SummaryPairData = new SummaryPairData()
-      newSummaryPairData.poolId = data.poolId
-      newSummaryPairData.tradingPair = data.tradingPair
-      newSummaryPairData.baseSymbol = data.baseSymbol
-      newSummaryPairData.baseId = data.baseId
-      newSummaryPairData.quoteSymbol = data.quoteSymbol
-      newSummaryPairData.quoteId = data.quoteId
-      newSummaryPairData.baseVolume24h = parseFloat(
-        data.baseVolume24h.toFixed(18)
-      )
-      newSummaryPairData.quoteVolume24h = parseFloat(
-        data.quoteVolume24h.toFixed(18)
-      )
-      newSummaryPairData.lastPrice = parseFloat(data.lastPrice.toFixed(18))
-      newSummaryPairData.lastPriceUsd = parseFloat(
-        data.lastPriceUsd.toFixed(2)
-      )
-      newSummaryPairData.priceChangePercent24h = parseFloat(
-        data.priceChangePercent24h.toFixed(2)
-      )
-      newSummaryPairData.priceChangePercentWeek = parseFloat(
-        data.priceChangePercentWeek.toFixed(2)
-      )
-      newSummaryPairData.priceChangePercent24hUsd = parseFloat(
-        data.priceChangePercent24hUsd.toFixed(2)
-      )
-      newSummaryPairData.priceChangePercentWeekUsd = parseFloat(
-        data.priceChangePercentWeekUsd.toFixed(2)
-      )
-      newSummaryPairData.highUsd = parseFloat(data.highUsd.toFixed(2))
-      newSummaryPairData.lowUsd = parseFloat(data.lowUsd.toFixed(2))
-      newSummaryPairData.highBtc = parseFloat(data.highBtc.toFixed(18))
-      newSummaryPairData.lowBtc = parseFloat(data.lowBtc.toFixed(18))
+  const promises = summaryPairData
+    .filter((data) => data.lastPriceUsd > 0)
+    .map(async (data) => {
+      // console.debug(data);
+      try {
+        const newSummaryPairData: SummaryPairData = new SummaryPairData()
+        newSummaryPairData.poolId = data.poolId
+        newSummaryPairData.baseSymbol = data.baseSymbol
+        newSummaryPairData.baseId = data.baseId
+        newSummaryPairData.quoteSymbol = data.quoteSymbol
+        newSummaryPairData.quoteId = data.quoteId
+        newSummaryPairData.baseVolume24h = parseFloat(
+          data.baseVolume24h.toFixed(18)
+        )
+        newSummaryPairData.quoteVolume24h = parseFloat(
+          data.quoteVolume24h.toFixed(18)
+        )
+        newSummaryPairData.lastPrice = parseFloat(data.lastPrice.toFixed(18))
+        newSummaryPairData.lastPriceUsd = parseFloat(
+          data.lastPriceUsd.toFixed(2)
+        )
+        newSummaryPairData.priceChangePercent24h = parseFloat(
+          data.priceChangePercent24h.toFixed(2)
+        )
+        newSummaryPairData.priceChangePercentWeek = parseFloat(
+          data.priceChangePercentWeek.toFixed(2)
+        )
+        newSummaryPairData.priceChangePercent24hUsd = parseFloat(
+          data.priceChangePercent24hUsd.toFixed(2)
+        )
+        newSummaryPairData.priceChangePercentWeekUsd = parseFloat(
+          data.priceChangePercentWeekUsd.toFixed(2)
+        )
+        newSummaryPairData.highUsd = parseFloat(data.highUsd.toFixed(2))
+        newSummaryPairData.lowUsd = parseFloat(data.lowUsd.toFixed(2))
+        newSummaryPairData.highBtc = parseFloat(data.highBtc.toFixed(18))
+        newSummaryPairData.lowBtc = parseFloat(data.lowBtc.toFixed(18))
 
-      await newSummaryPairData.validateStrict()
-      return data
-    } catch (error) {
-      return null
-    }
-  })
+        await newSummaryPairData.validate()
+        return data
+      } catch (error) {
+        return null
+      }
+    })
   const validatedSummaryData = await Promise.all(promises)
   const filteredSummaryData = validatedSummaryData.filter(notEmpty)
 

@@ -10,7 +10,11 @@ import { getQuery } from '../utils/apolloClient'
 import { isNil } from 'lodash'
 import { bignumber } from 'mathjs'
 import { createMultipleSummaryPairData } from '../models/summary.model'
-import { Transaction, LiquidityPool, CandleStick } from '../generated/graphql'
+import {
+  Transaction,
+  LiquidityPool,
+  CandleStick
+} from '../../generated-schema'
 import log from '../logger'
 
 const logger = log.logger.child({ module: 'Assets' })
@@ -21,7 +25,6 @@ interface LiquidityPoolData {
 
 interface ITradingPairDataBase {
   poolId: string
-  tradingPair: string
   baseSymbol: string
   baseId: string
   quoteSymbol: string
@@ -67,14 +70,14 @@ export default async function main (): Promise<void> {
     )
 
     logger.debug('Sorting data')
-    const sorted = sortByPairs(
+    const sortedData = sortByPairs(
       currentData.liquidityPools,
       dayData.liquidityPools,
       weekData.liquidityPools
     )
 
     logger.debug('Parsing data')
-    const parsedData = parseData(sorted)
+    const parsedData = parseData(sortedData)
     logger.debug('Adding candlestick data')
     const output: ITradingPairData[] = []
     for (const i of parsedData) {
@@ -120,70 +123,65 @@ const sortByPairs = (
     }
   })
 
-/** TODO: properly type this */
 const parseData = (
   sorted: Array<{
     currentData: LiquidityPool
     dayData: LiquidityPool
     weekData: LiquidityPool
   }>
-): any[] => {
-  const filtered = sorted.filter(
-    (item) => item.currentData.token1?.lastPriceBtc !== '0'
-  )
-  return filtered.map((item) => {
+): ITradingPairDataBase[] => {
+  return sorted.map((item) => {
     const currentData = item.currentData
     const dayData = item.dayData
     const weekData = item.weekData
 
-    /** TODO: Dry up this code */
     let currentBaseVolume = 0
     let currentQuoteVolume = 0
     let dayBaseVolume = 0
     let dayQuoteVolume = 0
 
-    if (
+    const isBaseTokenConnector0 =
       currentData.connectorTokens[0].token.symbol ===
       currentData?.token1?.symbol
-    ) {
-      currentBaseVolume = parseFloat(
-        currentData.connectorTokens[0].totalVolume
-      )
-      currentQuoteVolume = parseFloat(
-        currentData.connectorTokens[1].totalVolume
-      )
-      dayBaseVolume = parseFloat(dayData.connectorTokens[0].totalVolume)
-      dayQuoteVolume = parseFloat(dayData.connectorTokens[1].totalVolume)
-    } else if (
-      currentData.connectorTokens[0].token.symbol ===
-      currentData?.token0?.symbol
-    ) {
-      currentBaseVolume = parseFloat(
-        currentData.connectorTokens[1].totalVolume
-      )
-      currentQuoteVolume = parseFloat(
-        currentData.connectorTokens[0].totalVolume
-      )
-      dayBaseVolume = parseFloat(dayData.connectorTokens[1].totalVolume)
-      dayQuoteVolume = parseFloat(dayData.connectorTokens[0].totalVolume)
-    }
+
+    currentBaseVolume = parseFloat(
+      isBaseTokenConnector0
+        ? currentData.connectorTokens[0].totalVolume
+        : currentData.connectorTokens[1].totalVolume
+    )
+    currentQuoteVolume = parseFloat(
+      isBaseTokenConnector0
+        ? currentData.connectorTokens[1].totalVolume
+        : currentData.connectorTokens[0].totalVolume
+    )
+    dayBaseVolume = parseFloat(
+      isBaseTokenConnector0
+        ? dayData.connectorTokens[0].totalVolume
+        : dayData.connectorTokens[1].totalVolume
+    )
+    dayQuoteVolume = parseFloat(
+      isBaseTokenConnector0
+        ? dayData.connectorTokens[1].totalVolume
+        : dayData.connectorTokens[0].totalVolume
+    )
 
     const lastPriceBtc = currentData?.token1?.lastPriceBtc
     const lastPriceUsd = currentData?.token1?.lastPriceUsd
+    const baseTokenSymbol = currentData.token1?.symbol
+    const baseTokenId = currentData.token1?.id
+    const quoteTokenSymbol = currentData.token0?.symbol
+    const quoteTokenId = currentData.token0?.id
 
     return {
       poolId: currentData.id,
-      tradingPair: `${currentData?.token1?.id ?? ''}_${
-        currentData?.token0?.id ?? ''
-      }`,
-      baseSymbol: currentData?.token1?.symbol,
-      baseId: currentData?.token1?.id,
-      quoteSymbol: currentData?.token0?.symbol,
-      quoteId: currentData?.token0?.id,
+      baseSymbol: !isNil(baseTokenSymbol) ? baseTokenSymbol : '',
+      baseId: !isNil(baseTokenId) ? baseTokenId : '',
+      quoteSymbol: !isNil(quoteTokenSymbol) ? quoteTokenSymbol : '',
+      quoteId: !isNil(quoteTokenId) ? quoteTokenId : '',
       baseVolume24h: currentBaseVolume - dayBaseVolume,
       quoteVolume24h: currentQuoteVolume - dayQuoteVolume,
-      lastPrice: !isNil(lastPriceBtc) ? parseFloat(lastPriceBtc) : undefined,
-      lastPriceUsd: !isNil(lastPriceUsd) ? parseFloat(lastPriceUsd) : undefined,
+      lastPrice: !isNil(lastPriceBtc) ? parseFloat(lastPriceBtc) : 0,
+      lastPriceUsd: !isNil(lastPriceUsd) ? parseFloat(lastPriceUsd) : 0,
       priceChangePercent24h: calculatePriceChange(
         lastPriceBtc,
         dayData?.token1?.lastPriceBtc

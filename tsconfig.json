@@ -26,6 +26,6 @@
     "allowJs": false
   },
   "linterOptions": {
-    "exclude": ["./src/generated/*"]
+    "exclude": ["generated-schema.ts"]
   }
 }

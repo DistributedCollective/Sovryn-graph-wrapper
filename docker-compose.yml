@@ -28,10 +28,6 @@ services:
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=sov-notification-main
-      - NODE_TLS_REJECT_UNAUTHORIZED=0
-    # env_file:
-    #   - .env
       - POSTGRES_DB=sov-contract-data-main
     env_file:
       - .env

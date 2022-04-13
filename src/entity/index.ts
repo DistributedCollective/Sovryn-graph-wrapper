@@ -1,4 +1,4 @@
 import { SummaryPairData } from './Summary'
-import { User } from './User'
 import { Asset } from './Asset'
-export { SummaryPairData, User, Asset }
+import { Tvl } from './Tvl'
+export { SummaryPairData, Asset, Tvl }

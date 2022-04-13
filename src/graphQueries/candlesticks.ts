@@ -1,6 +1,5 @@
 import { DocumentNode } from 'graphql'
 import gql from 'graphql-tag'
-// import { getQuery } from "../utils/apolloClient";
 
 export const candlestickQuery = (
   baseToken: string,
@@ -27,11 +26,3 @@ export const candlestickQuery = (
     }
   `
 }
-
-// getQuery(
-//   candlestickQuery(
-//     "0xefc78fc7d48b64958315949279ba181c2114abbd",
-//     "HourInterval",
-//     1649168392
-//   )
-// ).then((res) => console.log(res));

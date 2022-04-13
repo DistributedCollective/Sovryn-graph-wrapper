@@ -60,14 +60,14 @@ const config = convict({
     doc: 'Mainnet Subgraph',
     format: 'url',
     default:
-      'https://graphql-sov-v0-0-6-main-818628407.us-east-2.elb.amazonaws.com/subgraphs/name/DistributedCollective/sovryn-subgraph',
+      'https://subgraph.sovryn.app/subgraphs/name/DistributedCollective/sovryn-subgraph',
     env: 'SUBGRAPH_URL'
   },
   testnetSubgraphUrl: {
     doc: 'Testnet Subgraph',
     format: 'url',
     default:
-      'https://graphql-sov-v0-0-6-test-1570131985.us-east-2.elb.amazonaws.com/subgraphs/name/DistributedCollective/sovryn-subgraph',
+      'https://subgraph.test.sovryn.app/subgraphs/name/DistributedCollective/sovryn-subgraph',
     env: 'SUBGRAPH_URL'
   },
   RSKMainnet: {

@@ -9,9 +9,6 @@ export class SummaryPairData extends AbstractBaseEntity {
   @PrimaryColumn()
   poolId!: string
 
-  @Length(83)
-  tradingPair!: string
-
   @Column()
   @Length(2, 10)
   baseSymbol!: string
@@ -46,19 +43,19 @@ export class SummaryPairData extends AbstractBaseEntity {
   @IsNumber()
   lastPriceUsd!: number
 
-  @Column('decimal', { precision: 6, scale: 2 })
+  @Column('decimal', { precision: 6, scale: 2, default: 0 })
   @IsNumber()
   priceChangePercent24h!: number
 
-  @Column('decimal', { precision: 6, scale: 2 })
+  @Column('decimal', { precision: 6, scale: 2, default: 0 })
   @IsNumber()
   priceChangePercentWeek!: number
 
-  @Column('decimal', { precision: 6, scale: 2 })
+  @Column('decimal', { precision: 6, scale: 2, default: 0 })
   @IsNumber()
   priceChangePercent24hUsd!: number
 
-  @Column('decimal', { precision: 6, scale: 2 })
+  @Column('decimal', { precision: 6, scale: 2, default: 0 })
   @IsNumber()
   priceChangePercentWeekUsd!: number
 

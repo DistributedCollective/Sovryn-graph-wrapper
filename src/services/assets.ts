@@ -21,7 +21,7 @@ import { addresses, createContract, web3 } from '../utils/web3Provider'
 import { bignumber } from 'mathjs'
 import { fishReleaseSchedule } from '../utils/fishCircSupply'
 import { isNil } from 'lodash'
-import { Token } from '../generated/graphql'
+import { Token } from '../../generated-schema'
 import { createMultipleAssets } from '../models/asset.model'
 import log from '../logger'
 
@@ -38,11 +38,8 @@ export default async function main (): Promise<void> {
   logger.info('Running assets main function')
   const { protocolStats } = await getQuery(assetDataQuery)
   const tokens = protocolStats.tokens as Token[]
-  const filteredTokens = tokens.filter(
-    (item) => item.lastPriceBtc !== '0' && item.lastPriceUsd !== '0'
-  )
   const assetData: AssetData[] = []
-  for (const item of filteredTokens) {
+  for (const item of tokens) {
     try {
       const symbol = item.symbol?.toString()
       const circSupply = await getCirculatingSupply(symbol, item.id)
@@ -96,6 +93,7 @@ async function getSovCircSupply (): Promise<string> {
 
 async function getWrbtcCircSupply (): Promise<string> {
   const bridgeBalance = await web3.eth.getBalance(
+    /** MOVE TO CONFIG */
     '0x0000000000000000000000000000000001000006'
   )
   return bignumber(21000000 * 1e18)
@@ -113,6 +111,7 @@ async function getCirculatingSupply (
   symbol: string | undefined,
   id: string
 ): Promise<string> {
+  /** For most tokens (unless special), circulating supply is total supply **/
   if (!isNil(symbol) && !isNil(circulatingSupplySpecial[symbol])) {
     return await circulatingSupplySpecial[symbol]()
   } else {
