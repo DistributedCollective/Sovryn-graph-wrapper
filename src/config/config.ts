@@ -61,14 +61,14 @@ const config = convict({
     format: 'url',
     default:
       'https://subgraph.sovryn.app/subgraphs/name/DistributedCollective/sovryn-subgraph',
-    env: 'SUBGRAPH_URL'
+    env: 'MAINNET_SUBGRAPH_URL'
   },
   testnetSubgraphUrl: {
     doc: 'Testnet Subgraph',
     format: 'url',
     default:
       'https://subgraph.test.sovryn.app/subgraphs/name/DistributedCollective/sovryn-subgraph',
-    env: 'SUBGRAPH_URL'
+    env: 'TESTNET_SUBGRAPH_URL'
   },
   RSKMainnet: {
     doc: 'RSK mainnet endpoint',

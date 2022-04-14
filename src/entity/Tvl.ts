@@ -1,13 +1,19 @@
 import { Entity, Column, PrimaryColumn } from 'typeorm'
 
-import { IsEthereumAddress, IsNumber, IsNumberString } from 'class-validator'
+import {
+  IsEthereumAddress,
+  IsNumber,
+  IsNumberString,
+  Length
+} from 'class-validator'
 
 import { AbstractBaseEntity } from './AbstractBase.entity'
+import { TvlGroup } from '../services/tvl'
 
 @Entity()
 export class Tvl extends AbstractBaseEntity {
-  @PrimaryColumn()
-  date!: Date
+  @PrimaryColumn({ type: 'date' })
+  date!: string
 
   @PrimaryColumn()
   @IsEthereumAddress()
@@ -18,14 +24,24 @@ export class Tvl extends AbstractBaseEntity {
   asset!: string
 
   @Column()
+  @Length(2, 20)
+  name!: string
+
+  @Column()
   @IsNumberString()
   balance!: string
 
   @Column('decimal', { precision: 40, scale: 2 })
   @IsNumber()
-  balanceUsd!: number
+  balanceUsd?: number
 
   @Column('decimal', { precision: 40, scale: 18 })
   @IsNumber()
-  balanceBtc!: number
+  balanceBtc?: number
+
+  @Column({
+    type: 'enum',
+    enum: TvlGroup
+  })
+  tvlGroup!: TvlGroup
 }

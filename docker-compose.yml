@@ -29,6 +29,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=sov-contract-data-main
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
     env_file:
       - .env
     ports:
