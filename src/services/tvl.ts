@@ -43,9 +43,7 @@ export default async function main (): Promise<void> {
   logger.info('Running TVL scheduled task')
   const data = await getQuery(protocolTokens)
   const protocolData: ProtocolStats = data.protocolStats
-  const tokenData = protocolData.tokens.filter(
-    (item) => item.lastPriceBtc !== '0'
-  )
+  const tokenData = protocolData.tokens
   const prices: Prices = {}
   tokenData.forEach((item) => {
     prices[item.id] = {
@@ -98,7 +96,7 @@ async function getStakingTvl (tokens: Token[]): Promise<void> {
 }
 
 async function getProtocolTvl (tokens: Token[]): Promise<void> {
-  for (const token of tokens.filter((item) => item.lastPriceBtc !== '0')) {
+  for (const token of tokens) {
     const balance = await getAssetBalance(token.id, addresses.Protocol)
     if (!isNil(balance) && balance.greaterThan(0)) {
       const usdBalance = bignumber(balance).mul(token.lastPriceUsd).toFixed(2)
