@@ -43,3 +43,9 @@ export const createTvlRow = async (tvlData: ITvl): Promise<void> => {
     await repository.insert(newTvlRow)
   }
 }
+
+export const getTvlDataForLiquidity = async (): Promise<any> => {
+  const repository = getRepository(Tvl)
+  const data = await repository.find()
+  return data
+}

@@ -3,6 +3,7 @@ import { SummaryPairData } from '../entity'
 import { ITradingPairData } from '../services/summary'
 import { notEmpty } from '../utils/common'
 import { inversePrice } from '../utils/helpers'
+import { isNil } from 'lodash'
 
 export const createMultipleSummaryPairData = async (
   summaryPairData: ITradingPairData[]
@@ -86,6 +87,92 @@ export const getAssetPrices = async (): Promise<Prices[]> => {
   const data = await repository
     .createQueryBuilder()
     .select(['baseId', 'lastPriceBtc', 'lastPriceUsd'])
+    .getRawMany()
+  return data
+}
+
+interface UpdateLiquidity {
+  contract: string
+  balances: {
+    [key: string]: number
+  }
+}
+
+export const updateLiquidityColumn = async (
+  data: UpdateLiquidity
+): Promise<void> => {
+  const repository = getRepository(SummaryPairData)
+  const row = await repository.findOne(data.contract)
+  if (!isNil(row)) {
+    const baseAssetLiquidity = !isNil(data.balances[row.baseId])
+      ? data.balances[row.baseId]
+      : 0
+    const quoteAssetLiquidity = !isNil(data.balances[row.quoteId])
+      ? data.balances[row.quoteId]
+      : 0
+    await repository.update(row.poolId, {
+      baseAssetLiquidity: baseAssetLiquidity,
+      quoteAssetLiquidity: quoteAssetLiquidity
+    })
+  }
+}
+
+export const getAmmLiquidityData = async (): Promise<
+Array<{
+  summary_poolId: string
+  summary_baseId: string
+  summary_baseSymbol: string
+  summary_quoteId: string
+  summary_quoteSymbol: string
+  summary_baseAssetLiquidity: number
+  summary_quoteAssetLiquidity: number
+}>
+> => {
+  const repository = getRepository(SummaryPairData)
+  const data = await repository
+    .createQueryBuilder('summary')
+    .select([
+      'summary.poolId',
+      'summary.baseId',
+      'summary.baseSymbol',
+      'summary.quoteId',
+      'summary.quoteSymbol',
+      'summary.baseAssetLiquidity',
+      'summary.quoteAssetLiquidity'
+    ])
+    .getRawMany()
+  return data
+}
+
+export const getSummaryTickerData = async (): Promise<
+Array<{
+  summary_baseId: string
+  summary_baseSymbol: string
+  summary_quoteId: string
+  summary_quoteSymbol: string
+  summary_baseAssetLiquidity: number
+  summary_quoteAssetLiquidity: number
+  summary_lastPrice: number
+  summary_baseVolume24h: number
+  summary_quoteVolume24h: number
+  summary_updatedAt: Date
+}>
+> => {
+  const repository = getRepository(SummaryPairData)
+  const data = await repository
+    .createQueryBuilder('summary')
+    .select([
+      'summary.baseId',
+      'summary.baseSymbol',
+      'summary.quoteId',
+      'summary.quoteSymbol',
+      'summary.baseAssetLiquidity',
+      'summary.quoteAssetLiquidity',
+      'summary.lastPrice',
+      'summary.baseVolume24h',
+      'summary.quoteVolume24h',
+      'summary.updatedAt'
+    ])
     .getRawMany()
   return data
 }

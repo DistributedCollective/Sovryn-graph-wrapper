@@ -3,6 +3,8 @@ import express, { NextFunction, Request, Response } from 'express'
 import asyncMiddleware from '../utils/asyncMiddleware'
 import { getSummaryData } from '../controllers/summary'
 import { getAssetData } from '../controllers/asset'
+import { getLiquidityData } from '../controllers/liquidity'
+import { getTickerData } from '../controllers/ticker'
 
 export const router = express.Router()
 
@@ -27,6 +29,32 @@ router.get(
     try {
       req.log.info(req, 'get asset data')
       const response = await getAssetData()
+      res.status(200).json(response)
+    } catch (error) {
+      next(error)
+    }
+  })
+)
+
+router.get(
+  '/liquidity',
+  asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      req.log.info(req, 'get asset data')
+      const response = await getLiquidityData()
+      res.status(200).json(response)
+    } catch (error) {
+      next(error)
+    }
+  })
+)
+
+router.get(
+  '/ticker',
+  asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      req.log.info(req, 'get asset data')
+      const response = await getTickerData()
       res.status(200).json(response)
     } catch (error) {
       next(error)

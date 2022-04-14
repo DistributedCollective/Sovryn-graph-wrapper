@@ -11,6 +11,7 @@ import math, { bignumber } from 'mathjs'
 import { isNil } from 'lodash'
 import { createTvlRow } from '../models/tvl.model'
 import log from '../logger'
+import { updateLiquidityColumn } from '../models/summary.model'
 
 const logger = log.logger.child({ module: 'TVL Service' })
 
@@ -148,12 +149,14 @@ async function getAmmPoolTvl (prices: Prices): Promise<void> {
   const contracts = data.liquidityPools
 
   for (const contract of contracts) {
+    const balances: { [key: string]: number } = {}
     for (let i = 0; i < 2; i++) {
       const balance = await getAssetBalance(
         contract[`token${i}`].id,
         contract.id
       )
       if (!isNil(balance) && balance.greaterThan(0)) {
+        balances[contract[`token${i}`].id] = Number(balance.toFixed(18))
         const tokenIteratorSymbol: string = !isNil(contract[`token${i}`].symbol)
           ? contract[`token${i}`].symbol
           : ''
@@ -174,6 +177,11 @@ async function getAmmPoolTvl (prices: Prices): Promise<void> {
         }
         await createTvlRow(output)
       }
+      /** Update liquidity fields in Summary */
+      await updateLiquidityColumn({
+        contract: contract.id,
+        balances: balances
+      })
     }
   }
   logger.info('TVL rows added for amm contracts')

@@ -74,4 +74,12 @@ export class SummaryPairData extends AbstractBaseEntity {
   @Column('decimal', { precision: 40, scale: 18 })
   @IsNumber()
   lowBtc!: number
+
+  @Column('decimal', { precision: 40, scale: 18, nullable: true })
+  @IsNumber()
+  baseAssetLiquidity?: number
+
+  @Column('decimal', { precision: 40, scale: 18, nullable: true })
+  @IsNumber()
+  quoteAssetLiquidity?: number
 }
