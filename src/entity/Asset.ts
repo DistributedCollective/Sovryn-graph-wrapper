@@ -22,10 +22,6 @@ export class Asset extends AbstractBaseEntity {
   @Column()
   name?: string
 
-  @Column('decimal', { nullable: true })
-  @IsNumber()
-  tradingFee!: number
-
   /** This is a string because USDT circulating supply on testnet is waaaay too big, and these values aren't used in numeric operations  */
   @Column()
   @IsNumberString()
@@ -33,5 +29,5 @@ export class Asset extends AbstractBaseEntity {
 
   @Column({ nullable: true })
   @IsNumber()
-  unifiedCryptoAssetId!: number
+  cryptoAssetId!: number
 }

@@ -9,8 +9,8 @@ export const getAssetData = async (): Promise<Asset> => {
       symbol: item.symbol,
       name: item.name,
       id: item.id,
-      trading_fee: item.tradingFee,
-      unified_cryptoasset_id: item.unifiedCryptoAssetId,
+      unified_cryptoasset_id:
+        item.cryptoAssetId > 0 ? item.cryptoAssetId : null,
       circulating_supply: parseInt(item.circulatingSupply),
       updated: item.updatedAt
     }

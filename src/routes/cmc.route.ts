@@ -52,6 +52,7 @@ router.get(
 router.get(
   '/ticker',
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
+    // res.set('Cache-control', 'public, max-age=60')
     try {
       req.log.info(req, 'get asset data')
       const response = await getTickerData()
@@ -61,3 +62,17 @@ router.get(
     }
   })
 )
+
+// router.get(
+//   "/trades",
+//   /**TODO... */
+//   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//       req.log.info(req, "get asset data");
+//       const response = await getTrades("", "");
+//       res.status(200).json(response);
+//     } catch (error) {
+//       next(error);
+//     }
+//   })
+// );

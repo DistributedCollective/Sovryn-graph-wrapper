@@ -1,19 +1,3 @@
-/**
- * 1. Get all assets in the system
- * 2. For all assets that are not "exceptions", read totalSupply from contract
- * 3. Separate methods for RBTC, FISH, SOV
- */
-
-/**
- *         "symbol": "SOV",
-        "name": "Sovryn Token",
-        "id": "0xefc78fc7d48b64958315949279ba181c2114abbd",
-        "trading_fee": 0.0015,
-        "unified_cryptoasset_id": 8669,
-        "circulating_supply": 21365209.8256,
-        "updated": "2022-04-08T11:20:30.000Z"
- */
-
 import { getQuery } from '../utils/apolloClient'
 import { assetDataQuery } from '../graphQueries/priceAndVolume'
 import { abiErc20 } from '@blobfishkate/sovryncontractswip'
@@ -32,6 +16,12 @@ export interface AssetData {
   symbol: string | undefined
   name: string | undefined
   circulatingSupply: string
+  cryptoAssetId: number
+}
+
+const cryptoAssetIds: { [key: string]: number } = {
+  SOV: 8669,
+  WRBTC: 3626
 }
 
 export default async function main (): Promise<void> {
@@ -43,11 +33,16 @@ export default async function main (): Promise<void> {
     try {
       const symbol = item.symbol?.toString()
       const circSupply = await getCirculatingSupply(symbol, item.id)
+      const cryptoAssetId =
+        !isNil(symbol) && !isNil(cryptoAssetIds[symbol])
+          ? cryptoAssetIds[symbol]
+          : 0
       assetData.push({
         id: item.id,
-        symbol: item.symbol?.toString(),
+        symbol: symbol,
         name: item.name?.toString(),
-        circulatingSupply: bignumber(circSupply).div(1e18).toFixed(18)
+        circulatingSupply: bignumber(circSupply).div(1e18).toFixed(18),
+        cryptoAssetId: cryptoAssetId
       })
     } catch (e) {
       logger.error(

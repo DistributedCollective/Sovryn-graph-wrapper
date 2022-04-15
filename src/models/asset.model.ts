@@ -10,12 +10,11 @@ export const createMultipleAssets = async (
   const promises = assetData.map(async (data) => {
     try {
       const newAssetData = new Asset()
+      newAssetData.cryptoAssetId = data.cryptoAssetId
       newAssetData.id = data.id
       newAssetData.symbol = data.name
       newAssetData.name = data.symbol
       newAssetData.circulatingSupply = data.circulatingSupply
-      newAssetData.unifiedCryptoAssetId = 0
-      newAssetData.tradingFee = 0.0015
       await newAssetData.validateStrict()
       return data
     } catch (error) {

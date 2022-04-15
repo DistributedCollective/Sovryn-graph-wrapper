@@ -56,6 +56,7 @@ export default async function main (): Promise<void> {
   await getLendingPoolTvl(prices)
   await getProtocolTvl(tokenData)
   await getStakingTvl(tokenData)
+  await getSubprotocolTvl(tokenData)
   logger.info('TVL scheduled task complete')
 }
 
@@ -101,7 +102,7 @@ async function getProtocolTvl (tokens: Token[]): Promise<void> {
     const balance = await getAssetBalance(token.id, addresses.Protocol)
     if (!isNil(balance) && balance.greaterThan(0)) {
       const usdBalance = bignumber(balance).mul(token.lastPriceUsd).toFixed(2)
-      const btcBalance = bignumber(balance).mul(token.lastPriceUsd).toFixed(18)
+      const btcBalance = bignumber(balance).mul(token.lastPriceBtc).toFixed(18)
       const output: ITvl = {
         contract: addresses.Protocol.toLowerCase(),
         asset: token.id,
@@ -185,6 +186,42 @@ async function getAmmPoolTvl (prices: Prices): Promise<void> {
     }
   }
   logger.info('TVL rows added for amm contracts')
+}
+
+async function getSubprotocolTvl (tokens: Token[]): Promise<void> {
+  const sovToken = tokens.find((item) => item.symbol === 'SOV')
+  const subprotocolReserves = Object.entries(addresses)
+    .filter((item) => item[0].includes('_subreserve'))
+    .map((item) => {
+      return {
+        contract: item[1].toLowerCase(),
+        protocol: item[0].slice(0, item[0].indexOf('_')).toUpperCase()
+      }
+    })
+  for (const contract of subprotocolReserves) {
+    if (!isNil(sovToken)) {
+      const balance = await getAssetBalance(sovToken.id, contract.contract)
+      if (!isNil(balance) && balance.greaterThan(0)) {
+        const usdBalance = bignumber(balance)
+          .mul(sovToken.lastPriceUsd)
+          .toFixed(2)
+        const btcBalance = bignumber(balance)
+          .mul(sovToken.lastPriceBtc)
+          .toFixed(18)
+        const output: ITvl = {
+          contract: addresses.staking.toLowerCase(),
+          asset: sovToken.id,
+          name: contract.protocol,
+          balance: balance.toFixed(18),
+          balanceBtc: btcBalance,
+          balanceUsd: usdBalance,
+          tvlGroup: TvlGroup.Subprotocol
+        }
+        await createTvlRow(output)
+      }
+    }
+    logger.info('TVL rows added for subprotocol contracts')
+  }
 }
 
 async function getAssetBalance (

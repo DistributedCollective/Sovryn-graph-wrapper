@@ -17,7 +17,7 @@ import {
 } from '../../generated-schema'
 import log from '../logger'
 
-const logger = log.logger.child({ module: 'Assets' })
+const logger = log.logger.child({ module: 'Summary' })
 
 interface LiquidityPoolData {
   liquidityPools: LiquidityPool[]
