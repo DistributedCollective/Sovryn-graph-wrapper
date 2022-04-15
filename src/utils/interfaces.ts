@@ -37,3 +37,19 @@ export interface AssetData {
 export interface Asset {
   [key: string]: AssetData
 }
+
+export interface TvlData {
+  [key: string]: {}
+  totalBtc: number
+  totalUsd: number
+}
+
+interface TvlBaseData {
+  total_btc: number
+  total_usd: number
+  updatedAt: Date
+}
+
+export interface ITvl extends TvlBaseData {
+  [key: string]: any
+}

@@ -5,6 +5,7 @@ import { getSummaryData } from '../controllers/summary'
 import { getAssetData } from '../controllers/asset'
 import { getLiquidityData } from '../controllers/liquidity'
 import { getTickerData } from '../controllers/ticker'
+import { getTvlData } from '../controllers/tvl'
 
 export const router = express.Router()
 
@@ -40,7 +41,7 @@ router.get(
   '/liquidity',
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
     try {
-      req.log.info(req, 'get asset data')
+      req.log.info(req, 'get liquidity data')
       const response = await getLiquidityData()
       res.status(200).json(response)
     } catch (error) {
@@ -52,10 +53,24 @@ router.get(
 router.get(
   '/ticker',
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
-    // res.set('Cache-control', 'public, max-age=60')
+    res.set('Cache-control', 'public, max-age=60')
     try {
-      req.log.info(req, 'get asset data')
+      req.log.info(req, 'get ticker data')
       const response = await getTickerData()
+      res.status(200).json(response)
+    } catch (error) {
+      next(error)
+    }
+  })
+)
+
+router.get(
+  '/tvl',
+  asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
+    res.set('Cache-control', 'public, max-age=60')
+    try {
+      req.log.info(req, 'get tvl data')
+      const response = await getTvlData()
       res.status(200).json(response)
     } catch (error) {
       next(error)

@@ -6,7 +6,7 @@ import {
 } from '../graphQueries/tvlContracts'
 import { abiErc20 } from '@blobfishkate/sovryncontractswip'
 import { createContract, addresses } from '../utils/web3Provider'
-import { ProtocolStats, Token } from '../../generated-schema'
+import { LendingPool, ProtocolStats, Token } from '../../generated-schema'
 import math, { bignumber } from 'mathjs'
 import { isNil } from 'lodash'
 import { createTvlRow } from '../models/tvl.model'
@@ -23,16 +23,17 @@ interface Prices {
 }
 
 export enum TvlGroup {
-  AMM = 'AMM',
-  Lending = 'Lending',
-  Protocol = 'Protocol',
-  Subprotocol = 'Subprotocol',
-  Staking = 'Staking',
+  AMM = 'tvlAmm',
+  Lending = 'tvlLending',
+  Protocol = 'tvlProtocol',
+  Subprotocol = 'tvlSubprotocols',
+  Staking = 'tvlStaking',
 }
 
 export interface ITvl {
   contract: string
   asset: string
+  /** Name follows the convention of ASSET_Contract */
   name: string
   balance: string
   balanceUsd: string
@@ -80,20 +81,25 @@ async function getStakingTvl (tokens: Token[]): Promise<void> {
         .mul(sovToken.lastPriceUsd)
         .toFixed(2)
       const btcBalance = bignumber(balance)
-        .mul(sovToken.lastPriceUsd)
+        .mul(sovToken.lastPriceBtc)
         .toFixed(18)
       const output: ITvl = {
         contract: addresses.staking.toLowerCase(),
         asset: sovToken.id,
-        name: 'Staking',
+        name: 'SOV_Staking',
         balance: balance.toFixed(18),
         balanceBtc: btcBalance,
         balanceUsd: usdBalance,
         tvlGroup: TvlGroup.Staking
       }
+      console.log(output)
       await createTvlRow(output)
       logger.info('TVL rows added for staking contract')
+    } else {
+      throw new Error('Balance is 0 for Staking contract')
     }
+  } else {
+    throw new Error('SOV token not found')
   }
 }
 
@@ -106,7 +112,7 @@ async function getProtocolTvl (tokens: Token[]): Promise<void> {
       const output: ITvl = {
         contract: addresses.Protocol.toLowerCase(),
         asset: token.id,
-        name: `Protocol_${!isNil(token.symbol) ? token.symbol : ''}`,
+        name: `${!isNil(token.symbol) ? token.symbol : ''}_Protocol`,
         balance: balance.toFixed(18),
         balanceBtc: btcBalance,
         balanceUsd: usdBalance,
@@ -120,7 +126,7 @@ async function getProtocolTvl (tokens: Token[]): Promise<void> {
 
 async function getLendingPoolTvl (prices: Prices): Promise<void> {
   const data = await getQuery(lendingPoolContracts)
-  const contracts = data.lendingPools
+  const contracts: LendingPool[] = data.lendingPools
   for (const contract of contracts) {
     const balance = await getAssetBalance(
       contract.underlyingAsset.id,
@@ -133,7 +139,11 @@ async function getLendingPoolTvl (prices: Prices): Promise<void> {
       const output: ITvl = {
         contract: contract.id,
         asset: contract.underlyingAsset.id,
-        name: contract.underlyingAsset.symbol,
+        name: `${
+          !isNil(contract.underlyingAsset.symbol)
+            ? contract.underlyingAsset.symbol
+            : ''
+        }_Lending`,
         balance: balance.toFixed(18),
         balanceBtc: btcBalance,
         balanceUsd: usdBalance,
@@ -209,9 +219,9 @@ async function getSubprotocolTvl (tokens: Token[]): Promise<void> {
           .mul(sovToken.lastPriceBtc)
           .toFixed(18)
         const output: ITvl = {
-          contract: addresses.staking.toLowerCase(),
+          contract: contract.contract,
           asset: sovToken.id,
-          name: contract.protocol,
+          name: `SOV_${contract.protocol}`,
           balance: balance.toFixed(18),
           balanceBtc: btcBalance,
           balanceUsd: usdBalance,
