@@ -1,4 +1,4 @@
-import { ITvl } from '../services/tvl'
+import { ITvl } from '../services/tvl.service'
 import { Tvl } from '../entity'
 import { getRepository } from 'typeorm'
 import { isNil } from 'lodash'

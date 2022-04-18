@@ -92,7 +92,6 @@ async function getStakingTvl (tokens: Token[]): Promise<void> {
         balanceUsd: usdBalance,
         tvlGroup: TvlGroup.Staking
       }
-      console.log(output)
       await createTvlRow(output)
       logger.info('TVL rows added for staking contract')
     } else {

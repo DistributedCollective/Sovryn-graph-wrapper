@@ -5,7 +5,7 @@ import { Length, IsEthereumAddress, IsNumber } from 'class-validator'
 import { AbstractBaseEntity } from './AbstractBase.entity'
 
 @Entity()
-export class SummaryPairData extends AbstractBaseEntity {
+export class LiquidityPoolSummary extends AbstractBaseEntity {
   @PrimaryColumn()
   poolId!: string
 

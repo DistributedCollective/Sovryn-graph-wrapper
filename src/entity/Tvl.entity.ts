@@ -8,7 +8,7 @@ import {
 } from 'class-validator'
 
 import { AbstractBaseEntity } from './AbstractBase.entity'
-import { TvlGroup } from '../services/tvl'
+import { TvlGroup } from '../services/tvl.service'
 
 @Entity()
 export class Tvl extends AbstractBaseEntity {

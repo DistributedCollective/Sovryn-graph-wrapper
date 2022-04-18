@@ -1,20 +1,21 @@
 import { getRepository } from 'typeorm'
-import { SummaryPairData } from '../entity'
-import { ITradingPairData } from '../services/summary'
+import { LiquidityPoolSummary } from '../entity'
+import { ITradingPairData } from '../services/summary.service'
 import { notEmpty } from '../utils/common'
 import { inversePrice } from '../utils/helpers'
 import { isNil } from 'lodash'
 
 export const createMultipleSummaryPairData = async (
   summaryPairData: ITradingPairData[]
-): Promise<SummaryPairData[]> => {
-  const repository = getRepository(SummaryPairData)
+): Promise<LiquidityPoolSummary[]> => {
+  const repository = getRepository(LiquidityPoolSummary)
   const promises = summaryPairData
     .filter((data) => data.lastPriceUsd > 0)
     .map(async (data) => {
       // console.debug(data);
       try {
-        const newSummaryPairData: SummaryPairData = new SummaryPairData()
+        const newSummaryPairData: LiquidityPoolSummary =
+          new LiquidityPoolSummary()
         newSummaryPairData.poolId = data.poolId
         newSummaryPairData.baseSymbol = data.baseSymbol
         newSummaryPairData.baseId = data.baseId
@@ -56,18 +57,22 @@ export const createMultipleSummaryPairData = async (
   const validatedSummaryData = await Promise.all(promises)
   const filteredSummaryData = validatedSummaryData.filter(notEmpty)
 
-  const result: SummaryPairData[] = await repository.save(filteredSummaryData)
+  const result: LiquidityPoolSummary[] = await repository.save(
+    filteredSummaryData
+  )
   return result
 }
 
-export const getAllSummaryPairData = async (): Promise<SummaryPairData[]> => {
-  const repository = getRepository(SummaryPairData)
+export const getAllSummaryPairData = async (): Promise<
+LiquidityPoolSummary[]
+> => {
+  const repository = getRepository(LiquidityPoolSummary)
   const data = await repository.find()
   return data
 }
 
 export const getBtcUsdPrice = async (): Promise<number> => {
-  const repository = getRepository(SummaryPairData)
+  const repository = getRepository(LiquidityPoolSummary)
   const data = await repository.findOneOrFail({
     baseSymbol: 'XUSD',
     quoteSymbol: 'WRBTC'
@@ -83,7 +88,7 @@ interface Prices {
 }
 
 export const getAssetPrices = async (): Promise<Prices[]> => {
-  const repository = getRepository(SummaryPairData)
+  const repository = getRepository(LiquidityPoolSummary)
   const data = await repository
     .createQueryBuilder()
     .select(['baseId', 'lastPriceBtc', 'lastPriceUsd'])
@@ -101,7 +106,7 @@ interface UpdateLiquidity {
 export const updateLiquidityColumn = async (
   data: UpdateLiquidity
 ): Promise<void> => {
-  const repository = getRepository(SummaryPairData)
+  const repository = getRepository(LiquidityPoolSummary)
   const row = await repository.findOne(data.contract)
   if (!isNil(row)) {
     const baseAssetLiquidity = !isNil(data.balances[row.baseId])
@@ -128,7 +133,7 @@ Array<{
   summary_quoteAssetLiquidity: number
 }>
 > => {
-  const repository = getRepository(SummaryPairData)
+  const repository = getRepository(LiquidityPoolSummary)
   const data = await repository
     .createQueryBuilder('summary')
     .select([
@@ -158,7 +163,7 @@ Array<{
   summary_updatedAt: Date
 }>
 > => {
-  const repository = getRepository(SummaryPairData)
+  const repository = getRepository(LiquidityPoolSummary)
   const data = await repository
     .createQueryBuilder('summary')
     .select([

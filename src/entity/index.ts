@@ -1,4 +1,4 @@
-import { SummaryPairData } from './Summary'
-import { Asset } from './Asset'
-import { Tvl } from './Tvl'
-export { SummaryPairData, Asset, Tvl }
+import { LiquidityPoolSummary } from './LiquidityPoolSummary.entity'
+import { Asset } from './Asset.entity'
+import { Tvl } from './Tvl.entity'
+export { LiquidityPoolSummary, Asset, Tvl }

@@ -1,5 +1,5 @@
 import { getRepository } from 'typeorm'
-import { AssetData } from '../services/assets'
+import { AssetData } from '../services/assets.service'
 import { Asset } from '../entity'
 import { notEmpty } from '../utils/common'
 

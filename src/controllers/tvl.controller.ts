@@ -5,7 +5,7 @@
  */
 
 import { getAllTvlData } from '../models/tvl.model'
-import { TvlGroup } from '../services/tvl'
+import { TvlGroup } from '../services/tvl.service'
 import { isNil } from 'lodash'
 import { ITvl } from '../utils/interfaces'
 

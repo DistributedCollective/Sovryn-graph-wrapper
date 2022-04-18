@@ -1,7 +1,7 @@
 import { CronJob } from 'cron'
-import assetMainFunction from './assets'
-import summaryMainFunction from './summary'
-import tvlMainFunction from './tvl'
+import assetMainFunction from './assets.service'
+import summaryMainFunction from './summary.service'
+import tvlMainFunction from './tvl.service'
 import log from '../logger'
 
 const logger = log.logger.child({ module: 'Cron Jobs' })

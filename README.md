@@ -14,3 +14,9 @@ This service contains:
 
 1. An express server with routes that can be found in the /src/routes directory
 2. Cron jobs to fetch and store data from the graph and from contracts. These are created from an AbstractCronJob and exported as an array from /src/services/cronJobs.ts
+
+The data pulled by the cron jobs in this service is:
+
+- Asset: symbol, asset, circulating supply
+- LiquidityPoolSummary: for each liquidity pool, the base asset, quote asset, 24h and week price change in BTC and USD, and 24 hour volume
+- Tvl
