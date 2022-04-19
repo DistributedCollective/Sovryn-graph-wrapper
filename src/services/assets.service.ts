@@ -7,6 +7,7 @@ import { fishReleaseSchedule } from '../utils/fishCircSupply'
 import { isNil } from 'lodash'
 import { Token } from '../../generated-schema'
 import { createMultipleAssets } from '../models/asset.model'
+import { createIlliquidSovRow } from '../models/illiquidSov.model'
 import log from '../logger'
 
 const logger = log.logger.child({ module: 'Assets' })
@@ -15,7 +16,7 @@ export interface AssetData {
   id: string
   symbol: string | undefined
   name: string | undefined
-  circulatingSupply: string
+  circulatingSupply: number
   cryptoAssetId: number
 }
 
@@ -41,7 +42,9 @@ export default async function main (): Promise<void> {
         id: item.id,
         symbol: symbol,
         name: item.name?.toString(),
-        circulatingSupply: bignumber(circSupply).div(1e18).toFixed(18),
+        circulatingSupply: parseFloat(
+          bignumber(circSupply).div(1e18).toFixed(18)
+        ),
         cryptoAssetId: cryptoAssetId
       })
     } catch (e) {
@@ -70,17 +73,48 @@ async function getSovCircSupply (): Promise<string> {
   const stakingBalance: string = await sovContract.methods
     .balanceOf(addresses.staking.toLowerCase())
     .call()
+
+  await createIlliquidSovRow({
+    contract: addresses.staking.toLowerCase(),
+    name: 'Staking',
+    sovBalance: Number(bignumber(stakingBalance).div(1e18).toFixed(18))
+  })
+
   const adoptionBalance: string = await sovContract.methods
     .balanceOf(addresses.AdoptionFund.toLowerCase())
     .call()
+
+  await createIlliquidSovRow({
+    contract: addresses.AdoptionFund.toLowerCase(),
+    name: 'AdoptionFund',
+    sovBalance: Number(bignumber(adoptionBalance).div(1e18).toFixed(18))
+  })
+
   const developmentBalance: string = await sovContract.methods
     .balanceOf(addresses.DevelopmentFund.toLowerCase())
     .call()
+
+  await createIlliquidSovRow({
+    contract: addresses.DevelopmentFund.toLowerCase(),
+    name: 'DevelopmentFund',
+    sovBalance: Number(bignumber(developmentBalance).div(1e18).toFixed(18))
+  })
+
+  const lockedSovBalance: string = await sovContract.methods
+    .balanceOf(addresses.lockedSOV.toLowerCase())
+    .call()
+
+  await createIlliquidSovRow({
+    contract: addresses.lockedSOV.toLowerCase(),
+    name: 'LockedSov',
+    sovBalance: Number(bignumber(lockedSovBalance).div(1e18).toFixed(18))
+  })
 
   const circSupply = bignumber(100 * 1e6 * 1e18)
     .minus(stakingBalance)
     .minus(developmentBalance)
     .minus(adoptionBalance)
+    .minus(lockedSovBalance)
 
   const output = bignumber(circSupply).toFixed()
   return output

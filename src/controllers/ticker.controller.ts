@@ -18,21 +18,19 @@ export async function getTickerData (): Promise<{ [key: string]: TickerItem }> {
   const result = await getSummaryTickerData()
   result.forEach((item) => {
     const updatedSinceYesterday =
-      new Date(item.summary_updatedAt).getTime() >
+      new Date(item.updatedAt).getTime() >
       new Date().getTime() - 24 * 60 * 60 * 1000
-    const k = `${item.summary_baseId}_${item.summary_quoteId}`
+    const k = `${item.baseId}_${item.quoteId}`
     output[k] = {
-      base_symbol: item.summary_baseSymbol,
-      base_id: item.summary_baseId,
-      quote_symbol: item.summary_quoteSymbol,
-      quote_id: item.summary_quoteId,
+      base_symbol: item.baseSymbol,
+      base_id: item.baseId,
+      quote_symbol: item.quoteSymbol,
+      quote_id: item.quoteId,
       isFrozen: !updatedSinceYesterday,
-      last_price: Number(item.summary_lastPrice),
-      last_price_base: Number(
-        bignumber(1).div(item.summary_lastPrice).toFixed(18)
-      ),
-      base_volume: Number(item.summary_baseVolume24h),
-      quote_volume: Number(item.summary_quoteVolume24h)
+      last_price: Number(item.lastPrice),
+      last_price_base: Number(bignumber(1).div(item.lastPrice).toFixed(18)),
+      base_volume: Number(item.baseVolume24h),
+      quote_volume: Number(item.quoteVolume24h)
     }
   })
   return output

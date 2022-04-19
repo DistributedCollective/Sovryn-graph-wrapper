@@ -1,5 +1,5 @@
 import { ConnectionOptions } from 'typeorm'
-import { LiquidityPoolSummary, Asset, Tvl } from '../entity'
+import { LiquidityPoolSummary, Asset, Tvl, IlliquidSov } from '../entity'
 
 import config from './config'
 const {
@@ -17,7 +17,7 @@ const dbConfig: ConnectionOptions = {
   username: postgresUser,
   password: postgresPassword,
   database: postgresDatabase,
-  entities: [LiquidityPoolSummary, Asset, Tvl],
+  entities: [LiquidityPoolSummary, Asset, Tvl, IlliquidSov],
   synchronize: true
 }
 

@@ -1,11 +1,6 @@
 import { Entity, Column, PrimaryColumn } from 'typeorm'
 
-import {
-  Length,
-  IsEthereumAddress,
-  IsNumber,
-  IsNumberString
-} from 'class-validator'
+import { Length, IsEthereumAddress, IsNumber } from 'class-validator'
 
 import { AbstractBaseEntity } from './AbstractBase.entity'
 
@@ -22,10 +17,9 @@ export class Asset extends AbstractBaseEntity {
   @Column()
   name?: string
 
-  /** This is a string because USDT circulating supply on testnet is waaaay too big, and these values aren't used in numeric operations  */
-  @Column()
-  @IsNumberString()
-  circulatingSupply!: string
+  @Column('decimal', { precision: 400, scale: 18 })
+  @IsNumber()
+  circulatingSupply!: number
 
   @Column({ nullable: true })
   @IsNumber()

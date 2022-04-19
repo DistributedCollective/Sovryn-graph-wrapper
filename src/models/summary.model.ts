@@ -123,61 +123,52 @@ export const updateLiquidityColumn = async (
 }
 
 export const getAmmLiquidityData = async (): Promise<
-Array<{
-  summary_poolId: string
-  summary_baseId: string
-  summary_baseSymbol: string
-  summary_quoteId: string
-  summary_quoteSymbol: string
-  summary_baseAssetLiquidity: number
-  summary_quoteAssetLiquidity: number
-}>
+LiquidityPoolSummary[]
 > => {
   const repository = getRepository(LiquidityPoolSummary)
-  const data = await repository
-    .createQueryBuilder('summary')
-    .select([
-      'summary.poolId',
-      'summary.baseId',
-      'summary.baseSymbol',
-      'summary.quoteId',
-      'summary.quoteSymbol',
-      'summary.baseAssetLiquidity',
-      'summary.quoteAssetLiquidity'
-    ])
-    .getRawMany()
+  const data = await repository.find({
+    select: [
+      'poolId',
+      'baseId',
+      'baseSymbol',
+      'quoteId',
+      'quoteSymbol',
+      'baseAssetLiquidity',
+      'quoteAssetLiquidity'
+    ]
+  })
   return data
 }
 
 export const getSummaryTickerData = async (): Promise<
-Array<{
-  summary_baseId: string
-  summary_baseSymbol: string
-  summary_quoteId: string
-  summary_quoteSymbol: string
-  summary_baseAssetLiquidity: number
-  summary_quoteAssetLiquidity: number
-  summary_lastPrice: number
-  summary_baseVolume24h: number
-  summary_quoteVolume24h: number
-  summary_updatedAt: Date
-}>
+LiquidityPoolSummary[]
 > => {
   const repository = getRepository(LiquidityPoolSummary)
-  const data = await repository
-    .createQueryBuilder('summary')
-    .select([
-      'summary.baseId',
-      'summary.baseSymbol',
-      'summary.quoteId',
-      'summary.quoteSymbol',
-      'summary.baseAssetLiquidity',
-      'summary.quoteAssetLiquidity',
-      'summary.lastPrice',
-      'summary.baseVolume24h',
-      'summary.quoteVolume24h',
-      'summary.updatedAt'
-    ])
-    .getRawMany()
+  const data = await repository.find({
+    select: [
+      'baseId',
+      'baseSymbol',
+      'quoteId',
+      'quoteSymbol',
+      'baseAssetLiquidity',
+      'quoteAssetLiquidity',
+      'lastPrice',
+      'baseVolume24h',
+      'quoteVolume24h',
+      'updatedAt'
+    ]
+  })
+  return data
+}
+
+export const getSovBtcPairData = async (): Promise<LiquidityPoolSummary> => {
+  const repository = getRepository(LiquidityPoolSummary)
+  const data = await repository.findOneOrFail({
+    select: ['lastPrice', 'lastPriceUsd', 'updatedAt'],
+    where: {
+      baseSymbol: 'SOV',
+      quoteSymbol: 'WRBTC'
+    }
+  })
   return data
 }

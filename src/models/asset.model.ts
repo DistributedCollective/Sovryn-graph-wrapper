@@ -33,3 +33,14 @@ export const getAllAssetData = async (): Promise<Asset[]> => {
   const data = await repository.find()
   return data
 }
+
+export const getSovData = async (): Promise<Asset> => {
+  const repository = getRepository(Asset)
+  const data = await repository.findOneOrFail({
+    select: ['symbol', 'circulatingSupply', 'updatedAt'],
+    where: {
+      symbol: 'SOV'
+    }
+  })
+  return data
+}

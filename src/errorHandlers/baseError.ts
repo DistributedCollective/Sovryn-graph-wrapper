@@ -5,7 +5,12 @@ export class BaseError extends Error {
   public readonly statusCode: HttpStatusCode
   public readonly isOperational: boolean
 
-  constructor (name: string, statusCode: HttpStatusCode, description: string, isOperational: boolean) {
+  constructor (
+    name: string,
+    statusCode: HttpStatusCode,
+    description: string,
+    isOperational: boolean
+  ) {
     super(description)
 
     this.name = name
@@ -17,7 +22,12 @@ export class BaseError extends Error {
 }
 
 export class APIError extends BaseError {
-  constructor (name: string, statusCode = HttpStatusCode.INTERNAL_SERVER, description = 'internal server error', isOperational = true) {
+  constructor (
+    name: string,
+    statusCode = HttpStatusCode.INTERNAL_SERVER,
+    description = 'internal server error',
+    isOperational = true
+  ) {
     super(name, statusCode, description, isOperational)
   }
 }
@@ -34,10 +44,21 @@ export class HTTP404Error extends BaseError {
   }
 }
 
+export class HTTP500Error extends BaseError {
+  constructor (description = 'internal server error') {
+    super('INTERNAL SERVER', HttpStatusCode.INTERNAL_SERVER, description, true)
+  }
+}
+
 export class ValidateError extends BaseError {
   public readonly errors: ValidationError[]
   constructor (errors: ValidationError[], description = 'Validation Error') {
-    super('UNPROCESSABLE ENTITY', HttpStatusCode.UNPROCESSABLE_ENTITY, description, true)
+    super(
+      'UNPROCESSABLE ENTITY',
+      HttpStatusCode.UNPROCESSABLE_ENTITY,
+      description,
+      true
+    )
     this.errors = errors
   }
 }

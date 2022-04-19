@@ -16,15 +16,15 @@ export async function getLiquidityData (): Promise<{
   const output: { [key: string]: LiquidityItem } = {}
   const result = await getAmmLiquidityData()
   result.forEach((item) => {
-    const k = `${item.summary_baseId}_${item.summary_quoteId}`
+    const k = `${item.baseId}_${item.quoteId}`
     output[k] = {
-      base_symbol: item.summary_baseSymbol,
-      base_id: item.summary_baseId,
-      quote_symbol: item.summary_quoteSymbol,
-      quote_id: item.summary_quoteId,
-      amm_address: item.summary_poolId,
-      base_asset_liquidity: Number(item.summary_baseAssetLiquidity),
-      quote_asset_liquidity: Number(item.summary_quoteAssetLiquidity)
+      base_symbol: item.baseSymbol,
+      base_id: item.baseId,
+      quote_symbol: item.quoteSymbol,
+      quote_id: item.quoteId,
+      amm_address: item.poolId,
+      base_asset_liquidity: Number(item.baseAssetLiquidity),
+      quote_asset_liquidity: Number(item.quoteAssetLiquidity)
     }
   })
   return output
