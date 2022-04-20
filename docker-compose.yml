@@ -6,7 +6,7 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=sov-contract-data-main
+      - POSTGRES_DB=sov-graph-wrapper-main
     ports:
       - '5432:5432'
     expose:
@@ -28,7 +28,7 @@ services:
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=sov-contract-data-main
+      - POSTGRES_DB=sov-graph-wrapper-main
     env_file:
       - .env
     ports:

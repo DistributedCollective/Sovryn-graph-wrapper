@@ -22,7 +22,7 @@ const config = convict({
   logLevel: {
     doc: 'application log level',
     format: String,
-    default: 'debug',
+    default: 'info',
     env: 'LOG_LEVEL'
   },
   postgresHost: {
@@ -53,7 +53,7 @@ const config = convict({
   postgresDatabase: {
     doc: 'postgres database',
     format: String,
-    default: 'sov-contract-data-main',
+    default: 'sov-graph-wrapper-main',
     env: 'POSTGRES_DB'
   },
   mainnetSubgraphUrl: {
@@ -81,6 +81,12 @@ const config = convict({
     format: 'url',
     default: 'https://testnet.sovryn.app/rpc',
     env: 'RSK_TESTNET'
+  },
+  sovTotalSupply: {
+    doc: 'Total supply of SOV',
+    format: Number,
+    default: 100 * 1e6 * 1e18,
+    env: 'SOV_TOTAL_SUPPLY'
   }
 })
 

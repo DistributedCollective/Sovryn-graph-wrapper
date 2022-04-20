@@ -1,13 +1,13 @@
 import { DocumentNode } from 'graphql'
 import gql from 'graphql-tag'
-// import { getQuery } from "../utils/apolloClient";
 
-export const blockNumber = (timestamp: number): DocumentNode => {
+export const blockNumberFromTimestamp = (timestamp: number): DocumentNode => {
   return gql`
     {
       transactions(
-        where: { timestamp_gte: ${timestamp} }
+        where: { timestamp_lte: ${timestamp} }
         orderBy: timestamp
+        orderDirection: desc
         first: 1
       ) {
         blockNumber

@@ -5,7 +5,7 @@
 
 import { priceAndVolumeQuery } from '../graphQueries/priceAndVolume'
 import { candlestickQuery } from '../graphQueries/candlesticks'
-import { blockNumber } from '../graphQueries/block'
+import { blockNumberFromTimestamp } from '../graphQueries/block'
 import { getQuery } from '../utils/apolloClient'
 import { isNil } from 'lodash'
 import { bignumber } from 'mathjs'
@@ -13,7 +13,8 @@ import { createMultipleSummaryPairData } from '../models/summary.model'
 import {
   Transaction,
   LiquidityPool,
-  CandleStick
+  CandleStick,
+  CandleSticksInterval
 } from '../../generated-schema'
 import log from '../logger'
 
@@ -98,7 +99,7 @@ export default async function main (): Promise<void> {
 }
 
 async function getBlockNumberFromDate (timestamp: number): Promise<number> {
-  const data = await getQuery(blockNumber(timestamp))
+  const data = await getQuery(blockNumberFromTimestamp(timestamp))
   const transactions = data.transactions as Transaction[]
   return parseInt(transactions[0].blockNumber)
 }
@@ -224,7 +225,11 @@ async function getHighAndLowPrices (baseToken: string): Promise<{
   const yesterdayTimestamp = Math.floor(
     (new Date().getTime() - 24 * 60 * 60 * 1000) / 1000
   )
-  const query = candlestickQuery(baseToken, 'HourInterval', yesterdayTimestamp)
+  const query = candlestickQuery(
+    baseToken,
+    CandleSticksInterval.HourInterval,
+    yesterdayTimestamp
+  )
   const queryData = await getQuery(query)
   let highUsd: number = 0
   let lowUsd: number = 0

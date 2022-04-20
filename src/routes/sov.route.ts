@@ -7,6 +7,10 @@ import {
   getSovCirculatingSupplyBreakdown,
   getSovCurrentPrice
 } from '../controllers/sov.controller'
+import config from '../config/config'
+import { bignumber } from 'mathjs'
+
+const { sovTotalSupply } = config
 
 export const router = express.Router()
 
@@ -77,7 +81,9 @@ router.get(
     res.set('Cache-control', 'public, max-age=600')
     try {
       req.log.info(req, 'get sov total supply')
-      res.status(200).json(Number(100 * 1e6))
+      res
+        .status(200)
+        .json(Number(bignumber(sovTotalSupply).div(1e18).toFixed()))
     } catch (error) {
       next(error)
     }

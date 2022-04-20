@@ -8,9 +8,11 @@ import { isNil } from 'lodash'
 import { Token } from '../../generated-schema'
 import { createMultipleAssets } from '../models/asset.model'
 import { createIlliquidSovRow } from '../models/illiquidSov.model'
+import config from '../config/config'
 import log from '../logger'
 
 const logger = log.logger.child({ module: 'Assets' })
+const { sovTotalSupply } = config
 
 export interface AssetData {
   id: string
@@ -110,7 +112,7 @@ async function getSovCircSupply (): Promise<string> {
     sovBalance: Number(bignumber(lockedSovBalance).div(1e18).toFixed(18))
   })
 
-  const circSupply = bignumber(100 * 1e6 * 1e18)
+  const circSupply = bignumber(sovTotalSupply)
     .minus(stakingBalance)
     .minus(developmentBalance)
     .minus(adoptionBalance)
