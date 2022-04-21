@@ -1,10 +1,10 @@
 import { Entity, Column, PrimaryColumn } from 'typeorm'
 
 import {
+  IsAscii,
   IsEthereumAddress,
   IsNumber,
   IsNumberString,
-  IsString,
   Length
 } from 'class-validator'
 
@@ -26,7 +26,7 @@ export class Tvl extends AbstractBaseEntity {
 
   @Column()
   @Length(2, 20)
-  @IsString()
+  @IsAscii()
   name!: string
 
   @Column()
