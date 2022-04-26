@@ -34,11 +34,11 @@ export class Tvl extends AbstractBaseEntity {
   balance!: string
 
   @Column('decimal', { precision: 40, scale: 2 })
-  @IsNumber()
+  @IsNumber({ allowNaN: false, allowInfinity: false, maxDecimalPlaces: 2 })
   balanceUsd?: number
 
   @Column('decimal', { precision: 40, scale: 18 })
-  @IsNumber()
+  @IsNumber({ allowNaN: false, allowInfinity: false, maxDecimalPlaces: 18 })
   balanceBtc?: number
 
   @Column({

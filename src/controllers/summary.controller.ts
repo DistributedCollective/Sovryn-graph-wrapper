@@ -1,6 +1,7 @@
-import { bignumber } from 'mathjs'
 import { getAllSummaryPairData } from '../models/summary.model'
 import { Summary } from '../utils/interfaces'
+import config from '../config/config'
+import { inversePrice } from '../utils/helpers'
 
 export const getSummaryData = async (): Promise<Summary> => {
   const data = await getAllSummaryPairData()
@@ -8,8 +9,8 @@ export const getSummaryData = async (): Promise<Summary> => {
   let btcPrice = 0
   let totalVolumeBtc = 0
   data.forEach((item) => {
-    if (item.baseSymbol === 'XUSD') {
-      btcPrice = Number(bignumber(1).div(item.lastPrice).toFixed(2))
+    if (item.baseSymbol === config.stableCoinSymbol) {
+      btcPrice = inversePrice(item.lastPrice, 2)
     }
     totalVolumeBtc += Number(item.quoteVolume24h)
     const pair = `${item.baseId}_${item.quoteId}`

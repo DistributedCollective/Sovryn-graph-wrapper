@@ -32,17 +32,11 @@ export const createIlliquidSovRow = async (
     contract: newIlliquidSovRow.contract
   })
 
-  if (!isNil(existingEntity)) {
-    await repository.update(
-      {
-        date: newIlliquidSovRow.date,
-        contract: newIlliquidSovRow.contract
-      },
-      newIlliquidSovRow
-    )
-  } else {
-    await repository.insert(newIlliquidSovRow)
-  }
+  const entity = repository.merge(
+    !isNil(existingEntity) ? existingEntity : newIlliquidSovRow,
+    newIlliquidSovRow
+  )
+  await entity.save()
 }
 
 export const getAllIlliquidSovData = async (): Promise<IlliquidSov[]> => {

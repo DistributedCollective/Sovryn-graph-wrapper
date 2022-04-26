@@ -7,6 +7,8 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=sov-graph-wrapper-main
+    env_file:
+      - .env
     expose:
       - 5432
     networks:

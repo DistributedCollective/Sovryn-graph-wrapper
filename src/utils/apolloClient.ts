@@ -9,9 +9,7 @@ import { isNil } from 'lodash'
 
 const logger = log.logger.child({ module: 'Apollo Client' })
 
-const { mainnetSubgraphUrl, testnetSubgraphUrl, env } = config
-const subgraphUrl =
-  env === 'production' ? mainnetSubgraphUrl : testnetSubgraphUrl
+const { subgraphUrl } = config
 
 const httpLink = createHttpLink({
   uri: subgraphUrl,

@@ -47,15 +47,18 @@ export interface ITradingPairData extends ITradingPairDataBase {
   lowBtc: number
 }
 
+const DAY_MILLISECONDS = 24 * 60 * 60 * 1000
+const WEEK_MILLISECONDS = 24 * 60 * 60 * 7 * 1000
+
 export default async function main (): Promise<void> {
   logger.info('Running Summary Data main function')
   try {
     logger.debug('Getting block numbers')
     const yesterdayBlock = await getBlockNumberFromDate(
-      Math.floor((new Date().getTime() - 24 * 60 * 60 * 1000) / 1000)
+      Math.floor((new Date().getTime() - DAY_MILLISECONDS) / 1000)
     )
     const lastWeekBlock = await getBlockNumberFromDate(
-      Math.floor((new Date().getTime() - 24 * 60 * 60 * 7 * 1000) / 1000)
+      Math.floor((new Date().getTime() - WEEK_MILLISECONDS) / 1000)
     )
 
     logger.debug('Getting liquidity pool data')
@@ -223,7 +226,7 @@ async function getHighAndLowPrices (baseToken: string): Promise<{
   lowBtc: number
 }> {
   const yesterdayTimestamp = Math.floor(
-    (new Date().getTime() - 24 * 60 * 60 * 1000) / 1000
+    (new Date().getTime() - DAY_MILLISECONDS) / 1000
   )
   const query = candlestickQuery(
     baseToken,

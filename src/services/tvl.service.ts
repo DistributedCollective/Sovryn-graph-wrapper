@@ -12,6 +12,7 @@ import { isNil } from 'lodash'
 import { createTvlRow } from '../models/tvl.model'
 import log from '../logger'
 import { updateLiquidityColumn } from '../models/summary.model'
+import config from '../config/config'
 
 const logger = log.logger.child({ module: 'TVL Service' })
 
@@ -95,7 +96,11 @@ async function getStakingTvl (tokens: Token[]): Promise<void> {
       await createTvlRow(output)
       logger.info('TVL rows added for staking contract')
     } else {
-      throw new Error('Balance is 0 for Staking contract')
+      throw new Error(
+        `Balance is 0 for Staking contract: ${addresses.staking.toLowerCase()} : ${
+          sovToken.id
+        } : ${config.env}`
+      )
     }
   } else {
     throw new Error('SOV token not found')

@@ -1,10 +1,16 @@
 import convict from 'convict'
 
+export enum Environment {
+  Production = 'production',
+  Development = 'development',
+  Test = 'test',
+}
+
 const config = convict({
   env: {
     doc: 'The application environment.',
     format: ['production', 'development', 'test'],
-    default: 'development',
+    default: 'production',
     env: 'NODE_ENV'
   },
   port: {
@@ -46,8 +52,8 @@ const config = convict({
   postgresPassword: {
     doc: 'postgres password',
     format: '*',
-    default: 'postgres',
     env: 'POSTGRES_PASSWORD',
+    default: '',
     sensitive: true
   },
   postgresDatabase: {
@@ -56,37 +62,36 @@ const config = convict({
     default: 'sov-graph-wrapper-main',
     env: 'POSTGRES_DB'
   },
-  mainnetSubgraphUrl: {
-    doc: 'Mainnet Subgraph',
+  subgraphUrl: {
+    doc: 'Url for deployed subgraph',
     format: 'url',
     default:
       'https://subgraph.sovryn.app/subgraphs/name/DistributedCollective/sovryn-subgraph',
-    env: 'MAINNET_SUBGRAPH_URL'
+    env: 'SUBGRAPH_URL'
   },
-  testnetSubgraphUrl: {
-    doc: 'Testnet Subgraph',
-    format: 'url',
-    default:
-      'https://subgraph.test.sovryn.app/subgraphs/name/DistributedCollective/sovryn-subgraph',
-    env: 'TESTNET_SUBGRAPH_URL'
-  },
-  RSKMainnet: {
+  RSKRpc: {
     doc: 'RSK mainnet endpoint',
     format: 'url',
     default: 'https://rsk-graph1.sovryn.app/rpc',
-    env: 'RSK_MAINNET'
-  },
-  RSKTestnet: {
-    doc: 'RSK testnet endpoint',
-    format: 'url',
-    default: 'https://testnet.sovryn.app/rpc',
-    env: 'RSK_TESTNET'
+    env: 'RSK_RPC'
   },
   sovTotalSupply: {
     doc: 'Total supply of SOV',
     format: Number,
     default: 100 * 1e6 * 1e18,
     env: 'SOV_TOTAL_SUPPLY'
+  },
+  stableCoinSymbol: {
+    doc: 'Symbol for main USD stablecoin in the protocol',
+    format: String,
+    default: 'XUSD',
+    env: 'STABLECOIN_SYMBOL'
+  },
+  twoWayPegAddress: {
+    doc: 'Address of the RSK 2WP contract',
+    format: String,
+    default: '0x0000000000000000000000000000000001000006',
+    env: 'RSK_2WP'
   }
 })
 

@@ -1,13 +1,14 @@
 import { ConnectionOptions } from 'typeorm'
 import { LiquidityPoolSummary, Asset, Tvl, IlliquidSov } from '../entity'
 
-import config from './config'
+import config, { Environment } from './config'
 const {
   postgresHost,
   postgresPort,
   postgresUser,
   postgresPassword,
-  postgresDatabase
+  postgresDatabase,
+  env
 } = config
 
 const dbConfig: ConnectionOptions = {
@@ -18,7 +19,7 @@ const dbConfig: ConnectionOptions = {
   password: postgresPassword,
   database: postgresDatabase,
   entities: [LiquidityPoolSummary, Asset, Tvl, IlliquidSov],
-  synchronize: true
+  synchronize: env === Environment.Development
 }
 
 export default dbConfig

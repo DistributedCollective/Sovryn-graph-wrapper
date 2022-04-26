@@ -1,5 +1,5 @@
-import { bignumber } from 'mathjs'
 import { getSummaryTickerData } from '../models/summary.model'
+import { inversePrice } from '../utils/helpers'
 
 interface TickerItem {
   base_symbol: string
@@ -17,9 +17,10 @@ export async function getTickerData (): Promise<{ [key: string]: TickerItem }> {
   const output: { [key: string]: TickerItem } = {}
   const result = await getSummaryTickerData()
   result.forEach((item) => {
+    const millisecondsInADay = 24 * 60 * 60 * 1000
     const updatedSinceYesterday =
       new Date(item.updatedAt).getTime() >
-      new Date().getTime() - 24 * 60 * 60 * 1000
+      new Date().getTime() - millisecondsInADay
     const k = `${item.baseId}_${item.quoteId}`
     output[k] = {
       base_symbol: item.baseSymbol,
@@ -28,7 +29,7 @@ export async function getTickerData (): Promise<{ [key: string]: TickerItem }> {
       quote_id: item.quoteId,
       isFrozen: !updatedSinceYesterday,
       last_price: Number(item.lastPrice),
-      last_price_base: Number(bignumber(1).div(item.lastPrice).toFixed(18)),
+      last_price_base: inversePrice(item.lastPrice, 18),
       base_volume: Number(item.baseVolume24h),
       quote_volume: Number(item.quoteVolume24h)
     }

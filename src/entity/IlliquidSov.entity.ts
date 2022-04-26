@@ -20,6 +20,6 @@ export class IlliquidSov extends AbstractBaseEntity {
   name!: string
 
   @Column('decimal', { precision: 30, scale: 18 })
-  @IsNumber()
+  @IsNumber({ allowNaN: false, allowInfinity: false, maxDecimalPlaces: 18 })
   sovBalance!: number
 }

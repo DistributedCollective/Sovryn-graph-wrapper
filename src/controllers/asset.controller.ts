@@ -1,11 +1,9 @@
 import { getAllAssetData } from '../models/asset.model'
 import { Asset, AssetData } from '../utils/interfaces'
 import { HTTP500Error } from '../errorHandlers/baseError'
-import log from '../logger'
+import { Logger } from 'pino'
 
-const logger = log.logger.child({ module: 'Asset Controller' })
-
-export const getAssetData = async (): Promise<Asset> => {
+export const getAssetData = async (log: Logger): Promise<Asset> => {
   try {
     const data = await getAllAssetData()
     const output: { [key: string]: AssetData } = {}
@@ -23,7 +21,7 @@ export const getAssetData = async (): Promise<Asset> => {
     return output
   } catch (e) {
     const error = e as Error
-    logger.error(error, error.message)
+    log.error(error, error.message)
     throw new HTTP500Error('Unable to return asset data')
   }
 }

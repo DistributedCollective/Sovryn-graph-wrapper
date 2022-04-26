@@ -1,6 +1,8 @@
 import { getAllIlliquidSovData } from '../models/illiquidSov.model'
 import { getSovData } from '../models/asset.model'
 import { getSovBtcPairData } from '../models/summary.model'
+import config from '../config/config'
+import { bignumber } from 'mathjs'
 
 export async function getSovCirculatingSupply (): Promise<{
   circulating_supply: number
@@ -55,7 +57,7 @@ export async function getSovCirculatingSupplyBreakdown (): Promise<ICircSupplyBr
     }
   })
   const output = {
-    totalSupply: Number(100 * 1e6),
+    totalSupply: Number(bignumber(config.sovTotalSupply).div(1e18).toFixed()),
     nonLiquidSov: parsedData,
     circulatingSupply: Number(circSupplyData.circulatingSupply),
     circulatingSupplyUpdatedAt: circSupplyData.updatedAt

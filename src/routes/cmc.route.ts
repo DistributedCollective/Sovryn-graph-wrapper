@@ -33,7 +33,7 @@ router.get(
     res.set('Cache-control', 'public, max-age=120')
     try {
       req.log.info(req, 'get asset data')
-      const response = await getAssetData()
+      const response = await getAssetData(req.log)
       res.status(200).json(response)
     } catch (error) {
       next(error)

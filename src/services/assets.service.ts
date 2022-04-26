@@ -12,7 +12,7 @@ import config from '../config/config'
 import log from '../logger'
 
 const logger = log.logger.child({ module: 'Assets' })
-const { sovTotalSupply } = config
+const { sovTotalSupply, twoWayPegAddress } = config
 
 export interface AssetData {
   id: string
@@ -123,13 +123,9 @@ async function getSovCircSupply (): Promise<string> {
 }
 
 async function getWrbtcCircSupply (): Promise<string> {
-  const bridgeBalance = await web3.eth.getBalance(
-    /** MOVE TO CONFIG */
-    '0x0000000000000000000000000000000001000006'
-  )
-  return bignumber(21000000 * 1e18)
-    .minus(bignumber(bridgeBalance))
-    .toFixed(0)
+  const bridgeBalance = await web3.eth.getBalance(twoWayPegAddress)
+  const maxRbtcSupply = 21000000 * 1e18
+  return bignumber(maxRbtcSupply).minus(bignumber(bridgeBalance)).toFixed(0)
 }
 
 async function getFishCircSupply (): Promise<string> {
