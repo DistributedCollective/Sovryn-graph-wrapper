@@ -53,7 +53,7 @@ const config = convict({
   postgresDatabase: {
     doc: 'postgres database',
     format: String,
-    default: 'sov-contract-data-main',
+    default: 'sov-graph-wrapper-main',
     env: 'POSTGRES_DB'
   },
   mainnetSubgraphUrl: {
