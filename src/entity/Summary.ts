@@ -1,13 +1,15 @@
-import { Entity, Column, PrimaryColumn } from 'typeorm'
+import { Entity, Column, Unique } from 'typeorm'
 
 import { Length, IsEthereumAddress, IsNumber } from 'class-validator'
 
 import { AbstractBaseEntity } from './AbstractBase.entity'
 
 @Entity()
-export class SummaryPairData extends AbstractBaseEntity {
-  @PrimaryColumn()
-  poolId!: string
+@Unique('pair', ['tradingPair'])
+export class Summary extends AbstractBaseEntity {
+  @Column()
+  @Length(83)
+  tradingPair!: string
 
   @Column()
   @Length(2, 10)
@@ -27,51 +29,23 @@ export class SummaryPairData extends AbstractBaseEntity {
   @IsEthereumAddress()
   quoteId!: string
 
-  @Column('decimal', { precision: 40, scale: 18 })
+  @Column()
   @IsNumber()
   baseVolume24h!: number
 
-  @Column('decimal', { precision: 40, scale: 18 })
+  @Column()
   @IsNumber()
   quoteVolume24h!: number
 
-  @Column('decimal', { precision: 40, scale: 18 })
+  @Column()
   @IsNumber()
   lastPrice!: number
 
-  @Column('decimal', { precision: 40, scale: 2 })
+  @Column()
   @IsNumber()
-  lastPriceUsd!: number
+  dayPrice!: number
 
-  @Column('decimal', { precision: 6, scale: 2, default: 0 })
+  @Column()
   @IsNumber()
-  priceChangePercent24h!: number
-
-  @Column('decimal', { precision: 6, scale: 2, default: 0 })
-  @IsNumber()
-  priceChangePercentWeek!: number
-
-  @Column('decimal', { precision: 6, scale: 2, default: 0 })
-  @IsNumber()
-  priceChangePercent24hUsd!: number
-
-  @Column('decimal', { precision: 6, scale: 2, default: 0 })
-  @IsNumber()
-  priceChangePercentWeekUsd!: number
-
-  @Column('decimal', { precision: 40, scale: 2 })
-  @IsNumber()
-  highUsd!: number
-
-  @Column('decimal', { precision: 40, scale: 2 })
-  @IsNumber()
-  lowUsd!: number
-
-  @Column('decimal', { precision: 40, scale: 18 })
-  @IsNumber()
-  highBtc!: number
-
-  @Column('decimal', { precision: 40, scale: 18 })
-  @IsNumber()
-  lowBtc!: number
+  weekPrice!: number
 }
