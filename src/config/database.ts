@@ -1,5 +1,5 @@
 import { ConnectionOptions } from 'typeorm'
-import { Summary } from '../entity'
+import { SummaryPairData, Asset } from '../entity'
 
 import config from './config'
 const {
@@ -17,7 +17,7 @@ const dbConfig: ConnectionOptions = {
   username: postgresUser,
   password: postgresPassword,
   database: postgresDatabase,
-  entities: [Summary],
+  entities: [SummaryPairData, Asset],
   synchronize: true
 }
 

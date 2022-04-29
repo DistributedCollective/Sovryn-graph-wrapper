@@ -3,34 +3,28 @@
  *
  */
 
-import { priceAndVolumeQuery } from '../queries/priceAndVolume'
+import { priceAndVolumeQuery } from '../graphQueries/priceAndVolume'
+import { candlestickQuery } from '../graphQueries/candlesticks'
+import { blockNumber } from '../graphQueries/block'
 import { getQuery } from '../utils/apolloClient'
 import { isNil } from 'lodash'
 import { bignumber } from 'mathjs'
+import { createMultipleSummaryPairData } from '../models/summary.model'
+import {
+  Transaction,
+  LiquidityPool,
+  CandleStick
+} from '../../generated-schema'
+import log from '../logger'
 
-interface ConnectorToken {
-  token: {
-    symbol: string
-  }
-  totalVolume: string
+const logger = log.logger.child({ module: 'Assets' })
+
+interface LiquidityPoolData {
+  liquidityPools: LiquidityPool[]
 }
 
-interface Token {
-  symbol: string
-  id: string
-  lastPriceBtc: string
-  lastPriceUsd: string
-}
-
-interface LiquidityPool {
-  id: string
-  connectorTokens: ConnectorToken[]
-  token0: Token
-  token1: Token
-}
-
-interface ITradingPairData {
-  tradingPair: string
+interface ITradingPairDataBase {
+  poolId: string
   baseSymbol: string
   baseId: string
   quoteSymbol: string
@@ -45,29 +39,83 @@ interface ITradingPairData {
   priceChangePercentWeekUsd: number
 }
 
-export async function main (): Promise<void> {
-  console.log('Running main...')
-  const data = await getQuery(priceAndVolumeQuery())
-  const currentBlock = data._meta.block.number
-  const currentData: LiquidityPool[] = data.liquidityPools
-  /** We assume 30 second block time */
-  const yesterdayBlock = currentBlock - 2880
-  const lastWeekBlock = currentBlock - 2880 * 7
-  const dayData: { liquidityPools: LiquidityPool[] } = await getQuery(
-    priceAndVolumeQuery(yesterdayBlock)
-  )
-  console.log(dayData)
-  const weekData: { liquidityPools: LiquidityPool[] } = await getQuery(
-    priceAndVolumeQuery(lastWeekBlock)
-  )
+export interface ITradingPairData extends ITradingPairDataBase {
+  highUsd: number
+  lowUsd: number
+  highBtc: number
+  lowBtc: number
+}
 
-  const sortedByPairs = currentData.map((item) => {
-    const itemDayData = dayData.liquidityPools.find(
-      (dayItem) => dayItem.id === item.id
+export default async function main (): Promise<void> {
+  logger.info('Running Summary Data main function')
+  try {
+    logger.debug('Getting block numbers')
+    const yesterdayBlock = await getBlockNumberFromDate(
+      Math.floor((new Date().getTime() - 24 * 60 * 60 * 1000) / 1000)
     )
-    const itemWeekData = weekData.liquidityPools.find(
-      (weekItem) => weekItem.id === item.id
+    const lastWeekBlock = await getBlockNumberFromDate(
+      Math.floor((new Date().getTime() - 24 * 60 * 60 * 7 * 1000) / 1000)
     )
+
+    logger.debug('Getting liquidity pool data')
+    const currentData: LiquidityPoolData = await getQuery(
+      priceAndVolumeQuery()
+    )
+
+    const dayData: LiquidityPoolData = await getQuery(
+      priceAndVolumeQuery(yesterdayBlock)
+    )
+    const weekData: LiquidityPoolData = await getQuery(
+      priceAndVolumeQuery(lastWeekBlock)
+    )
+
+    logger.debug('Sorting data')
+    const sortedData = sortByPairs(
+      currentData.liquidityPools,
+      dayData.liquidityPools,
+      weekData.liquidityPools
+    )
+
+    logger.debug('Parsing data')
+    const parsedData = parseData(sortedData)
+    logger.debug('Adding candlestick data')
+    const output: ITradingPairData[] = []
+    for (const i of parsedData) {
+      const highLowPrices = await getHighAndLowPrices(i.baseId)
+      const item = {
+        ...i,
+        ...highLowPrices
+      }
+      output.push(item)
+    }
+
+    logger.debug('Saving data')
+    await createMultipleSummaryPairData(output)
+    logger.info('Summary Data main function completed')
+  } catch (e) {
+    logger.error(e as Error, 'Error running summary main data')
+  }
+}
+
+async function getBlockNumberFromDate (timestamp: number): Promise<number> {
+  const data = await getQuery(blockNumber(timestamp))
+  const transactions = data.transactions as Transaction[]
+  return parseInt(transactions[0].blockNumber)
+}
+
+const sortByPairs = (
+  currentData: LiquidityPool[],
+  dayData: LiquidityPool[],
+  weekData: LiquidityPool[]
+): Array<{
+  currentData: LiquidityPool
+  dayData: LiquidityPool
+  weekData: LiquidityPool
+}> =>
+  currentData.map((item) => {
+    const itemDayData = dayData.find((dayItem) => dayItem.id === item.id)
+    const itemWeekData = weekData.find((weekItem) => weekItem.id === item.id)
+
     return {
       currentData: item,
       dayData: !isNil(itemDayData) ? itemDayData : item,
@@ -75,76 +123,139 @@ export async function main (): Promise<void> {
     }
   })
 
-  const parsedData: ITradingPairData[] = sortedByPairs.map((item) => {
+const parseData = (
+  sorted: Array<{
+    currentData: LiquidityPool
+    dayData: LiquidityPool
+    weekData: LiquidityPool
+  }>
+): ITradingPairDataBase[] => {
+  return sorted.map((item) => {
     const currentData = item.currentData
     const dayData = item.dayData
     const weekData = item.weekData
 
-    /** TODO: Dry up this code */
-    const currentBaseTokenData = currentData.connectorTokens.find(
-      (item) => item.token.symbol === currentData.token1.symbol
-    )
-    const currentBaseVolume = !isNil(currentBaseTokenData)
-      ? parseFloat(currentBaseTokenData.totalVolume)
-      : 0
+    let currentBaseVolume = 0
+    let currentQuoteVolume = 0
+    let dayBaseVolume = 0
+    let dayQuoteVolume = 0
 
-    const currentQuoteTokenData = currentData.connectorTokens.find(
-      (item) => item.token.symbol === currentData.token0.symbol
-    )
-    const currentQuoteVolume = !isNil(currentQuoteTokenData)
-      ? parseFloat(currentQuoteTokenData.totalVolume)
-      : 0
+    const isBaseTokenConnector0 =
+      currentData.connectorTokens[0].token.symbol ===
+      currentData?.token1?.symbol
 
-    const dayBaseTokenData = dayData.connectorTokens.find(
-      (item) => item.token.symbol === currentData.token1.symbol
+    currentBaseVolume = parseFloat(
+      isBaseTokenConnector0
+        ? currentData.connectorTokens[0].totalVolume
+        : currentData.connectorTokens[1].totalVolume
     )
-    const dayBaseVolume = !isNil(dayBaseTokenData)
-      ? parseFloat(dayBaseTokenData.totalVolume)
-      : 0
+    currentQuoteVolume = parseFloat(
+      isBaseTokenConnector0
+        ? currentData.connectorTokens[1].totalVolume
+        : currentData.connectorTokens[0].totalVolume
+    )
+    dayBaseVolume = parseFloat(
+      isBaseTokenConnector0
+        ? dayData.connectorTokens[0].totalVolume
+        : dayData.connectorTokens[1].totalVolume
+    )
+    dayQuoteVolume = parseFloat(
+      isBaseTokenConnector0
+        ? dayData.connectorTokens[1].totalVolume
+        : dayData.connectorTokens[0].totalVolume
+    )
 
-    const dayQuoteTOkenData = dayData.connectorTokens.find(
-      (item) => item.token.symbol === currentData.token0.symbol
-    )
-    const dayQuoteVolume = !isNil(dayQuoteTOkenData)
-      ? parseFloat(dayQuoteTOkenData.totalVolume)
-      : 0
+    const lastPriceBtc = currentData?.token1?.lastPriceBtc
+    const lastPriceUsd = currentData?.token1?.lastPriceUsd
+    const baseTokenSymbol = currentData.token1?.symbol
+    const baseTokenId = currentData.token1?.id
+    const quoteTokenSymbol = currentData.token0?.symbol
+    const quoteTokenId = currentData.token0?.id
 
     return {
-      tradingPair: currentData.token1.id + '_' + currentData.token0.id,
-      baseSymbol: currentData.token1.symbol,
-      baseId: currentData.token1.id,
-      quoteSymbol: currentData.token0.symbol,
-      quoteId: currentData.token0.id,
+      poolId: currentData.id,
+      baseSymbol: !isNil(baseTokenSymbol) ? baseTokenSymbol : '',
+      baseId: !isNil(baseTokenId) ? baseTokenId : '',
+      quoteSymbol: !isNil(quoteTokenSymbol) ? quoteTokenSymbol : '',
+      quoteId: !isNil(quoteTokenId) ? quoteTokenId : '',
       baseVolume24h: currentBaseVolume - dayBaseVolume,
       quoteVolume24h: currentQuoteVolume - dayQuoteVolume,
-      lastPrice: parseFloat(currentData.token1.lastPriceBtc),
-      lastPriceUsd: parseFloat(currentData.token1.lastPriceUsd),
+      lastPrice: !isNil(lastPriceBtc) ? parseFloat(lastPriceBtc) : 0,
+      lastPriceUsd: !isNil(lastPriceUsd) ? parseFloat(lastPriceUsd) : 0,
       priceChangePercent24h: calculatePriceChange(
-        currentData.token1.lastPriceBtc,
-        dayData.token1.lastPriceBtc
+        lastPriceBtc,
+        dayData?.token1?.lastPriceBtc
       ),
       priceChangePercentWeek: calculatePriceChange(
-        currentData.token1.lastPriceBtc,
-        weekData.token1.lastPriceBtc
+        lastPriceBtc,
+        weekData?.token1?.lastPriceBtc
       ),
       priceChangePercent24hUsd: calculatePriceChange(
-        currentData.token1.lastPriceUsd,
-        dayData.token1.lastPriceUsd
+        lastPriceUsd,
+        dayData?.token1?.lastPriceUsd
       ),
       priceChangePercentWeekUsd: calculatePriceChange(
-        currentData.token1.lastPriceUsd,
-        weekData.token1.lastPriceUsd
+        lastPriceUsd,
+        weekData?.token1?.lastPriceUsd
       )
     }
   })
-
-  console.log(parsedData)
 }
 
-function calculatePriceChange (currentPrice: string, prevPrice: string): number {
+function calculatePriceChange (
+  currentPrice: string | undefined,
+  prevPrice: string | undefined
+): number {
+  if (isNil(currentPrice) || isNil(prevPrice)) {
+    return 0
+  }
   const delta = bignumber(currentPrice).minus(parseFloat(prevPrice))
   const percentChange = delta.div(parseFloat(currentPrice)).mul(100)
-  return parseFloat(percentChange.toFixed(8))
+  return parseFloat(percentChange.toFixed(2))
 }
 
-// main()
+/** Retrieves previous 24 hours of candlesticks to get high/low */
+async function getHighAndLowPrices (baseToken: string): Promise<{
+  highUsd: number
+  lowUsd: number
+  highBtc: number
+  lowBtc: number
+}> {
+  const yesterdayTimestamp = Math.floor(
+    (new Date().getTime() - 24 * 60 * 60 * 1000) / 1000
+  )
+  const query = candlestickQuery(baseToken, 'HourInterval', yesterdayTimestamp)
+  const queryData = await getQuery(query)
+  let highUsd: number = 0
+  let lowUsd: number = 0
+  let highBtc: number = 0
+  let lowBtc: number = 0
+  if (!isNil(queryData) && !isNil(queryData.candleSticks)) {
+    const candlesticks = queryData.candleSticks as CandleStick[]
+    for (const i of candlesticks) {
+      if (i.quoteToken?.symbol === 'XUSD') {
+        if (lowUsd === 0) lowUsd = parseFloat(i.low)
+        if (parseFloat(i.high) > highUsd) {
+          highUsd = parseFloat(i.high)
+        }
+        if (parseFloat(i.low) < lowUsd) {
+          lowUsd = parseFloat(i.low)
+        }
+      } else if (i.quoteToken?.symbol === 'WRBTC') {
+        if (lowBtc === 0) lowBtc = parseFloat(i.low)
+        if (parseFloat(i.high) > highBtc) {
+          highBtc = parseFloat(i.high)
+        }
+        if (parseFloat(i.low) < lowBtc) {
+          lowBtc = parseFloat(i.low)
+        }
+      }
+    }
+  }
+  return {
+    highUsd: highUsd,
+    lowUsd: lowUsd,
+    highBtc: highBtc,
+    lowBtc: lowBtc
+  }
+}
