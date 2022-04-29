@@ -10,7 +10,7 @@ const config = convict({
   port: {
     doc: 'The port to bind.',
     format: 'port',
-    default: 3000,
+    default: 3006,
     env: 'PORT'
   },
   appName: {
@@ -22,7 +22,7 @@ const config = convict({
   logLevel: {
     doc: 'application log level',
     format: String,
-    default: 'debug',
+    default: 'info',
     env: 'LOG_LEVEL'
   },
   postgresHost: {
@@ -40,47 +40,28 @@ const config = convict({
   postgresUser: {
     doc: 'postgres user',
     format: String,
-    default: 'postgres',
+    default: 'sov-postgres',
     env: 'POSTGRES_USER'
   },
   postgresPassword: {
     doc: 'postgres password',
     format: '*',
-    default: 'postgres',
+    default: '',
     env: 'POSTGRES_PASSWORD',
     sensitive: true
   },
   postgresDatabase: {
     doc: 'postgres database',
     format: String,
-    default: 'sov-graph-wrapper-main',
+    default: 'sov-boilerplate-main',
     env: 'POSTGRES_DB'
   },
-  mainnetSubgraphUrl: {
-    doc: 'Mainnet Subgraph',
+  subgraphUrl: {
+    doc: 'postgres database',
     format: 'url',
     default:
-      'https://subgraph.sovryn.app/subgraphs/name/DistributedCollective/sovryn-subgraph',
+      'https://graphql-sov-v0-0-6-main-818628407.us-east-2.elb.amazonaws.com/subgraphs/name/DistributedCollective/sovryn-subgraph',
     env: 'SUBGRAPH_URL'
-  },
-  testnetSubgraphUrl: {
-    doc: 'Testnet Subgraph',
-    format: 'url',
-    default:
-      'https://subgraph.test.sovryn.app/subgraphs/name/DistributedCollective/sovryn-subgraph',
-    env: 'SUBGRAPH_URL'
-  },
-  RSKMainnet: {
-    doc: 'RSK mainnet endpoint',
-    format: 'url',
-    default: 'https://rsk-graph1.sovryn.app/rpc',
-    env: 'RSK_MAINNET'
-  },
-  RSKTestnet: {
-    doc: 'RSK testnet endpoint',
-    format: 'url',
-    default: 'https://testnet.sovryn.app/rpc',
-    env: 'RSK_TESTNET'
   }
 })
 

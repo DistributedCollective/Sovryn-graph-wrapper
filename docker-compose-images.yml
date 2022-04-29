@@ -6,29 +6,23 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=sov-graph-wrapper-main
+      - POSTGRES_DB=sov-boilerplate-main
     expose:
       - 5432
     networks:
       - sovryn
 
-  sov-graph-wrapper-service:
-    build:
-      context: ./
-      dockerfile: Dockerfile
-    volumes:
-      - ./:/app
-    working_dir: /app
+  sov-boilerplate-service:
+    image: sov-boilerplate-service
     environment:
-      - APP_NAME='graph-wrapper-service'
-      - LOG_LEVEL=debug
-      - POSTGRES_HOST=sov-postgres
-      - POSTGRES_PORT=5432
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=sov-graph-wrapper-main
+      - PORT=3000
+      - URL_REDIS_SERVICE=http://sov-boilerplate-redis-service
+    ports:
+      - "3000:3000"
+    expose:
+      - "3000"
     depends_on:
-      - sov-postgres
+      - sov-boilerplate-service-redis-service
     networks:
       - sovryn
 
