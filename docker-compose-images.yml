@@ -15,7 +15,17 @@ services:
       - sovryn
 
   sov-graph-wrapper-service:
+    build:
+      context: ./
+      dockerfile: Dockerfile
     environment:
+      - APP_NAME='graph-wrapper-service'
+      - LOG_LEVEL=debug
+      - POSTGRES_HOST=sov-postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=sov-graph-wrapper-main
       - PORT=3000
     ports:
       - "3000:3000"

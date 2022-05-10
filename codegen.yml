@@ -1,11 +1,11 @@
 overwrite: true
 schema: "./schema.graphql"
 generates:
-  ./generated-schema.ts:
+  ./src/generated-schema.ts:
     plugins:
       - "typescript"
       - "typescript-resolvers"
       - "typescript-document-nodes"
-  ./graphql.schema.json:
+  ./src/graphql.schema.json:
     plugins:
       - "introspection"

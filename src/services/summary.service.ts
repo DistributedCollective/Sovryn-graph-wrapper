@@ -15,7 +15,7 @@ import {
   LiquidityPool,
   CandleStick,
   CandleSticksInterval
-} from '../../generated-schema'
+} from '../generated-schema'
 import { ITradingPairDataBase, ITradingPairData } from '../utils/interfaces'
 import log from '../logger'
 
