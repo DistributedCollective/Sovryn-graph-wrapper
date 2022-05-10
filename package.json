@@ -14,7 +14,7 @@
       "lint": "ts-standard",
       "lint:fix": "ts-standard --fix",
       "prepare": "husky install",
-      "codegen": "graphql-codegen --config codegen.yml"
+      "codegen": "graphql-codegen --config ./codegen.yml"
    },
    "keywords": [
       "Sovryn"

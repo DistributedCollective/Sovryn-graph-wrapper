@@ -34,18 +34,24 @@ export async function getTvlData (): Promise<ITvl> {
       }
       output[item.tvlGroup][item.name] = entry
 
+      /** Increment tvl btc group */
       if (!isNaN(output[item.tvlGroup].totalBtc)) {
         output[item.tvlGroup].totalBtc =
-          Number(output[item.tvlGroup].total_btc) + Number(item.balanceBtc)
+          Number(output[item.tvlGroup].totalBtc) + Number(item.balanceBtc)
       }
+      /** Increment tvl btc total */
       if (!isNaN(output.total_btc)) output.total_btc += Number(item.balanceBtc)
+      /** Increment tvl usd group */
       if (!isNaN(output[item.tvlGroup].totalUsd)) {
         output[item.tvlGroup].totalUsd =
           Number(output[item.tvlGroup].totalUsd) + Number(item.balanceUsd)
       }
+      /** Increment tvl usd total */
       if (!isNaN(output.total_usd)) output.total_usd += Number(item.balanceUsd)
     }
   })
+  output.total_btc = parseFloat(output.total_btc.toFixed(18))
+  output.total_usd = parseFloat(output.total_usd.toFixed(2))
   output.updatedAt = data[0].updatedAt
   return output
 }
