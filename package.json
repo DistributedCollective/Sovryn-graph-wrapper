@@ -1,7 +1,7 @@
 {
-   "name": "sov-boilerplate-service",
+   "name": "sov-graph-wrapper-service",
    "version": "1.0.0",
-   "description": "Sovryn boilerplate Service",
+   "description": "Sovryn graph wrapper Service",
    "main": "app.js",
    "scripts": {
       "build": "tsc",
