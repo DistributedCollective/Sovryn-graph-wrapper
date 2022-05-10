@@ -1,0 +1,15 @@
+{
+  "app_name": "sovryn-graph-wrapper",
+  "aws_region": "us-east-2",
+  "k8s_cluster_name": "k8-mainnet",
+  "registry": "docker.io",
+  "image_name": "sovryn/sovryn-graph-wrapper",
+  "prod_branch": "main",
+  "dev_branch": "development",
+  "dockerfile_path": ".",
+  "APP_ENV_VARS": {
+    "NODE_ENV": "production",
+    "SUBGRAPH_URL": "https://subgraph.sovryn.app/subgraphs/name/DistributedCollective/sovryn-subgraph",
+    "RSK_RPC": "https://rsk-graph1.sovryn.app/rpc"
+  }
+}
