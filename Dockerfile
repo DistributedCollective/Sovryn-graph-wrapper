@@ -12,11 +12,9 @@ COPY package*.json ./
 
 RUN npm install
 
-COPY . /codegen.yml
+COPY ./ ./
 
 RUN npm run codegen
-
-COPY ./ ./
 
 RUN npm run build
 
