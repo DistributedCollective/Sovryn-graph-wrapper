@@ -8,7 +8,7 @@ WORKDIR /app
 # - dist: A production build compiled with Babel
 FROM base AS builder
 
-COPY package*.json .babelrc.json ./
+COPY package*.json ./
 
 RUN npm install
 
@@ -16,7 +16,7 @@ COPY . /codegen.yml
 
 RUN npm run codegen
 
-COPY ./src ./src
+COPY ./ ./
 
 RUN npm run build
 
@@ -32,4 +32,3 @@ COPY --from=builder /app/dist ./dist
 USER node
 EXPOSE 3000
 CMD ["node", "./dist/server.js"]
-
