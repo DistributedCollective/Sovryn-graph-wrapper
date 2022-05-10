@@ -12,6 +12,10 @@ COPY package*.json .babelrc.json ./
 
 RUN npm install
 
+COPY . /codegen.yml
+
+RUN npm run codegen
+
 COPY ./src ./src
 
 RUN npm run build
