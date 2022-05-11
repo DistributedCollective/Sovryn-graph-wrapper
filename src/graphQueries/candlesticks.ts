@@ -1,6 +1,6 @@
 import { DocumentNode } from 'graphql'
 import gql from 'graphql-tag'
-import { CandleSticksInterval } from '../../generated-schema'
+import { CandleSticksInterval } from '../generated-schema'
 
 export const candlestickQuery = (
   baseToken: string,

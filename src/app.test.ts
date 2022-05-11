@@ -10,6 +10,6 @@ describe('GET /', () => {
   it('responds to GET / request', async () => {
     const result = await request(app).get('/').send()
     expect(result.status).toBe(200)
-    expect(result.text).toBe('Sovryn boilerplate Service DB Read Service Running. Stay Sovryn.')
+    expect(result.text).toBe('Sovryn graph-wrapper Service DB Read Service Running. Stay Sovryn.')
   })
 })

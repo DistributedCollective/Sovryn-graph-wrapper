@@ -6,7 +6,7 @@ import {
 } from '../graphQueries/tvlContracts'
 import { abiErc20 } from '@blobfishkate/sovryncontractswip'
 import { createContract, addresses } from '../utils/web3Provider'
-import { LendingPool, ProtocolStats, Token } from '../../generated-schema'
+import { LendingPool, ProtocolStats, Token } from '../generated-schema'
 import math, { bignumber } from 'mathjs'
 import { isNil } from 'lodash'
 import { createTvlRow } from '../models/tvl.model'
