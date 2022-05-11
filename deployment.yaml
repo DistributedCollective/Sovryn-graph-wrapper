@@ -40,6 +40,8 @@ spec:
       schedulerName: default-scheduler
       securityContext: {}
       terminationGracePeriodSeconds: 30
+      imagePullSecrets:
+        - name: regcred
 ---
 apiVersion: v1
 kind: Service
