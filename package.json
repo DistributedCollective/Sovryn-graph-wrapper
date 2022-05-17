@@ -13,6 +13,9 @@
       "test:watch": "jest --watchAll",
       "lint": "ts-standard",
       "lint:fix": "ts-standard --fix",
+      "migrations:generate": "npx ts-node ./node_modules/.bin/typeorm migration:generate -f ./src/config/database.ts",
+      "migrations:run": "npx ts-node ./node_modules/.bin/typeorm migration:run -f ./src/config/database.ts",
+      "migrations:revert": "npx ts-node ./node_modules/.bin/typeorm migration:revert -f ./src/config/database.ts",
       "prepare": "husky install",
       "codegen": "graphql-codegen --config ./codegen.yml"
    },
