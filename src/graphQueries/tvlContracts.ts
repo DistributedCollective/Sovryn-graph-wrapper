@@ -42,3 +42,11 @@ export const lendingPoolContracts: DocumentNode = gql`
     }
   }
 `
+
+export const lendingPoolIds: DocumentNode = gql`
+  {
+    lendingPools {
+      id
+    }
+  }
+`
