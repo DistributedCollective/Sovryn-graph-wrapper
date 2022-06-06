@@ -1,33 +1,35 @@
 /** This entity holds polled data for the apy of the lending pools */
 
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm'
+import { Entity, Column, PrimaryGeneratedColumn, Index } from "typeorm";
 
-import { IsDate, IsEthereumAddress, IsNumber } from 'class-validator'
+import { IsDate, IsEthereumAddress, IsNumber } from "class-validator";
 
-import { AbstractBaseEntity } from './AbstractBase.entity'
+import { AbstractBaseEntity } from "./AbstractBase.entity";
 
 @Entity()
 export class LendingApy extends AbstractBaseEntity {
-  @PrimaryGeneratedColumn('increment')
-  id!: string
+  @PrimaryGeneratedColumn("increment")
+  id!: string;
 
+  @Index()
   @Column()
   @IsEthereumAddress()
-  contract!: string
+  contract!: string;
 
-  @Column('decimal', { precision: 30, scale: 18 })
+  @Column("decimal", { precision: 30, scale: 18 })
   @IsNumber({ allowNaN: false, allowInfinity: false, maxDecimalPlaces: 18 })
-  supply!: number
+  supply!: number;
 
-  @Column('decimal', { precision: 10, scale: 4 })
+  @Column("decimal", { precision: 10, scale: 4 })
   @IsNumber({ allowNaN: false, allowInfinity: false, maxDecimalPlaces: 18 })
-  supplyApr!: number
+  supplyApr!: number;
 
-  @Column('decimal', { precision: 10, scale: 4 })
+  @Column("decimal", { precision: 10, scale: 4 })
   @IsNumber({ allowNaN: false, allowInfinity: false, maxDecimalPlaces: 18 })
-  borrowApr!: number
+  borrowApr!: number;
 
+  @Index()
   @Column()
   @IsDate()
-  timestamp!: Date
+  timestamp!: Date;
 }
