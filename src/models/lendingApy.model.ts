@@ -1,6 +1,10 @@
 import { getRepository, MoreThan } from 'typeorm'
 import { LendingApy } from '../entity'
 import { notEmpty } from '../utils/common'
+import { HTTP500Error } from '../errorHandlers/baseError'
+import log from '../logger'
+
+const logger = log.logger.child({ module: 'Lending Apy Model' })
 
 export interface ILendingApyRow {
   contract: string
@@ -39,14 +43,20 @@ export async function getLendingPoolApy (
   pool: string,
   days: number = 14
 ): Promise<LendingApy[]> {
-  const daysInMilliseconds = days * 24 * 60 * 1000
-  const startDate = new Date(Date.now() - daysInMilliseconds)
-  const repository = getRepository(LendingApy)
-  const data = await repository.find({
-    where: {
-      contract: pool,
-      timestamp: MoreThan(startDate)
-    }
-  })
-  return data
+  try {
+    const daysInMilliseconds = days * 24 * 60 * 60 * 1000
+    const startDate = new Date(Date.now() - daysInMilliseconds)
+    const repository = getRepository(LendingApy)
+    const data = await repository.find({
+      where: {
+        contract: pool,
+        timestamp: MoreThan(startDate)
+      }
+    })
+    return data
+  } catch (e) {
+    const error = e as Error
+    logger.error(error.message)
+    throw new HTTP500Error(`Unable to get lending apy data for pool: ${pool}`)
+  }
 }
