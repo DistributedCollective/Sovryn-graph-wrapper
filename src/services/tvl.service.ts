@@ -159,6 +159,7 @@ async function getLendingPoolTvl (prices: Prices): Promise<void> {
   logger.info('TVL rows added for lending contracts')
 }
 
+/** TODO: This can now use contract balances from the graph */
 async function getAmmPoolTvl (prices: Prices): Promise<void> {
   const data = await getQuery(liquidityPoolContracts)
   const contracts = data.liquidityPools
