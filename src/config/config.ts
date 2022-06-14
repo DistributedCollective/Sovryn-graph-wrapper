@@ -92,11 +92,6 @@ const config = convict({
     format: String,
     default: '0x0000000000000000000000000000000001000006',
     env: 'RSK_2WP'
-  },
-  ammApyServiceUrl: {
-    doc: 'Url for the amm apy microservice',
-    format: 'url',
-    default: 'http://amm-apy.sovryn.app'
   }
 })
 

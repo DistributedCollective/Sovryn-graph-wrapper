@@ -91,28 +91,3 @@ export interface ILendingPoolApyItem {
   borrow_apr: number
   timestamp: Date
 }
-
-export interface IPoolData_Legacy {
-  ammPool: string
-  contractBalanceToken: number
-  contractBalanceBtc: number
-  volumeToken: number
-  volumeBtc: number
-  yesterdayApy: Array<{
-    pool: string
-    pool_token: string
-    activity_date: Date
-    apy: number
-  }>
-}
-
-export interface IPoolData {
-  ammPool: string
-  data: {
-    [key: string]: {
-      contractBalance: number
-      volume24h: number
-      apy: number
-    }
-  }
-}
