@@ -4,6 +4,7 @@ import { ITradingPairData } from '../utils/interfaces'
 import { notEmpty } from '../utils/common'
 import { inversePrice } from '../utils/helpers'
 import { isNil } from 'lodash'
+import { HTTP404Error } from '../errorHandlers/baseError'
 import log from '../logger'
 
 const logger = log.logger.child({ module: 'Summary Model' })
@@ -162,6 +163,68 @@ LiquidityPoolSummary[]
     ]
   })
   return data
+}
+
+export const getPoolDataBySymbol = async (
+  symbol: string
+): Promise<LiquidityPoolSummary> => {
+  try {
+    const repository = getRepository(LiquidityPoolSummary)
+    const data = await repository.findOne({
+      select: [
+        'poolId',
+        'baseSymbol',
+        'quoteSymbol',
+        'baseAssetLiquidity',
+        'quoteAssetLiquidity',
+        'baseVolume24h',
+        'quoteVolume24h'
+      ],
+      where: {
+        baseSymbol: symbol
+      }
+    })
+    if (isNil(data)) {
+      throw new HTTP404Error(`Pool data not found for ${symbol}`)
+    } else {
+      return data
+    }
+  } catch (e) {
+    const error = e as Error
+    logger.error(error.message, [error])
+    throw new Error(`Error getting pool data for: ${symbol}`)
+  }
+}
+
+export const getPoolDataByAddress = async (
+  address: string
+): Promise<LiquidityPoolSummary> => {
+  try {
+    const repository = getRepository(LiquidityPoolSummary)
+    const data = await repository.findOne({
+      select: [
+        'poolId',
+        'baseSymbol',
+        'quoteSymbol',
+        'baseAssetLiquidity',
+        'quoteAssetLiquidity',
+        'baseVolume24h',
+        'quoteVolume24h'
+      ],
+      where: {
+        poolId: address
+      }
+    })
+    if (isNil(data)) {
+      throw new HTTP404Error(`Pool data not found for ${address}`)
+    } else {
+      return data
+    }
+  } catch (e) {
+    const error = e as Error
+    logger.error(error.message, [error])
+    throw new Error(`Error getting pool data for: ${address}`)
+  }
 }
 
 export const getSovBtcPairData = async (): Promise<LiquidityPoolSummary> => {

@@ -7,14 +7,13 @@ import {
   LendingApy
 } from '../entity'
 
-import config, { Environment } from './config'
+import config from './config'
 const {
   postgresHost,
   postgresPort,
   postgresUser,
   postgresPassword,
-  postgresDatabase,
-  env
+  postgresDatabase
 } = config
 
 const dbConfig: ConnectionOptions = {
@@ -24,8 +23,12 @@ const dbConfig: ConnectionOptions = {
   username: postgresUser,
   password: postgresPassword,
   database: postgresDatabase,
+  migrations: ['src/migration/**/*.ts'],
   entities: [LiquidityPoolSummary, Asset, Tvl, IlliquidSov, LendingApy],
-  synchronize: env === Environment.Development
+  synchronize: false,
+  cli: {
+    migrationsDir: 'src/migration'
+  }
 }
 
 export default dbConfig
