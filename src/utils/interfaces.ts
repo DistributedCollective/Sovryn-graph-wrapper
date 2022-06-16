@@ -84,3 +84,10 @@ interface TvlBaseData {
 export interface ITvl extends TvlBaseData {
   [key: string]: any
 }
+
+export interface ILendingPoolApyItem {
+  supply: number
+  supply_apr: number
+  borrow_apr: number
+  timestamp: Date
+}

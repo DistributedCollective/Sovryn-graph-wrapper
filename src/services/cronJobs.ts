@@ -2,6 +2,7 @@ import { CronJob } from 'cron'
 import assetMainFunction from './assets.service'
 import summaryMainFunction from './summary.service'
 import tvlMainFunction from './tvl.service'
+import lendingApyMainFunction from './lendingApy.service'
 import log from '../logger'
 
 const logger = log.logger.child({ module: 'Cron Jobs' })
@@ -50,8 +51,15 @@ const tvlScheduledTask = new AbstractCronJob(
   'tvl scheduled task'
 )
 
+const lendingApyScheduledTask = new AbstractCronJob(
+  lendingApyMainFunction,
+  '0 */4 * * *',
+  'lending apy scheduled task'
+)
+
 export const jobList: AbstractCronJob[] = [
   assetsScheduledTask,
   summaryScheduledTask,
-  tvlScheduledTask
+  tvlScheduledTask,
+  lendingApyScheduledTask
 ]
