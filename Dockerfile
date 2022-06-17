@@ -14,6 +14,8 @@ RUN npm install
 
 COPY ./ ./
 
+RUN npm run codegen
+
 RUN npm run build
 
 # Remove dev dependencies

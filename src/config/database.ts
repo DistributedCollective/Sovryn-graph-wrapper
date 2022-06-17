@@ -1,5 +1,11 @@
 import { ConnectionOptions } from 'typeorm'
-import { Summary } from '../entity'
+import {
+  LiquidityPoolSummary,
+  Asset,
+  Tvl,
+  IlliquidSov,
+  LendingApy
+} from '../entity'
 
 import config from './config'
 const {
@@ -17,8 +23,12 @@ const dbConfig: ConnectionOptions = {
   username: postgresUser,
   password: postgresPassword,
   database: postgresDatabase,
-  entities: [Summary],
-  synchronize: true
+  migrations: ['src/migration/**/*.ts'],
+  entities: [LiquidityPoolSummary, Asset, Tvl, IlliquidSov, LendingApy],
+  synchronize: false,
+  cli: {
+    migrationsDir: 'src/migration'
+  }
 }
 
 export default dbConfig
