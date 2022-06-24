@@ -20,3 +20,11 @@ The data pulled by the cron jobs in this service is:
 - Asset: symbol, asset, circulating supply
 - LiquidityPoolSummary: for each liquidity pool, the base asset, quote asset, 24h and week price change in BTC and USD, and 24 hour volume
 - Tvl
+
+## Database Migrations
+
+1. Generate migration
+   To make any changes to a database that is already deployed: `export POSTGRES_HOST=<postgres host> && export POSTGRES_PASSWORD=<password> export POSTGRES_DB=<db name> && npm run migrations:generate -- -n <migration name>`
+
+2. Run migration
+   After generating a migration, you can run it on a deployed database by running: `npm run migrations:run`
