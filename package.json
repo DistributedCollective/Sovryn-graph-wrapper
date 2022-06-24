@@ -17,7 +17,8 @@
       "migrations:run": "npx ts-node ./node_modules/.bin/typeorm migration:run -f ./src/config/database.ts",
       "migrations:revert": "npx ts-node ./node_modules/.bin/typeorm migration:revert -f ./src/config/database.ts",
       "prepare": "husky install",
-      "codegen": "graphql-codegen --config ./codegen.yml"
+      "codegen": "graphql-codegen --config ./codegen.yml",
+      "migrate:dev": "export POSTGRES_HOST=localhost && export POSTGRES_PASSWORD=postgres export POSTGRES_DB=sov-graph-wrapper-main && npm run migrations:run"
    },
    "keywords": [
       "Sovryn"

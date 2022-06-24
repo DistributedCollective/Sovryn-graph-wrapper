@@ -27,6 +27,8 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=sov-graph-wrapper-main
       - PORT=3000
+    env_file:
+      - .env
     ports:
       - "3000:3000"
     expose:
