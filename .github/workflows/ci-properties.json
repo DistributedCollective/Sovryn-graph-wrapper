@@ -9,9 +9,8 @@
   "dockerfile_path": ".",
   "APP_ENV_VARS": {
     "APP_NAME": "sovryn-graph-wrapper",
-    "NODE_ENV": "production",
-    "SUBGRAPH_URL": "https://subgraph.sovryn.app/subgraphs/name/DistributedCollective/sovryn-subgraph",
-    "RSK_RPC": "https://rsk-graph1.sovryn.app/rpc"
-
+    "NODE_ENV": "test",
+    "SUBGRAPH_URL": "https://subgraph.test.sovryn.app/subgraphs/name/DistributedCollective/sovryn-subgraph",
+    "RSK_RPC": "https://testnet.sovryn.app/rpc"
   }
 }
