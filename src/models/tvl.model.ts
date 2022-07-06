@@ -46,6 +46,15 @@ export const createTvlRow = async (tvlData: ITvl): Promise<void> => {
 
 export const getAllTvlData = async (): Promise<Tvl[]> => {
   const repository = getRepository(Tvl)
-  const data = await repository.find()
+  /** This query returns the most recent rows for each contract/asset pair
+   * The result is today's tvl for each contract/asset
+   */
+  const data = await repository
+    .createQueryBuilder()
+    .select('DISTINCT ON ("contract", "asset") *')
+    .orderBy('contract')
+    .addOrderBy('asset')
+    .addOrderBy('date', 'DESC')
+    .getRawMany()
   return data
 }
