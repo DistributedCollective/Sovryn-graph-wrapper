@@ -70,7 +70,7 @@ const config = convict({
     env: 'SUBGRAPH_URL'
   },
   RSKRpc: {
-    doc: 'RSK mainnet endpoint',
+    doc: 'RSK rpc endpoint',
     format: 'url',
     default: 'https://rsk-graph1.sovryn.app/rpc',
     env: 'RSK_RPC'

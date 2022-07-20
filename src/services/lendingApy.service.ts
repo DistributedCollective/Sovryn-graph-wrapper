@@ -45,7 +45,7 @@ async function getLendingPoolContracts (): Promise<string[]> {
 }
 
 async function getBorrowApr (contract: Contract): Promise<string> {
-  const borrowApr = await contract.methods.avgBorrowInterestRate().call()
+  const borrowApr = await contract.methods.borrowInterestRate().call()
   return weiToFixed(borrowApr, 4)
 }
 
