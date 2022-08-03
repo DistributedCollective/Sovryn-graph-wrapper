@@ -27,7 +27,7 @@ export async function getZeroTvl (
   }
 }
 
-async function getTroveManagerTvl (btcPrice: string): Promise<void> {
+async function getTroveManagerTvl (btcPrice: string): Promise<ITvl> {
   try {
     const troveManagerContract = createContract(
       abiTroveManager,
