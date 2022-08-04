@@ -38,10 +38,9 @@ async function getTroveManagerTvl (btcPrice: string): Promise<ITvl> {
       .call()
     const balance = bignumber(zusdDeposits).div(1e18)
     const output: ITvl = {
-      contract: addresses.stabilityPool,
-      // asset: addresses.zusd_token,
-      asset: addresses.SOV_token,
-      name: 'ZUSD_Zero',
+      contract: addresses.stabilityPool.toLowerCase(),
+      asset: addresses.BTC_token.toLowerCase(),
+      name: 'BTC_Zero',
       balance: balance.toFixed(18),
       balanceBtc: balance.toFixed(18),
       balanceUsd: balance.mul(btcPrice).toFixed(2),
@@ -66,9 +65,8 @@ async function getStabilityPoolTvl (btcPrice: string): Promise<ITvl> {
       .call()
     const balance = bignumber(zusdDeposits).div(1e18)
     const output: ITvl = {
-      contract: addresses.stabilityPool,
-      // asset: addresses.zusd_token,
-      asset: addresses.SOV_token,
+      contract: addresses.stabilityPool.toLowerCase(),
+      asset: addresses.ZUSD.toLowerCase(),
       name: 'ZUSD_Zero',
       balance: balance.toFixed(18),
       balanceBtc: balance.div(btcPrice).toFixed(18),
