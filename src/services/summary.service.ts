@@ -179,7 +179,10 @@ const parseData = (
       priceChangePercentWeekUsd: calculatePriceChange(
         lastPriceUsd,
         weekData?.token1?.lastPriceUsd
-      )
+      ),
+      yesterdayPrice: !isNil(dayData?.token1)
+        ? parseFloat(dayData?.token1?.lastPriceUsd)
+        : 0
     }
   })
 }

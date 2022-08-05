@@ -83,6 +83,10 @@ export class LiquidityPoolSummary extends AbstractBaseEntity {
   @IsNumber({ allowNaN: false, allowInfinity: false, maxDecimalPlaces: 18 })
   lowBtc!: number
 
+  @Column('decimal', { precision: 40, scale: 18, default: 0 })
+  @IsNumber({ allowNaN: false, allowInfinity: false, maxDecimalPlaces: 18 })
+  dayPrice!: number
+
   @Column('decimal', { precision: 40, scale: 18, nullable: true })
   @IsNumber({ allowNaN: false, allowInfinity: false, maxDecimalPlaces: 18 })
   baseAssetLiquidity?: number
