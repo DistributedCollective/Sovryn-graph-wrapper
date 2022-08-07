@@ -25,7 +25,7 @@ const dbConfig: ConnectionOptions = {
   database: postgresDatabase,
   migrations: ['src/migration/**/*.ts'],
   entities: [LiquidityPoolSummary, Asset, Tvl, IlliquidSov, LendingApy],
-  synchronize: true,
+  synchronize: false,
   cli: {
     migrationsDir: 'src/migration'
   }
