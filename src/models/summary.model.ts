@@ -4,7 +4,7 @@ import { ITradingPairData } from '../utils/interfaces'
 import { notEmpty } from '../utils/common'
 import { inversePrice } from '../utils/helpers'
 import { isNil } from 'lodash'
-import { HTTP400Error, HTTP404Error } from '../errorHandlers/baseError'
+import { HTTP404Error } from '../errorHandlers/baseError'
 import log from '../logger'
 
 const logger = log.logger.child({ module: 'Summary Model' })
@@ -192,7 +192,7 @@ export const getPoolDataBySymbol = async (
   } catch (e) {
     const error = e as Error
     logger.error(error.message, [error])
-    throw new HTTP400Error(`Error getting pool data for: ${symbol}`)
+    throw error
   }
 }
 
