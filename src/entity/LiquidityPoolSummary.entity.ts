@@ -83,6 +83,7 @@ export class LiquidityPoolSummary extends AbstractBaseEntity {
   @IsNumber({ allowNaN: false, allowInfinity: false, maxDecimalPlaces: 18 })
   lowBtc!: number
 
+  /** dayPrice is the price of this token 1 day ago. It is used by the frontend to calculate the price change between non-BTC pairs (eg SOV-ETH) */
   @Column('decimal', { precision: 40, scale: 18, default: 0 })
   @IsNumber({ allowNaN: false, allowInfinity: false, maxDecimalPlaces: 18 })
   dayPrice!: number
