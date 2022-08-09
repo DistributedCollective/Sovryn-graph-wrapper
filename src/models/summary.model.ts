@@ -192,7 +192,7 @@ export const getPoolDataBySymbol = async (
   } catch (e) {
     const error = e as Error
     logger.error(error.message, [error])
-    throw new Error(`Error getting pool data for: ${symbol}`)
+    throw error
   }
 }
 
@@ -223,7 +223,7 @@ export const getPoolDataByAddress = async (
   } catch (e) {
     const error = e as Error
     logger.error(error.message, [error])
-    throw new Error(`Error getting pool data for: ${address}`)
+    throw error
   }
 }
 
