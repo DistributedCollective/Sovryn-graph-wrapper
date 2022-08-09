@@ -35,7 +35,7 @@ export interface ITradingPairDataBase {
   priceChangePercentWeek: number
   priceChangePercent24hUsd: number
   priceChangePercentWeekUsd: number
-  yesterdayPrice: number
+  dayPrice: number
 }
 
 export interface ITradingPairData extends ITradingPairDataBase {
