@@ -3,6 +3,9 @@ import { AssetData } from '../utils/interfaces'
 import { Asset } from '../entity'
 import { notEmpty } from '../utils/common'
 import log from '../logger'
+import config from '../config/config'
+
+const { cacheTTL } = config
 
 const logger = log.logger.child({ module: 'Asset Model' })
 
@@ -33,7 +36,12 @@ export const createMultipleAssets = async (
 
 export const getAllAssetData = async (): Promise<Asset[]> => {
   const repository = getRepository(Asset)
-  const data = await repository.find()
+  const data = await repository.find({
+    cache: {
+      id: 'asset-data',
+      milliseconds: cacheTTL
+    }
+  })
   return data
 }
 
@@ -45,6 +53,10 @@ export const getSovData = async (): Promise<Asset> => {
       select: ['symbol', 'circulatingSupply', 'updatedAt'],
       where: {
         symbol: 'SOV'
+      },
+      cache: {
+        id: 'sov-data',
+        milliseconds: cacheTTL
       }
     })
 

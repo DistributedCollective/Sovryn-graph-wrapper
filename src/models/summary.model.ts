@@ -6,6 +6,9 @@ import { inversePrice } from '../utils/helpers'
 import { isNil } from 'lodash'
 import { HTTP404Error } from '../errorHandlers/baseError'
 import log from '../logger'
+import config from '../config/config'
+
+const { cacheTTL } = config
 
 const logger = log.logger.child({ module: 'Summary Model' })
 
@@ -71,7 +74,12 @@ export const getAllSummaryPairData = async (): Promise<
 LiquidityPoolSummary[]
 > => {
   const repository = getRepository(LiquidityPoolSummary)
-  const data = await repository.find()
+  const data = await repository.find({
+    cache: {
+      id: 'summary-data',
+      milliseconds: cacheTTL
+    }
+  })
   return data
 }
 
@@ -139,7 +147,11 @@ LiquidityPoolSummary[]
       'quoteSymbol',
       'baseAssetLiquidity',
       'quoteAssetLiquidity'
-    ]
+    ],
+    cache: {
+      id: 'amm-liquidity-data',
+      milliseconds: cacheTTL
+    }
   })
   return data
 }
@@ -160,7 +172,11 @@ LiquidityPoolSummary[]
       'baseVolume24h',
       'quoteVolume24h',
       'updatedAt'
-    ]
+    ],
+    cache: {
+      id: 'summary-ticker-data',
+      milliseconds: cacheTTL
+    }
   })
   return data
 }
@@ -182,6 +198,10 @@ export const getPoolDataBySymbol = async (
       ],
       where: {
         baseSymbol: symbol
+      },
+      cache: {
+        id: 'summary-pool-data',
+        milliseconds: cacheTTL
       }
     })
     if (isNil(data)) {
@@ -213,7 +233,8 @@ export const getPoolDataByAddress = async (
       ],
       where: {
         poolId: address
-      }
+      },
+      cache: cacheTTL
     })
     if (isNil(data)) {
       throw new HTTP404Error(`Pool data not found for ${address}`)
@@ -235,6 +256,10 @@ export const getSovBtcPairData = async (): Promise<LiquidityPoolSummary> => {
       where: {
         baseSymbol: 'SOV',
         quoteSymbol: 'WRBTC'
+      },
+      cache: {
+        id: 'sov-btc-pair-data',
+        milliseconds: cacheTTL
       }
     })
     return data

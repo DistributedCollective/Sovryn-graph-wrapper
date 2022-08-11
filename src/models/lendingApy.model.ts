@@ -3,6 +3,9 @@ import { LendingApy } from '../entity'
 import { notEmpty } from '../utils/common'
 import { HTTP500Error } from '../errorHandlers/baseError'
 import log from '../logger'
+import config from '../config/config'
+
+const { cacheTTL } = config
 
 const logger = log.logger.child({ module: 'Lending Apy Model' })
 
@@ -51,7 +54,8 @@ export async function getLendingPoolApy (
       where: {
         contract: pool,
         timestamp: MoreThan(startDate)
-      }
+      },
+      cache: cacheTTL
     })
     return data
   } catch (e) {

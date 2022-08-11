@@ -1,7 +1,10 @@
+import { isNil } from 'lodash'
+import { getRepository } from 'typeorm'
 import { ITvl } from '../services/tvl.service'
 import { Tvl } from '../entity'
-import { getRepository } from 'typeorm'
-import { isNil } from 'lodash'
+import config from '../config/config'
+
+const { cacheTTL } = config
 
 export const createTvlRow = async (tvlData: ITvl): Promise<void> => {
   const repository = getRepository(Tvl)
@@ -55,6 +58,7 @@ export const getAllTvlData = async (): Promise<Tvl[]> => {
     .orderBy('contract')
     .addOrderBy('asset')
     .addOrderBy('date', 'DESC')
+    .cache('tvl_data', cacheTTL)
     .getRawMany()
   return data
 }
