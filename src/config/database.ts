@@ -13,7 +13,8 @@ const {
   postgresPort,
   postgresUser,
   postgresPassword,
-  postgresDatabase
+  postgresDatabase,
+  cacheTTL
 } = config
 
 const dbConfig: ConnectionOptions = {
@@ -23,6 +24,9 @@ const dbConfig: ConnectionOptions = {
   username: postgresUser,
   password: postgresPassword,
   database: postgresDatabase,
+  cache: {
+    duration: cacheTTL
+  },
   migrations: ['src/migration/**/*.ts'],
   entities: [LiquidityPoolSummary, Asset, Tvl, IlliquidSov, LendingApy],
   synchronize: false,

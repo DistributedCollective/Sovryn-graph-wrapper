@@ -62,6 +62,18 @@ const config = convict({
     default: 'sov-graph-wrapper-main',
     env: 'POSTGRES_DB'
   },
+  typeormCache: {
+    doc: 'typeorm cache',
+    format: Boolean,
+    default: true,
+    env: 'TYPEORM_CACHE'
+  },
+  cacheTTL: {
+    doc: 'cache TTL in milliseconds',
+    format: Number,
+    default: 15 * 1000,
+    env: 'CACHE_TTL'
+  },
   subgraphUrl: {
     doc: 'Url for deployed subgraph',
     format: 'url',
