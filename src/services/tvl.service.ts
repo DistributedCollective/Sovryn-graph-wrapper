@@ -29,6 +29,7 @@ export enum TvlGroup {
   Protocol = 'tvlProtocol',
   Subprotocol = 'tvlSubprotocols',
   Staking = 'tvlStaking',
+  Zero = 'tvlZero',
 }
 
 export interface ITvl {
