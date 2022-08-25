@@ -13,8 +13,7 @@ import { createMultipleSummaryPairData } from '../models/summary.model'
 import {
   Transaction,
   LiquidityPool,
-  CandleStick,
-  CandleSticksInterval
+  CandleStickHour
 } from '../generated-schema'
 import { ITradingPairDataBase, ITradingPairData } from '../utils/interfaces'
 import log from '../logger'
@@ -86,7 +85,7 @@ export default async function main (): Promise<void> {
 async function getBlockNumberFromDate (timestamp: number): Promise<number> {
   const data = await getQuery(blockNumberFromTimestamp(timestamp))
   const transactions = data.transactions as Transaction[]
-  return parseInt(transactions[0].blockNumber)
+  return Number(transactions[0].blockNumber)
 }
 
 const sortByPairs = (
@@ -218,18 +217,14 @@ async function getHighAndLowPrices (
   const yesterdayTimestamp = Math.floor(
     (new Date().getTime() - DAY_MILLISECONDS) / 1000
   )
-  const query = candlestickQuery(
-    baseToken,
-    CandleSticksInterval.HourInterval,
-    yesterdayTimestamp
-  )
+  const query = candlestickQuery(baseToken, yesterdayTimestamp)
   const queryData = await getQuery(query)
   let highUsd: number = currentUsdPrice
   let lowUsd: number = currentUsdPrice
   let highBtc: number = currentBtcPrice
   let lowBtc: number = currentBtcPrice
   if (!isNil(queryData) && !isNil(queryData.candleSticks)) {
-    const candlesticks = queryData.candleSticks as CandleStick[]
+    const candlesticks = queryData.candleSticks as CandleStickHour[]
     for (const i of candlesticks) {
       if (i.quoteToken?.symbol === 'XUSD') {
         if (lowUsd === 0) lowUsd = parseFloat(i.low)
