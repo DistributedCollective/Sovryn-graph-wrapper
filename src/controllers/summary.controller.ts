@@ -2,6 +2,7 @@ import { getAllSummaryPairData } from '../models/summary.model'
 import { Summary } from '../utils/interfaces'
 import config from '../config/config'
 import { inversePrice } from '../utils/helpers'
+import { getLegacySymbol } from '../utils/legacySymbol'
 
 export const getSummaryData = async (): Promise<Summary> => {
   const data = await getAllSummaryPairData()
@@ -17,8 +18,10 @@ export const getSummaryData = async (): Promise<Summary> => {
     pairs[pair] = {
       trading_pairs: pair,
       base_symbol: item.baseSymbol,
+      base_symbol_legacy: getLegacySymbol(item.baseSymbol),
       base_id: item.baseId,
       quote_symbol: item.quoteSymbol,
+      quote_symbol_legacy: getLegacySymbol(item.quoteSymbol),
       quote_id: item.quoteId,
       base_volume: Number(item.baseVolume24h),
       quote_volume: Number(item.quoteVolume24h),
@@ -31,7 +34,8 @@ export const getSummaryData = async (): Promise<Summary> => {
       price_change_percent_24h: Number(item.priceChangePercent24h),
       price_change_percent_24h_usd: Number(item.priceChangePercent24hUsd),
       price_change_week: Number(item.priceChangePercentWeek),
-      price_change_week_usd: Number(item.priceChangePercentWeekUsd)
+      price_change_week_usd: Number(item.priceChangePercentWeekUsd),
+      day_price: Number(item.dayPrice)
     }
   })
 

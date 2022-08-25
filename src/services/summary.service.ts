@@ -63,7 +63,11 @@ export default async function main (): Promise<void> {
     logger.debug('Adding candlestick data')
     const output: ITradingPairData[] = []
     for (const i of parsedData) {
-      const highLowPrices = await getHighAndLowPrices(i.baseId)
+      const highLowPrices = await getHighAndLowPrices(
+        i.baseId,
+        i.lastPrice,
+        i.lastPriceUsd
+      )
       const item = {
         ...i,
         ...highLowPrices
@@ -179,7 +183,11 @@ const parseData = (
       priceChangePercentWeekUsd: calculatePriceChange(
         lastPriceUsd,
         weekData?.token1?.lastPriceUsd
-      )
+      ),
+      /** dayPrice is the BTC price 24 hours ago. This is used by frontend  */
+      dayPrice: !isNil(dayData?.token1)
+        ? parseFloat(dayData?.token1?.lastPriceBtc)
+        : 100
     }
   })
 }
@@ -197,12 +205,16 @@ function calculatePriceChange (
 }
 
 /** Retrieves previous 24 hours of candlesticks to get high/low */
-async function getHighAndLowPrices (baseToken: string): Promise<{
-  highUsd: number
-  lowUsd: number
-  highBtc: number
-  lowBtc: number
-}> {
+async function getHighAndLowPrices (
+  baseToken: string,
+  currentBtcPrice: number,
+  currentUsdPrice: number
+): Promise<{
+    highUsd: number
+    lowUsd: number
+    highBtc: number
+    lowBtc: number
+  }> {
   const yesterdayTimestamp = Math.floor(
     (new Date().getTime() - DAY_MILLISECONDS) / 1000
   )
@@ -212,10 +224,10 @@ async function getHighAndLowPrices (baseToken: string): Promise<{
     yesterdayTimestamp
   )
   const queryData = await getQuery(query)
-  let highUsd: number = 0
-  let lowUsd: number = 0
-  let highBtc: number = 0
-  let lowBtc: number = 0
+  let highUsd: number = currentUsdPrice
+  let lowUsd: number = currentUsdPrice
+  let highBtc: number = currentBtcPrice
+  let lowBtc: number = currentBtcPrice
   if (!isNil(queryData) && !isNil(queryData.candleSticks)) {
     const candlesticks = queryData.candleSticks as CandleStick[]
     for (const i of candlesticks) {

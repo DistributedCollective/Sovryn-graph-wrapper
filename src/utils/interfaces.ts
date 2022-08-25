@@ -1,8 +1,10 @@
 interface TradingPairDataItem {
   trading_pairs: string
   base_symbol: string
+  base_symbol_legacy: string
   base_id: string
   quote_symbol: string
+  quote_symbol_legacy: String
   quote_id: string
   base_volume: number
   quote_volume: number
@@ -16,6 +18,7 @@ interface TradingPairDataItem {
   price_change_percent_24h_usd: number
   price_change_week: number
   price_change_week_usd: number
+  day_price: number
 }
 
 export interface ITradingPairDataBase {
@@ -32,6 +35,7 @@ export interface ITradingPairDataBase {
   priceChangePercentWeek: number
   priceChangePercent24hUsd: number
   priceChangePercentWeekUsd: number
+  dayPrice: number
 }
 
 export interface ITradingPairData extends ITradingPairDataBase {
