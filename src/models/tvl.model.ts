@@ -51,10 +51,15 @@ export const getAllTvlData = async (): Promise<Tvl[]> => {
    */
   const data = await repository
     .createQueryBuilder()
-    .select('DISTINCT ON ("contract", "asset") *')
-    .orderBy('contract')
-    .addOrderBy('asset')
-    .addOrderBy('date', 'DESC')
+    .select('*')
+    .where((qb) => {
+      const subQuery = qb
+        .subQuery()
+        .select('MAX(date)')
+        .from(Tvl, 'tvl')
+        .getQuery()
+      return 'date IN ' + subQuery
+    })
     .getRawMany()
   return data
 }
