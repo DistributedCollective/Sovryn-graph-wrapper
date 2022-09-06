@@ -1,5 +1,5 @@
 {
-  "extends": "@tsconfig/node12/tsconfig.json",
+  "extends": "@tsconfig/node16/tsconfig.json",
   "compilerOptions": {
     /* Strict Type-Checking Options */
     // "strict": true, /* Enable all strict type-checking options. */
@@ -26,6 +26,8 @@
     "allowJs": false
   },
   "linterOptions": {
-    "exclude": ["generated-schema.ts"]
+    "exclude": [
+      "generated-schema.ts"
+    ]
   }
 }
