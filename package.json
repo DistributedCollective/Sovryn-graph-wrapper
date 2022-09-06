@@ -3,6 +3,10 @@
    "version": "1.0.0",
    "description": "Sovryn graph wrapper Service",
    "main": "app.js",
+   "engines": {
+      "npm": ">=7.0.0",
+      "node": ">=16.0.0"
+   },
    "scripts": {
       "build": "tsc",
       "start": "node ./dist/server.js",
