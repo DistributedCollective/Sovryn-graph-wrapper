@@ -69,8 +69,6 @@
       "@graphql-codegen/typescript": "2.4.8",
       "@graphql-codegen/typescript-document-nodes": "2.2.8",
       "@graphql-codegen/typescript-resolvers": "2.6.1",
-      "@tsconfig/node12": "^1.0.11",
-      "@types/bunyan": "^1.8.8",
       "@types/convict": "^6.1.1",
       "@types/cors": "^2.8.12",
       "@types/cron": "^1.7.3",
