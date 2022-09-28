@@ -47,8 +47,8 @@ export class LiquidityPoolSummary extends AbstractBaseEntity {
   @IsNumber({ allowNaN: false, allowInfinity: false, maxDecimalPlaces: 18 })
   lastPrice!: number
 
-  @Column('decimal', { precision: 40, scale: 2 })
-  @IsNumber({ allowNaN: false, allowInfinity: false, maxDecimalPlaces: 2 })
+  @Column('decimal', { precision: 40, scale: 8 })
+  @IsNumber({ allowNaN: false, allowInfinity: false, maxDecimalPlaces: 8 })
   lastPriceUsd!: number
 
   @Column('decimal', { precision: 10, scale: 2, default: 0 })
@@ -67,12 +67,12 @@ export class LiquidityPoolSummary extends AbstractBaseEntity {
   @IsNumber({ allowNaN: false, allowInfinity: false, maxDecimalPlaces: 2 })
   priceChangePercentWeekUsd!: number
 
-  @Column('decimal', { precision: 40, scale: 2 })
-  @IsNumber({ allowNaN: false, allowInfinity: false, maxDecimalPlaces: 2 })
+  @Column('decimal', { precision: 40, scale: 8 })
+  @IsNumber({ allowNaN: false, allowInfinity: false, maxDecimalPlaces: 8 })
   highUsd!: number
 
-  @Column('decimal', { precision: 40, scale: 2 })
-  @IsNumber({ allowNaN: false, allowInfinity: false, maxDecimalPlaces: 2 })
+  @Column('decimal', { precision: 40, scale: 8 })
+  @IsNumber({ allowNaN: false, allowInfinity: false, maxDecimalPlaces: 8 })
   lowUsd!: number
 
   @Column('decimal', { precision: 40, scale: 18 })
