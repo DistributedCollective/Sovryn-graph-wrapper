@@ -33,7 +33,7 @@ export const createMultipleSummaryPairData = async (
         )
         newSummaryPairData.lastPrice = parseFloat(data.lastPrice.toFixed(18))
         newSummaryPairData.lastPriceUsd = parseFloat(
-          data.lastPriceUsd.toFixed(2)
+          data.lastPriceUsd.toFixed(8)
         )
         newSummaryPairData.priceChangePercent24h = parseFloat(
           data.priceChangePercent24h.toFixed(2)
@@ -47,8 +47,8 @@ export const createMultipleSummaryPairData = async (
         newSummaryPairData.priceChangePercentWeekUsd = parseFloat(
           data.priceChangePercentWeekUsd.toFixed(2)
         )
-        newSummaryPairData.highUsd = parseFloat(data.highUsd.toFixed(2))
-        newSummaryPairData.lowUsd = parseFloat(data.lowUsd.toFixed(2))
+        newSummaryPairData.highUsd = parseFloat(data.highUsd.toFixed(8))
+        newSummaryPairData.lowUsd = parseFloat(data.lowUsd.toFixed(8))
         newSummaryPairData.highBtc = parseFloat(data.highBtc.toFixed(18))
         newSummaryPairData.lowBtc = parseFloat(data.lowBtc.toFixed(18))
         newSummaryPairData.dayPrice = parseFloat(data.dayPrice.toFixed(18))
