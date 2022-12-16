@@ -191,7 +191,7 @@ const parseData = (
   })
 }
 
-function calculatePriceChange (
+export function calculatePriceChange (
   currentPrice: string | undefined,
   prevPrice: string | undefined
 ): number {
@@ -199,7 +199,7 @@ function calculatePriceChange (
     return 0
   }
   const delta = bignumber(currentPrice).minus(parseFloat(prevPrice))
-  const percentChange = delta.div(parseFloat(currentPrice)).mul(100)
+  const percentChange = delta.div(parseFloat(prevPrice)).mul(100)
   return parseFloat(percentChange.toFixed(2))
 }
 
