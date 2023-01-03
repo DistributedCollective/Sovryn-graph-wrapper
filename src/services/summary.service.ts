@@ -204,7 +204,7 @@ export function calculatePriceChange (
 }
 
 /** Retrieves previous 24 hours of candlesticks to get high/low */
-async function getHighAndLowPrices (
+export async function getHighAndLowPrices (
   baseToken: string,
   currentBtcPrice: number,
   currentUsdPrice: number
@@ -223,8 +223,8 @@ async function getHighAndLowPrices (
   let lowUsd: number = currentUsdPrice
   let highBtc: number = currentBtcPrice
   let lowBtc: number = currentBtcPrice
-  if (!isNil(queryData) && !isNil(queryData.candleSticks)) {
-    const candlesticks = queryData.candleSticks as CandleStickHour[]
+  if (!isNil(queryData) && !isNil(queryData.candleStickHours)) {
+    const candlesticks = queryData.candleStickHours as CandleStickHour[]
     for (const i of candlesticks) {
       if (i.quoteToken?.symbol === 'XUSD') {
         if (lowUsd === 0) lowUsd = parseFloat(i.low)
