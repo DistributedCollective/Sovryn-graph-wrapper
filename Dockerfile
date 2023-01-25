@@ -10,7 +10,7 @@ FROM base AS builder
 
 COPY package*.json ./
 
-RUN npm install --legacy-peer-deps
+RUN npm install
 
 COPY ./ ./
 
