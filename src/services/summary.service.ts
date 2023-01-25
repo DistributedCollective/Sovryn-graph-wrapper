@@ -49,17 +49,12 @@ export default async function main (): Promise<void> {
     const weekData: LiquidityPoolData = await getQuery(
       priceAndVolumeQuery(lastWeekBlock)
     )
-
-    logger.debug('Sorting data')
     const sortedData = sortByPairs(
       currentData.liquidityPools,
       dayData.liquidityPools,
       weekData.liquidityPools
     )
-
-    logger.debug('Parsing data')
     const parsedData = parseData(sortedData)
-    logger.debug('Adding candlestick data')
     const output: ITradingPairData[] = []
     for (const i of parsedData) {
       const highLowPrices = await getHighAndLowPrices(
@@ -195,7 +190,7 @@ export function calculatePriceChange (
   currentPrice: string | undefined,
   prevPrice: string | undefined
 ): number {
-  if (isNil(currentPrice) || isNil(prevPrice)) {
+  if (isNil(currentPrice) || isNil(prevPrice) || prevPrice === '0') {
     return 0
   }
   const delta = bignumber(currentPrice).minus(parseFloat(prevPrice))
