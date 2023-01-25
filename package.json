@@ -70,7 +70,7 @@
       "@graphql-codegen/typescript": "2.4.8",
       "@graphql-codegen/typescript-document-nodes": "2.2.8",
       "@graphql-codegen/typescript-resolvers": "2.6.1",
-      "@tsconfig/node12": "^1.0.11",
+      "@tsconfig/node16": "^1.0.3",
       "@types/bunyan": "^1.8.8",
       "@types/convict": "^6.1.1",
       "@types/convict-format-with-validator": "^6.0.2",
