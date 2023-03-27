@@ -10,6 +10,8 @@ export async function getMyntTvl (
   tokens: Token[],
   logger: Logger
 ): Promise<void> {
+  const myntAggregator = addresses.myntAggregator.toLowerCase()
+  const zusdToken = addresses.ZUSD.toLowerCase()
   const symbols = ['DOC']
   const myntTokens = tokens.filter(
     (item) => !isNil(item.symbol) && symbols.includes(item.symbol)
@@ -20,18 +22,18 @@ export async function getMyntTvl (
     const ZUSD = {
       ...DLLR,
       symbol: 'ZUSD',
-      id: addresses.ZUSD
+      id: zusdToken
     }
     myntTokens.push(ZUSD)
   }
 
   for (const token of myntTokens) {
-    const balance = await getAssetBalance(token.id, addresses.myntAggregator)
+    const balance = await getAssetBalance(token.id, myntAggregator)
     if (!isNil(balance)) {
       const usdBalance = bignumber(balance).mul(token.lastPriceUsd).toFixed(2)
       const btcBalance = bignumber(balance).mul(token.lastPriceBtc).toFixed(18)
       const output: ITvl = {
-        contract: addresses.myntAggregator,
+        contract: myntAggregator,
         asset: token.id,
         name: `${!isNil(token.symbol) ? token.symbol : ''}_Mynt`,
         balance: balance.toFixed(18),
