@@ -11,6 +11,7 @@ import { getStakingTvl } from './tvlSections/staking'
 import { getAmmPoolTvl } from './tvlSections/amm'
 import { getSubprotocolTvl } from './tvlSections/subprotocol'
 import { getZeroTvl } from './tvlSections/zero'
+import { getMyntTvl } from './tvlSections/mynt'
 
 const logger = log.logger.child({ module: 'TVL Service' })
 
@@ -28,6 +29,7 @@ export enum TvlGroup {
   Subprotocol = 'tvlSubprotocols',
   Staking = 'tvlStaking',
   Zero = 'tvlZero',
+  Mynt = 'tvlMynt'
 }
 
 export interface ITvl {
@@ -59,6 +61,7 @@ export default async function main (): Promise<void> {
   await getStakingTvl(tokenData, logger)
   await getSubprotocolTvl(tokenData, logger)
   await getZeroTvl(tokenData, logger)
+  await getMyntTvl(tokenData, logger)
   logger.info('TVL scheduled task complete')
 }
 
