@@ -51,6 +51,9 @@ export async function getLendingPoolApy (
       where: {
         contract: pool,
         timestamp: MoreThan(startDate)
+      },
+      order: {
+        timestamp: 'ASC'
       }
     })
     return data
