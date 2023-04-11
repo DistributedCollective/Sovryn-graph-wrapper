@@ -55,7 +55,7 @@
       "reflect-metadata": "^0.1.13",
       "regenerator-runtime": "^0.13.7",
       "response-time": "^2.3.2",
-      "typeorm": "^0.2.45",
+      "typeorm": "^0.3.14",
       "uuid": "^8.3.1",
       "web3": "^1.7.5",
       "web3-utils": "^1.7.5"
