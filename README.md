@@ -52,6 +52,10 @@ This service depends on:
 - An RSK Node
 - The Sovryn Subgraph
 
+## Testing and monitoring
+
+This service is end-to-end tested and monitored using Postman. There is a monitor labelled CMC in Postman that tests the /cmc/ routes. It would be good to add more tests and monitors to this service.
+
 ## Database Migrations
 
 1. Generate migration
