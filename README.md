@@ -3,9 +3,10 @@
 1. [Purpose](#purpose)
 2. [Overview](#overview)
 3. [Data methodology](#data-methodology)
-4. [Dependencies](#dependencies)
-5. [Testing and Monitoring](#testing-and-monitoring)
-6. [Database Migrations](#database-migrations)
+4. [API Endpoints](#api-endpoints)
+5. [Dependencies](#dependencies)
+6. [Testing and Monitoring](#testing-and-monitoring)
+7. [Database Migrations](#database-migrations)
 
 ## Purpose
 
