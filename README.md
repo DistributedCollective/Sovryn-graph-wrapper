@@ -1,5 +1,12 @@
 # Sovryn Graph Wrapper service
 
+1. [Purpose](#purpose)
+2. [Overview](#overview)
+3. [Data methodology](#data-methodology)
+4. [Dependencies](#dependencies)
+5. [Testing and Monitoring](#testing-and-monitoring)
+6. [Database Migrations](#database-migrations)
+
 ## Purpose
 
 The purpose of this service is to allow Sovryn frontends and third parties to easily access top-level Sovryn data. This includes data on trading pairs, trading volume, lending apy, and token circulating supply and price.
@@ -25,11 +32,25 @@ Polled data:
 
 ### assets.service.ts
 
+This cron job gets and saves all data required for the `/cmc/asset` endpoint. This includes circulating supply data for all tokens.
+
+It contains the logic for calculating circulating supply for all tokens where circulating supply is not simply the total supply of the token on RSK.
+
 ### lendingApy.service.ts
+
+This cron job gets and save all data required for the `/cmc/lendApy/:lendingPool` endpoint.
+
+It polls the borrow apr and supply apr from the contract for each lending pool and saves this to the database.
 
 ### summary.service.ts
 
+This cron job processes and saves all data required for the `/cmc/summary` endpoint. It uses data from time-travel subgraph queries to calculate 24h and one week price changes for each token, and also 24h highs and lows. It also calculates and saves traded volume for each token.
+
 ### tvl.service.ts
+
+This cron job gets and stores the data for the `cmc/tvl` endpoint. It gets the balance of each ERC20 token stored on the contracts that make up Sovryn TVL.
+
+As Sovryn TVL is divided into multiple sections (amm, lending etc), the logic for each TVL section is in the `/src/services/tvlSections/` directory.
 
 ## API Endpoints
 
@@ -40,7 +61,6 @@ Polled data:
 | GET        | /cmc/liquidity                    | To retrieve balances of each AMM pool                                                      |
 | GET        | /cmc/ticker                       | To retrieve price and volume data for all trading pairs                                    |
 | GET        | /cmc/ammPool/symbol/:assetSymbol  | To retrieve volume and liquidity data for just one pool by asset symbol                    |
-| GET        | /lendingApy/:lendingPool          | To retrieve the previous 14 days of lending pool APY data for one pool by contract address |
 | GET        | /lendingApy/:lendingPool          | To retrieve the previous 14 days of lending pool APY data for one pool by contract address |
 | GET        | /sov/current-price                | To retrieve the current sov price                                                          |
 | GET        | /sov/circulating-supply           | To retrieve data on sov circulating supply                                                 |
