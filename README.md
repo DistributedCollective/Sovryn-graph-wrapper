@@ -33,17 +33,20 @@ Polled data:
 
 ## API Endpoints
 
-| HTTP Verbs | Endpoints                        | Action                                                                                     |
-| ---------- | -------------------------------- | ------------------------------------------------------------------------------------------ |
-| GET        | /cmc/summary                     | To retrieve data on all trading pairs and asset prices                                     |
-| GET        | /cmc/asset                       | To retrieve data on all individual AMM-traded assets                                       |
-| GET        | /cmc/liquidity                   | To retrieve balances of each AMM pool                                                      |
-| GET        | /cmc/ticker                      | To retrieve price and volume data for all trading pairs                                    |
-| GET        | /cmc/ammPool/symbol/:assetSymbol | To retrieve volume and liquidity data for just one pool by asset symbol                    |
-| GET        | /lendingApy/:lendingPool         | To retrieve the previous 14 days of lending pool APY data for one pool by contract address |
-| GET        | /lendingApy/:lendingPool         | To retrieve the previous 14 days of lending pool APY data for one pool by contract address |
-| GET        | /sov/current-price               | To retrieve the current sov price                                                          |
-| GET        | /sov/                            | To retrieve                                                                                |
+| HTTP Verbs | Endpoints                         | Action                                                                                     |
+| ---------- | --------------------------------- | ------------------------------------------------------------------------------------------ |
+| GET        | /cmc/summary                      | To retrieve data on all trading pairs and asset prices                                     |
+| GET        | /cmc/asset                        | To retrieve data on all individual AMM-traded assets                                       |
+| GET        | /cmc/liquidity                    | To retrieve balances of each AMM pool                                                      |
+| GET        | /cmc/ticker                       | To retrieve price and volume data for all trading pairs                                    |
+| GET        | /cmc/ammPool/symbol/:assetSymbol  | To retrieve volume and liquidity data for just one pool by asset symbol                    |
+| GET        | /lendingApy/:lendingPool          | To retrieve the previous 14 days of lending pool APY data for one pool by contract address |
+| GET        | /lendingApy/:lendingPool          | To retrieve the previous 14 days of lending pool APY data for one pool by contract address |
+| GET        | /sov/current-price                | To retrieve the current sov price                                                          |
+| GET        | /sov/circulating-supply           | To retrieve data on sov circulating supply                                                 |
+| GET        | /sov/circulating-supply-only      | Required by a third party. Returns only the circulating supply value as a string           |
+| GET        | /sov/circulating-supply-breakdown | To retrieve underlying data used to calculate circulating supply                           |
+| GET        | /sov/total-supply-only            | Required by a third party. Returns the total supply of SOV                                 |
 
 ## Dependencies
 
