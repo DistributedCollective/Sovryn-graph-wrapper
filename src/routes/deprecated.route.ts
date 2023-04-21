@@ -20,7 +20,7 @@ router.get(
       const response = {
         error: true,
         message:
-          'This API endpoint has now been deprecated. To access Sovryn pricing data, please use the Sovryn Subgraph. \nDocumentation for how to replace this endpoint with subgraph data can be found [here](https://github.com/DistributedCollective/Sovryn-subgraph/blob/development/docs/MigrateDatafeedEndpoint.md). \nIf you need help, please reach out to the Sovryn team via our discord: https://discord.com/channels/729675474665603133/',
+          'This API endpoint has now been deprecated. To access Sovryn pricing data, please use the Sovryn Subgraph. \nDocumentation for how to replace this endpoint with subgraph data can be found here: https://github.com/DistributedCollective/Sovryn-subgraph/blob/development/docs/MigrateDatafeedEndpoint.md. \nIf you need help, please reach out to the Sovryn team via our discord: https://discord.com/channels/729675474665603133/',
         statusCode: 410
       }
       res.status(410).json(response)
