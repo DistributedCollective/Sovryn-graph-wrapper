@@ -1,3 +1,5 @@
+/** This entity stores data required to serve the /cmc/summary endpoint */
+
 import { Entity, Column, PrimaryColumn } from 'typeorm'
 
 import {

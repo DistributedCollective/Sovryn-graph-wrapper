@@ -7,6 +7,7 @@ import log from './logger'
 import { router as cmcRouter } from './routes/cmc.route'
 import { router as sovRouter } from './routes/sov.route'
 import { router as lendingApyRouter } from './routes/lendingApy.route'
+import { router as deprecatedRouter } from './routes/deprecated.route'
 import responseTime from 'response-time'
 import errorHandler from './errorHandlers/errorHandler'
 import { HTTP404Error } from './errorHandlers/baseError'
@@ -28,6 +29,7 @@ app.get('/', (req, res) => {
 app.use('/cmc/', cmcRouter)
 app.use('/sov/', sovRouter)
 app.use('/lendingApy', lendingApyRouter)
+app.use('/deprecated', deprecatedRouter)
 
 app.use(function (_req: Request, res: Response, _next: NextFunction) {
   res.status(404).send("Sorry can't find that!")
