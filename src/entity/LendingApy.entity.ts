@@ -16,9 +16,13 @@ export class LendingApy extends AbstractBaseEntity {
   @IsEthereumAddress()
   contract!: string
 
-  @Column('decimal', { precision: 30, scale: 18 })
+  @Column('decimal', { precision: 30, scale: 18, default: 0 })
   @IsNumber({ allowNaN: false, allowInfinity: false, maxDecimalPlaces: 18 })
   supply!: number
+
+  @Column('decimal', { precision: 30, scale: 18, default: 0 })
+  @IsNumber({ allowNaN: false, allowInfinity: false, maxDecimalPlaces: 18 })
+  borrow!: number
 
   @Column('decimal', { precision: 10, scale: 4 })
   @IsNumber({ allowNaN: false, allowInfinity: false, maxDecimalPlaces: 18 })
