@@ -59,7 +59,8 @@ router.get(
       // group by day
       const groupedByDay = response.reduce<{ [key: string]: ILendingPoolApyItem[] }>((acc, item) => {
         const day = dayjs(item.timestamp).format(format)
-        if (!acc[day]) {
+        /* eslint no-prototype-builtins: "off" */
+        if (!acc.hasOwnProperty(day)) {
           acc[day] = []
         }
         acc[day].push(item)
@@ -94,11 +95,13 @@ router.get(
       const lastDate = dayjs(items[items.length - 1].timestamp)
       while (currentDate.isBefore(lastDate)) {
         const day = currentDate.format(format)
-        if (groupedByDay[day]) {
+        /* eslint no-prototype-builtins: "off" */
+        if (groupedByDay.hasOwnProperty(day)) {
           filledItems.push(...groupedByDay[day])
         } else {
           const previousDay = currentDate.subtract(1, 'day').format(format)
-          if (groupedByDay[previousDay]) {
+          /* eslint no-prototype-builtins: "off" */
+          if (groupedByDay.hasOwnProperty(previousDay)) {
             filledItems.push(...groupedByDay[previousDay])
           }
         }
