@@ -28,7 +28,7 @@ export default async function main (): Promise<void> {
         borrowApr: borrowApr,
         supplyApr: supplyApr,
         supply: supply,
-        borrow: borrow,
+        borrow: borrow
       })
     } catch (e) {
       const error = e as Error
