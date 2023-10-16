@@ -91,6 +91,7 @@ export interface ITvl extends TvlBaseData {
 
 export interface ILendingPoolApyItem {
   supply: number
+  borrow: number
   supply_apr: number
   borrow_apr: number
   timestamp: Date
