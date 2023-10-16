@@ -48,7 +48,7 @@ router.get(
   setCacheMiddleware(30),
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
     try {
-      req.log.info(req, 'get daiy lending pool apy', [req.params.lendingPool])
+      req.log.info(req, 'get daily lending pool apy', [req.params.lendingPool])
       const errors = validationResult(req)
       if (!errors.isEmpty()) {
         req.log.debug(errors.array(), 'handling message errors')
