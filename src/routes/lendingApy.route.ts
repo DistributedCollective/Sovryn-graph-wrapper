@@ -82,7 +82,7 @@ router.get(
           borrow,
           supply_apr: supplyApr.toString(),
           borrow_apr: borrowApr.toString(),
-          timestamp: item[0].timestamp
+          timestamp: dayjs(item[0].timestamp).hour(0).minute(0).second(0).millisecond(0).toISOString()
         }
       })
 
@@ -93,20 +93,23 @@ router.get(
       const filledItems = []
       let currentDate = dayjs(items[0].timestamp)
       const lastDate = dayjs(items[items.length - 1].timestamp)
+
       while (currentDate.isBefore(lastDate)) {
         const day = currentDate.format(format)
         /* eslint no-prototype-builtins: "off" */
         if (groupedByDay.hasOwnProperty(day)) {
-          filledItems.push(...groupedByDay[day])
+          filledItems.push(items.find((item) => dayjs(item.timestamp).format(format) === day))
         } else {
           const previousDay = currentDate.subtract(1, 'day').format(format)
           /* eslint no-prototype-builtins: "off" */
           if (groupedByDay.hasOwnProperty(previousDay)) {
-            filledItems.push(...groupedByDay[previousDay])
+            filledItems.push(items.find((item) => dayjs(item.timestamp).format(format) === previousDay))
           }
         }
         currentDate = currentDate.add(1, 'day')
       }
+
+      filledItems.push(items[items.length - 1])
 
       res.status(200).json(filledItems)
     } catch (error) {
