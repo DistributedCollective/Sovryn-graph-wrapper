@@ -6,6 +6,7 @@ export async function getPoolApy (pool: string): Promise<ILendingPoolApyItem[]> 
   const parsedData = data.map((item) => {
     return {
       supply: item.supply,
+      borrow: item.borrow,
       supply_apr: item.supplyApr,
       borrow_apr: item.borrowApr,
       timestamp: item.timestamp

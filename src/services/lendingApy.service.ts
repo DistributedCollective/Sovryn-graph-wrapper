@@ -22,11 +22,13 @@ export default async function main (): Promise<void> {
       const borrowApr = await getBorrowApr(contract)
       const supplyApr = await getSupplyApr(contract)
       const supply = await getSupply(contract)
+      const borrow = await getBorrow(contract)
       rowData.push({
         contract: pool,
         borrowApr: borrowApr,
         supplyApr: supplyApr,
-        supply: supply
+        supply: supply,
+        borrow: borrow
       })
     } catch (e) {
       const error = e as Error
@@ -56,6 +58,11 @@ async function getSupplyApr (contract: Contract): Promise<string> {
 
 async function getSupply (contract: Contract): Promise<string> {
   const supply = await contract.methods.totalAssetSupply().call()
+  return weiToFixed(supply, 18)
+}
+
+async function getBorrow (contract: Contract): Promise<string> {
+  const supply = await contract.methods.totalAssetBorrow().call()
   return weiToFixed(supply, 18)
 }
 

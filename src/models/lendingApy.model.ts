@@ -11,6 +11,7 @@ export interface ILendingApyRow {
   borrowApr: string
   supplyApr: string
   supply: string
+  borrow: string
 }
 
 export async function saveMultipleLendingApyRows (
@@ -25,6 +26,7 @@ export async function saveMultipleLendingApyRows (
       newRowData.borrowApr = Number(data.borrowApr)
       newRowData.supplyApr = Number(data.supplyApr)
       newRowData.supply = Number(data.supply)
+      newRowData.borrow = Number(data.borrow)
       newRowData.timestamp = now
       await newRowData.validateStrict()
       return newRowData
