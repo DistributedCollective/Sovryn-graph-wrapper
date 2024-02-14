@@ -13,11 +13,13 @@
   "DEV_ENV_VARS": {
     "NODE_ENV": "test",
     "SUBGRAPH_URL": "https://subgraph.test.sovryn.app/subgraphs/name/DistributedCollective/sovryn-subgraph",
-    "RSK_RPC": "https://testnet.sovryn.app/rpc"
+    "RSK_RPC": "https://testnet.sovryn.app/rpc",
+    "INGRESS_HOSTNAME": "graph-wrapper.test.sovryn.app"
   },
   "PROD_ENV_VARS": {
     "NODE_ENV": "production",
     "SUBGRAPH_URL": "https://subgraph.sovryn.app/subgraphs/name/DistributedCollective/sovryn-subgraph",
-    "RSK_RPC": "https://rsk-internal.sovryn.app/rpc"
+    "RSK_RPC": "https://rsk-internal.sovryn.app/rpc",
+    "INGRESS_HOSTNAME": "graph-wrapper.sovryn.app"
   }
 }
